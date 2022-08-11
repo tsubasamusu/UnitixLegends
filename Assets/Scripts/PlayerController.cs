@@ -43,9 +43,9 @@ public class PlayerController : MonoBehaviour
 
 	private int useItemNo=1;//使用しているアイテムの番号
 
-	private int UseItemNo//useItemNo変数用のプロパティ
+	public int UseItemNo//useItemNo変数用のプロパティ
     {
-		get { return useItemNo; }//取得処理のみ可能に
+		get { return useItemNo; }//外部からは取得処理のみ可能に
     }
 
 	/// <summary>

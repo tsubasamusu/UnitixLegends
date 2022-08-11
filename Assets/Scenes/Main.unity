@@ -6095,6 +6095,8 @@ MonoBehaviour:
   jumpHeight: 2
   jumpKey: 32
   stoopKey: 101
+  getItemKey: 113
+  discardKey: 120
   controller: {fileID: 4889205611976788817}
   anim: {fileID: 4889205611973315950}
 --- !u!137 &4889205611977634720
