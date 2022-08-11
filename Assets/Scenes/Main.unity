@@ -397,8 +397,8 @@ Transform:
   m_GameObject: {fileID: 1983269717}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1658307957}
   m_RootOrder: 2
@@ -6159,10 +6159,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2c504fe461dcb4f84ac10c7850a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 0
-  speedZ: 0
-  jumpSpeed: 0
-  jumpKey: 0
+  gravity: 2
+  previousSpeed: 10
+  backSpeed: 2
+  speedX: 2
+  jumpHeight: 2
+  jumpKey: 32
+  stoopKey: 101
   controller: {fileID: 4889205611976788817}
   anim: {fileID: 4889205611973315950}
 --- !u!137 &4889205611977634720
