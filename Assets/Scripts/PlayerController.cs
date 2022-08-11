@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
 	private float jumpSpeed;//ジャンプ速度
 
+	[SerializeField]
+	private KeyCode jumpKey;//ジャンプボタン
+
     [SerializeField]
 	private CharacterController controller;//CharacterController
 
@@ -28,34 +31,27 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-
-		//print ("Rayの設定判定" + CheckGrounded ());
-
-		// rayを使った接地判定
-		if (CheckGrounded() == true)
+		//Playerが接地しているなら
+		if (CheckGrounded())
 		{
-
-			// 前進
-			if (Input.GetAxis("Vertical") > 0.0f)
-			{ // キャラクターがバックしないようにする。
+			//「W,S」で前後移動
+			if (Input.GetAxis("Vertical") != 0.0f)//WかSを押されている間
+			{
 				moveDirection.z = Input.GetAxis("Vertical") * speedZ;
 			}
-			else
-			{
-				moveDirection.z = 0;
-			}
+			
 
 			// 方向転換
 			transform.Rotate(0, Input.GetAxis("Horizontal") * 3, 0);
 
-			// ジャンプ
-			if (Input.GetButtonDown("Jump"))
+			//ジャンプ
+			if (Input.GetKeyDown(jumpKey))//ジャンプボタンが押されたら
 			{
 				moveDirection.y = jumpSpeed;
 			}
 		}
 
-		// 重力を発生させる
+		//重力を発生させる
 		moveDirection.y -= gravity * Time.deltaTime;
 
 		// 移動の実行
@@ -68,17 +64,19 @@ public class PlayerController : MonoBehaviour
 
 	}
 
-	// Ray（光線）を使った接地判定メソッド
+	/// <summary>
+	/// Playerが接地していたらtrueを返す
+	/// </summary>
+	/// <returns></returns>
 	public bool CheckGrounded()
 	{
-
-		// rayの初期位置と向き（姿勢）
+		//rayの初期位置と向き（姿勢）を設定
 		var ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
 
-		// rayの探索距離
+		//rayの探索距離（長さ）を設定
 		var tolerance = 0.3f;
 
-		// rayのヒット判定
+		//rayのヒット判定（bool型）を返す
 		return Physics.Raycast(ray, tolerance);
 	}
 }
