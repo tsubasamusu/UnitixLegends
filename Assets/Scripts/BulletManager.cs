@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private GameObject mainCamera;//メインカメラ
 
-    // Update is called once per frame
+    public List<GameObject> bulletPrefabList = new List<GameObject>();//弾のプレファブのリスト
+
+    /// <summary>
+    /// 毎フレーム呼び出される
+    /// </summary>
     void Update()
     {
-        
+        //Bulletを発射する向きをカメラの向きに合わせる
+        transform.eulerAngles = new Vector3(mainCamera.transform.eulerAngles.x,mainCamera.transform.eulerAngles.y,transform.eulerAngles.z);
+    }
+
+    /// <summary>
+    /// ShotBulletゲームオブジェクトを有効化・無効化を行う
+    /// </summary>
+    public void SetShotBulletActiveOrPassive(bool set)
+    {
+        //引数を元に、ShotBulletゲームオブジェクトの有効化・無効化を切り替える
+        transform.gameObject.SetActive(set);
     }
 }
