@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;//DOTweenを使用
 using System;//enumを使用
+using Cinemachine;//Cinemachineを使用
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField]
 	private float jumpHeight;//ジャンプの高さ
+
+	[SerializeField, Range(1.0f, 30.0f)]
+	private float zoomFOV;//ズーム時の視野角
 
 	[SerializeField]
 	private KeyCode jumpKey;//ジャンプキー
@@ -41,6 +45,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
 	private BulletManager bulletManager;//BulletManager
+
+	[SerializeField]
+	private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
 
 	[SerializeField]
 	private GameObject mainCamera;//メインカメラ
@@ -251,9 +258,17 @@ public class PlayerController : MonoBehaviour
 		//右クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse1))
 		{
-			//アイテムを構える処理
+			//ズームする
+			followZoom.m_MaxFOV = zoomFOV;
+			followZoom.m_MinFOV = 1.0f;
 		}
-
+		//右クリックが終ったら
+		else if(Input.GetKeyUp(KeyCode.Mouse1))
+        {
+			//元のカメラの倍率に戻す
+			followZoom.m_MaxFOV = 30.0f;
+			followZoom.m_MinFOV = 30.0f;
+        }
 
 		//TODO:アイテムに近づいたら
 

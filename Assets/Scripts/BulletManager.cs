@@ -16,6 +16,9 @@ public class BulletManager : MonoBehaviour
     [SerializeField]
     private GameObject mainCamera;//メインカメラ
 
+    [SerializeField]
+    private Transform temporaryObjectContainerTran;//一時的にゲームオブジェクトを収容するTransform
+
     /// <summary>
     /// 毎フレーム呼び出される
     /// </summary>
@@ -47,10 +50,15 @@ public class BulletManager : MonoBehaviour
         //弾を発射
         bulletRb.AddForce(transform.forward* shotSpeed);
 
+        //Playerの死後も発射した弾は一定時間残る
+        bulletRb.gameObject.transform.SetParent(temporaryObjectContainerTran);
+
         //残弾数を減らす
         shotCount--;
 
         //発射した弾を3.0秒後に消す
-        Destroy(bulletRb,3.0f);
+        Destroy(bulletRb.gameObject,3.0f);
+
+        //TODO:SoundManagerを元に武器の発射音を再生する処理
     }
 }

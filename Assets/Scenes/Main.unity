@@ -732,10 +732,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4700f9f03ad19f94baf0367cb7a9c988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Width: 2
+  m_Width: 10
   m_Damping: 2
   m_MinFOV: 1
-  m_MaxFOV: 76
+  m_MaxFOV: 30
 --- !u!1 &570688346
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,6 +776,38 @@ Transform:
   - {fileID: 7253046155250110830}
   m_Father: {fileID: 7253046155250110828}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &637062611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 637062612}
+  m_Layer: 0
+  m_Name: Other
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &637062612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637062611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 822695140}
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &666311024
 GameObject:
@@ -1018,7 +1050,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.30196896, y: 0.16698793, z: -0.05381356, w: 0.9370346}
+  m_LocalRotation: {x: 0.2987855, y: 0.16716968, z: -0.053246226, w: 0.9380546}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1026,6 +1058,37 @@ Transform:
   - {fileID: 1313705366}
   m_Father: {fileID: 543694167}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &822695139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 822695140}
+  m_Layer: 0
+  m_Name: TemporaryObjectContainerTran
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &822695140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822695139}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 637062612}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
@@ -1079,7 +1142,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 22.619865
+  field of view: 30
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -1104,7 +1167,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.301969, y: 0.16698793, z: -0.053813573, w: 0.9370346}
+  m_LocalRotation: {x: 0.2987855, y: 0.16716966, z: -0.053246237, w: 0.93805456}
   m_LocalPosition: {x: -0.38178802, y: 4, z: -3.7537532}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1216,7 +1279,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170332041}
-  m_LocalRotation: {x: 0.2925925, y: 0.16751726, z: -0.052142594, w: 0.9400047}
+  m_LocalRotation: {x: 0.2862126, y: 0.16786686, z: -0.051005624, w: 0.94196683}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7897,6 +7960,7 @@ MonoBehaviour:
   backSpeed: 2
   speedX: 2
   jumpHeight: 2
+  zoomFOV: 10.1
   jumpKey: 32
   stoopKey: 101
   getItemKey: 113
@@ -7904,6 +7968,7 @@ MonoBehaviour:
   controller: {fileID: 4889205611976788817}
   anim: {fileID: 4889205611973315950}
   bulletManager: {fileID: 112694188}
+  followZoom: {fileID: 543694168}
   mainCamera: {fileID: 963194225}
 --- !u!137 &4889205611977634720
 SkinnedMeshRenderer:
