@@ -42,7 +42,7 @@ public class BulletManager : MonoBehaviour
     /// </summary>
     public void ShotBullet()
     {
-        //TODO:‘I‘ğ‚µ‚Ä‚¢‚é•Ší‚Ì’e‚Ìî•ñ‚ğæ“¾‚·‚éˆ—
+        //TODO:GameData‚©‚ç‘I‘ğ‚µ‚Ä‚¢‚é•Ší‚Ì’e‚Ìî•ñ‚ğæ“¾‚·‚éˆ—‚ğŒÄ‚Ño‚·
 
         //’e‚ğ¶¬
         Rigidbody bulletRb=Instantiate(bulletPrefab,transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
@@ -59,6 +59,6 @@ public class BulletManager : MonoBehaviour
         //”­Ë‚µ‚½’e‚ğ3.0•bŒã‚ÉÁ‚·
         Destroy(bulletRb.gameObject,3.0f);
 
-        //TODO:SoundManager‚ğŒ³‚É•Ší‚Ì”­Ë‰¹‚ğÄ¶‚·‚éˆ—
+        //TODO:SoundManager‚©‚ç•Ší‚Ì”­Ë‰¹‚ğÄ¶‚·‚éˆ—‚ğŒÄ‚Ño‚·
     }
 }

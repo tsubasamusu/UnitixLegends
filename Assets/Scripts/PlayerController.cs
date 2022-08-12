@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
 		//かがむキーが押されている間
 		if (Input.GetKey(stoopKey))
 		{
-			//TODO:かがむ処理
+			//TODO:かがむ処理を追加
 
 			//Playerの状態を返す
 			return PlayerCondition.Stooping;
@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour
 		//アイテム破棄キーが押されたら
 		if (Input.GetKeyDown(discardKey))
 		{
-			//TODO:アイテムを破棄する処理
+			//TODO:GameDataからアイテムを破棄する処理を呼び出す
 		}
 		//左クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse0))
@@ -275,7 +275,7 @@ public class PlayerController : MonoBehaviour
 		//アイテム取得キーが押されたら
 		if (Input.GetKeyDown(getItemKey))
 		{
-			//TODO:アイテムの取得処理
+			//TODO:GameDataからアイテムの取得処理を呼び出す
 		}
 	}
 

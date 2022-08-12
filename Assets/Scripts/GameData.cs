@@ -23,5 +23,5 @@ public class GameData : MonoBehaviour
         }
     }
 
-    //TODO:‘I‘ğ‚µ‚Ä‚¢‚é•Ší‚Ìî•ñ‚ğæ“¾‚·‚éˆ—
+    //TODO:‘I‘ğ‚µ‚Ä‚¢‚é•Ší‚Ìî•ñ‚ğæ“¾‚·‚éˆ—‚ğ’Ç‰Á
 }

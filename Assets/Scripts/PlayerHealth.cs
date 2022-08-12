@@ -54,6 +54,12 @@ public class PlayerHealth : MonoBehaviour
         {
             //updateValueをマイナスにする
             updateValue = -updateValue;
+
+            //TODO:UIManagerからダメージ演出の処理を呼び出す
+        }
+        else
+        {
+            //TODO:UIManagerから回復演出の処理を呼び出す
         }
 
         //playerHpに0以上100以下の値まで代入されるように制限する
@@ -72,6 +78,6 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void AttackedByTearGasGrenade()
     {
-
+        //TODO:UIManagerから視界を一定時間暗くする処理を呼び出す
     }
 }
