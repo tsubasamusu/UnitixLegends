@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private Animator anim;//Animator
 
+    [SerializeField]
+	private GameObject mainCamera;//メインカメラ
+
 	private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
 
 	private int useItemNo=1;//使用しているアイテムの番号
@@ -62,7 +65,10 @@ public class PlayerController : MonoBehaviour
 		Stooping//かがんでいる
 	}
 
-	void Update()
+	/// <summary>
+	/// 毎フレーム呼び出される
+	/// </summary>
+    void Update()
 	{
 		//アニメーションの再生と、Playerの動きの制御を行う
 		PlayAnimation(MovePlayer());
@@ -125,6 +131,9 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	private PlayerCondition MovePlayer()
 	{
+		//Playerの向きをカメラの向きに合わせる
+		transform.eulerAngles = new Vector3(transform.eulerAngles.x, mainCamera.transform.eulerAngles.y, transform.eulerAngles.z);
+
 		//重力を生成
 		moveDirection.y -= gravity * Time.deltaTime;
 
