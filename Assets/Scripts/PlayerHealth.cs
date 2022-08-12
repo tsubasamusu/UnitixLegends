@@ -12,14 +12,6 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// 毎フレーム呼び出される
-    /// </summary>
-    private void Update()
-    {
-        Debug.Log(playerHp);
-    }
-
-    /// <summary>
     /// 他のコライダーに触れた際に呼び出される
     /// </summary>
     /// <param name="hit"></param>
