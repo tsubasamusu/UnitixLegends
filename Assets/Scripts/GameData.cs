@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class GameData : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GameData instance;//インスタンス
+
+    /// <summary>
+    /// Startメソッドより前に呼び出される
+    /// </summary>
+    private void Awake()
     {
-        
+        //以下、シングルトンに必須の記述
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //TODO:選択している武器の情報を取得する処理
 }

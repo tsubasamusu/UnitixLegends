@@ -5,9 +5,16 @@ using UnityEngine;
 public class BulletManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject mainCamera;//メインカメラ
+    private int shotCount;//（仮）
 
-    public List<GameObject> bulletPrefabList = new List<GameObject>();//弾のプレファブのリスト
+    [SerializeField]
+    private Rigidbody bulletPrefab;//（仮）
+
+    [SerializeField]
+    private float shotSpeed;//（仮）
+
+    [SerializeField]
+    private GameObject mainCamera;//メインカメラ
 
     /// <summary>
     /// 毎フレーム呼び出される
@@ -25,5 +32,25 @@ public class BulletManager : MonoBehaviour
     {
         //引数を元に、ShotBulletゲームオブジェクトの有効化・無効化を切り替える
         transform.gameObject.SetActive(set);
+    }
+
+    /// <summary>
+    /// 弾を発射する
+    /// </summary>
+    public void ShotBullet()
+    {
+        //TODO:選択している武器の弾の情報を取得する処理
+
+        //弾を生成
+        Rigidbody bulletRb=Instantiate(bulletPrefab,transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
+
+        //弾を発射
+        bulletRb.AddForce(transform.forward* shotSpeed);
+
+        //残弾数を減らす
+        shotCount--;
+
+        //発射した弾を3.0秒後に消す
+        Destroy(bulletRb,3.0f);
     }
 }

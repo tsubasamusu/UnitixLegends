@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
 	private Animator anim;//Animator
 
     [SerializeField]
+	private BulletManager bulletManager;//BulletManager
+
+	[SerializeField]
 	private GameObject mainCamera;//メインカメラ
 
 	private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
@@ -229,28 +232,28 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	private void ControlItem()
 	{
-		//何かキーが押されていたら
-		if (CheckKey() != KeyCode.None)//無駄な処理を回避
-		{
-			//アイテムの切り替えを行う
-			ChangeItem(CheckKey());
+		//アイテムの切り替えを行う
+		ChangeItem(CheckKey());
 
-			//アイテム破棄キーが押されたら
-			if (Input.GetKeyDown(discardKey))
-			{
-				//TODO:アイテムを破棄する処理
-			}
-			//左クリックされている間
-			else if (Input.GetKey(KeyCode.Mouse0))
-			{
-				//TODO:アイテムの使用処理
-			}
-			//右クリックされている間
-			else if (Input.GetKey(KeyCode.Mouse1))
-			{
-				//アイテムを構える処理
-			}
+		//アイテム破棄キーが押されたら
+		if (Input.GetKeyDown(discardKey))
+		{
+			//TODO:アイテムを破棄する処理
 		}
+		//左クリックされている間
+		else if (Input.GetKey(KeyCode.Mouse0))
+		{
+			//TODO:選択しているアイテムが銃火器なら
+
+			//弾を発射
+			bulletManager.ShotBullet();
+		}
+		//右クリックされている間
+		else if (Input.GetKey(KeyCode.Mouse1))
+		{
+			//アイテムを構える処理
+		}
+
 
 		//TODO:アイテムに近づいたら
 
