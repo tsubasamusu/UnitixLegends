@@ -21,25 +21,25 @@ public class PlayerHealth : MonoBehaviour
         switch(hit.gameObject.tag)
         {
             case ("Grenade"):
-                UpdatePlayerHp(30.0f);
+                UpdatePlayerHp(-30.0f);
                 break;
             case ("TearGasGrenade"):
                 AttackedByTearGasGrenade();
                 break;
             case ("Knife"):
-                UpdatePlayerHp(100.0f);
+                UpdatePlayerHp(-100.0f);
                 break;
             case ("Bat"):
-                UpdatePlayerHp(50.0f);
+                UpdatePlayerHp(-50.0f);
                 break;
             case ("Assault"):
-                UpdatePlayerHp(1.0f,hit);
+                UpdatePlayerHp(-1.0f,hit);
                 break;
             case ("Sniper"):
-                UpdatePlayerHp(80.0f,hit);
+                UpdatePlayerHp(-80.0f,hit);
                 break;
             case ("Shotgun"):
-                UpdatePlayerHp(30.0f, hit);
+                UpdatePlayerHp(-30.0f, hit);
                 break;
         }
     }
@@ -47,17 +47,15 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// PlayerのHpを更新
     /// </summary>
-    private void UpdatePlayerHp(float updateValue, ControllerColliderHit hit=null, bool isAttacked = true)
+    private void UpdatePlayerHp(float updateValue, ControllerColliderHit hit=null)
     {
-        //攻撃を受けたら
-        if(isAttacked)
+        //攻撃を受けた際の処理なら
+        if(updateValue<0)
         {
-            //updateValueをマイナスにする
-            updateValue = -updateValue;
-
             //TODO:UIManagerからダメージ演出の処理を呼び出す
         }
-        else
+        //回復する際の処理なら
+        else if(updateValue>0)
         {
             //TODO:UIManagerから回復演出の処理を呼び出す
         }
@@ -65,11 +63,17 @@ public class PlayerHealth : MonoBehaviour
         //playerHpに0以上100以下の値まで代入されるように制限する
         playerHp = Mathf.Clamp(playerHp+ updateValue, 0, 100);
 
-        //引数のhitがnullではないなら
-        if(hit != null)//nullエラー回避
+        //nullエラー回避
+        if (hit != null)
         {
             //引数で受け取ったゲームオブジェクトを消す
             Destroy(hit.gameObject);
+        }
+
+        //Playerの体力が0になったら
+        if(playerHp==0.0f)
+        {
+            //TOD:GameManagerからゲームオーバーの処理を呼び出す
         }
     }
 
