@@ -14,19 +14,7 @@ public class UIManager : MonoBehaviour
     private Image logo;//ロゴ
 
     [SerializeField]
-    private Image imgItem1;//アイテムイメージ1
-
-    [SerializeField]
-    private Image imgItem2;//アイテムイメージ2
-
-    [SerializeField]
-    private Image imgItem3;//アイテムイメージ3
-
-    [SerializeField]
-    private Image imgItem4;//アイテムイメージ4
-
-    [SerializeField]
-    private Image imgItem5;//アイテムイメージ5
+    private Image[] itemImages=new Image[5];
 
     [SerializeField]
     private Sprite gameStart;//ゲームスタートロゴ
