@@ -23,6 +23,9 @@ public class UIManager : MonoBehaviour
     private Text txtGameOver;//ゲームオーバーテキスト
 
     [SerializeField]
+    private Text txtBulletCount;//残弾数テキスト
+
+    [SerializeField]
     private Slider hpSlider;//体力スライダー
 
     [SerializeField]
@@ -163,5 +166,14 @@ public class UIManager : MonoBehaviour
     {
         //引数を元に、CanvasGroupの透明度を設定
         canvasGroup.alpha = isSetting ? 1.0f : 0.0f;
+    }
+
+    /// <summary>
+    /// 残弾数の表示の更新を行う
+    /// </summary>
+    public void UpdateTxtBulletCount(int bulletCount)
+    {
+        //引数を元に、残弾数のテキストを設定
+       txtBulletCount.text=bulletCount.ToString();
     }
 }
