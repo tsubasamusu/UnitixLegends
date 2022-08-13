@@ -20,6 +20,9 @@ public class UIManager : MonoBehaviour
     private Sprite gameClear;//ゲームクリアロゴ
 
     [SerializeField]
+    private Text txtGameOver;//ゲームオーバーテキスト
+
+    [SerializeField]
     private Slider hpSlider;//体力スライダー
 
     [SerializeField]
@@ -28,7 +31,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// ゲームスタート演出を行う
     /// </summary>
-    public IEnumerator SetGameStart()
+    public IEnumerator PlayGameStart()
     {
         //視界を白色に設定
         eventHorizon.color = new Color(255.0f, 255.0f, 255.0f,0.0f);
@@ -58,7 +61,7 @@ public class UIManager : MonoBehaviour
     /// ゲームクリア演出を行う
     /// </summary>
     /// <returns></returns>
-    public IEnumerator SetGameClear()
+    public IEnumerator PlayGameClear()
     {
         //視界を白色に設定
         eventHorizon.color = new Color(255.0f, 255.0f, 255.0f, 0.0f);
@@ -78,7 +81,32 @@ public class UIManager : MonoBehaviour
         //視界とロゴの演出が終わるまで待つ
         yield return new WaitForSeconds(1.0f);
 
-        ///Mainシーンを読み込む
+        //Mainシーンを読み込む
+        SceneManager.LoadScene("Main");
+    }
+
+    /// <summary>
+    /// ゲームオーバー演出を行う
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator PlayGameOver()
+    {
+        //視界を黒色に設定
+        eventHorizon.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+
+        //1.0秒かけて視界を完全に暗くする
+        eventHorizon.DOFade(1.0f, 1.0f);
+
+        //視界が完全に暗転するまで待つ
+        yield return new WaitForSeconds(1.0f);
+
+        //3.0秒かけて「GameOver」を表示
+        txtGameOver.DOText("GameOver",3.0f);
+
+        //「GameOverの表示が終ったあと、さらに1.0秒間待つ
+        yield return new WaitForSeconds(4.0f);
+
+        //Mainシーンを読み込む
         SceneManager.LoadScene("Main");
     }
 
