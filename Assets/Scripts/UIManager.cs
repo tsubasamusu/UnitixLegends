@@ -67,4 +67,31 @@ public class UIManager : MonoBehaviour
         //0.5秒かけて視界を元に戻す
         eventHorizon.DOFade(0.0f, 0.5f);
     }
+
+    /// <summary>
+    /// 被弾した際の視界の処理
+    /// </summary>
+    public IEnumerator AttackEventHorizon()
+    {
+        //視界を赤色に設定
+        eventHorizon.color = new Color(255.0f, 0.0f, 0.0f, 0.0f);
+
+        //0.25秒かけて視界を少し赤くする
+        eventHorizon.DOFade(0.5f, 0.25f);
+
+        //視界が少し赤くなるまで待つ
+        yield return new WaitForSeconds(0.25f);
+
+        //0.25秒かけて視界を元に戻す
+        eventHorizon.DOFade(0.0f, 0.25f);
+    }
+
+    /// <summary>
+    /// 体力用スライダーを更新する
+    /// </summary>
+    public void UpdateHpSliderValue(float currentValue,float updateValue)
+    {
+        //0.5秒かけて体力用スライダーを更新する
+        hpSlider.DOValue((currentValue + updateValue)/100.0f, 0.5f);
+    }
 }

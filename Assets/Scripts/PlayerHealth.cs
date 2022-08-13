@@ -31,10 +31,10 @@ public class PlayerHealth : MonoBehaviour
                 AttackedByTearGasGrenade();
                 break;
             case ("Knife"):
-                UpdatePlayerHp(-100.0f);
+                UpdatePlayerHp(-100.0f,hit);
                 break;
             case ("Bat"):
-                UpdatePlayerHp(-50.0f);
+                UpdatePlayerHp(-50.0f,hit);
                 break;
             case ("Assault"):
                 UpdatePlayerHp(-1.0f,hit);
@@ -51,21 +51,20 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// PlayerのHpを更新
     /// </summary>
-    private void UpdatePlayerHp(float updateValue, ControllerColliderHit hit=null)
+    private void UpdatePlayerHp(float updateValue, ControllerColliderHit hit = null)
     {
         //攻撃を受けた際の処理なら
-        if(updateValue<0)
+        if(updateValue<0.0f)
         {
-            //TODO:UIManagerからダメージ演出の処理を呼び出す
-        }
-        //回復する際の処理なら
-        else if(updateValue>0)
-        {
-            //TODO:UIManagerから回復演出の処理を呼び出す
+            //被弾した際の視界の処理を行う
+            StartCoroutine( uiManager.AttackEventHorizon());
         }
 
+        //体力用スライダーを更新
+        uiManager.UpdateHpSliderValue(playerHp, updateValue);
+
         //playerHpに0以上100以下の値まで代入されるように制限する
-        playerHp = Mathf.Clamp(playerHp+ updateValue, 0, 100);
+        playerHp = Mathf.Clamp(playerHp + updateValue, 0, 100);
 
         //nullエラー回避
         if (hit != null)
@@ -75,7 +74,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         //Playerの体力が0になったら
-        if(playerHp==0.0f)
+        if (playerHp == 0.0f)
         {
             //TOD:GameManagerからゲームオーバーの処理を呼び出す
         }
