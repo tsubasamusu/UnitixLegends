@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;//UIを使用
 using DG.Tweening;//DOTweenを使用
+using UnityEngine.SceneManagement;//シーンのロードを使用
 
 public class UIManager : MonoBehaviour
 {
@@ -51,6 +52,34 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //GameManagerからゲーム開始状態に切り替える
+    }
+
+    /// <summary>
+    /// ゲームクリア演出を行う
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator SetGameClear()
+    {
+        //視界を白色に設定
+        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f, 0.0f);
+
+        //ロゴをゲームクリアに設定
+        logo.sprite = gameClear;
+
+        //2.0秒かけてロゴを表示
+        logo.DOFade(1.0f, 2.0f);
+
+        //ロゴの表示が終わるまで待つ
+        yield return new WaitForSeconds(2.0f);
+
+        //ロゴを1.0秒かけて消す
+        logo.DOFade(0.0f, 1.0f);
+
+        //視界とロゴの演出が終わるまで待つ
+        yield return new WaitForSeconds(1.0f);
+
+        ///Mainシーンを読み込む
+        SceneManager.LoadScene("Main");
     }
 
     /// <summary>
