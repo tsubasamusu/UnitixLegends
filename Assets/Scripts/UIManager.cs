@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
 
-    private List<GameObject> itemSlotList = new List<GameObject>();//アイテムスロットのリスト（GameObject型）
+    private List<Image> imgItemSlotList = new List<Image>();//アイテムスロットのイメージのリスト
 
     /// <summary>
     /// 毎フレーム呼び出される
@@ -276,14 +276,9 @@ public class UIManager : MonoBehaviour
                 imgItem.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
             }
 
-            //生成したアイテムスロットの情報をリストに追加
-            itemSlotList.Add(itemSlot);
+            //生成したアイテムスロットのイメージをリストに追加
+            imgItemSlotList.Add(imgItem);
         }
-    }
-
-    private void Start()
-    {
-        GenerateItemSlots(5);
     }
 
     /// <summary>
@@ -291,6 +286,10 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void SetItemImage(int itemNo,Sprite itemSprite)
     {
-       
+        //引数を元に、指定されたアイテムのSpriteを設定する
+        imgItemSlotList[itemNo-1].sprite = itemSprite;
+
+        //指定されたイメージを可視化
+        imgItemSlotList[itemNo - 1].color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
     }
 }
