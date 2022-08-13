@@ -26,10 +26,16 @@ public class UIManager : MonoBehaviour
     private Text txtBulletCount;//残弾数テキスト
 
     [SerializeField]
+    private Text floatingMessagePrefab;//フロート表示のプレファブ
+
+    [SerializeField]
     private Slider hpSlider;//体力スライダー
 
     [SerializeField]
     private CanvasGroup canvasGroup;//CanvasGroup
+
+    [SerializeField]
+    private Transform canvasTran;//Canvasのtransform
 
     /// <summary>
     /// ゲームスタート演出を行う
@@ -175,5 +181,41 @@ public class UIManager : MonoBehaviour
     {
         //引数を元に、残弾数のテキストを設定
        txtBulletCount.text=bulletCount.ToString();
+    }
+
+    /// <summary>
+    /// フロート表示の生成を行う
+    /// </summary>
+    public IEnumerator GenerateFloatingMessage(string messageText,Color color)
+    {
+        //フロート表示を生成
+        Text txtFloatingMessage = Instantiate(floatingMessagePrefab);
+
+        //生成したフロート表示の親をCanvasに設定
+        txtFloatingMessage.gameObject.transform.SetParent(canvasTran);
+
+        //引数を元に、フロート表示のテキストを設定
+        txtFloatingMessage.text = messageText;
+
+        //引数を元に、フロート表示の色を設定
+        txtFloatingMessage.color = color;
+
+        //フロート表示の場所を初期位置を設定
+        txtFloatingMessage.gameObject.transform.position= new Vector3(900.0f,50.0f,0);
+
+        //フロート表示の大きさを初期化
+        txtFloatingMessage.gameObject.transform.localScale = Vector3.one;
+
+        //生成したフロート表示を3.0秒後に消す
+        Destroy(txtFloatingMessage.gameObject, 3.0f);
+
+        //フロート表示を2.0秒かけて、上に移動させる
+        txtFloatingMessage.gameObject.transform.DOLocalMoveY(100.0f,2.0f);
+
+        //フロート表示の移動が終わるまで待つ
+        yield return new WaitForSeconds(2.0f);
+
+        //フロート表示を1.0秒かけて非表示にする
+        txtFloatingMessage.DOFade(0.0f, 1.0f);
     }
 }
