@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Slider hpSlider;//体力スライダー
 
+    [SerializeField]
+    private CanvasGroup canvasGroup;//CanvasGroup
+
     /// <summary>
     /// ゲームスタート演出を行う
     /// </summary>
@@ -93,5 +96,15 @@ public class UIManager : MonoBehaviour
     {
         //0.5秒かけて体力用スライダーを更新する
         hpSlider.DOValue((currentValue + updateValue)/100.0f, 0.5f);
+    }
+
+    /// <summary>
+    /// CanvasGroupの表示、非表示を切り替える
+    /// </summary>
+    /// <param name="set"></param>
+    public void SetCanvasGroup(bool isSetting)
+    {
+        //引数を元に、CanvasGroupの透明度を設定
+        canvasGroup.alpha = isSetting ? 1.0f : 0.0f;
     }
 }
