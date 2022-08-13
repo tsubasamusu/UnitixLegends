@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [SerializeField]
+    private UIManager uiManager;//UIManager
+
     private float playerHp=100.0f;//Playerの体力
 
     public float PlayerHp//PlayerHp変数用のプロパティ
@@ -21,9 +24,10 @@ public class PlayerHealth : MonoBehaviour
         switch(hit.gameObject.tag)
         {
             case ("Grenade"):
-                UpdatePlayerHp(-30.0f);
+                UpdatePlayerHp(-30.0f,hit);
                 break;
             case ("TearGasGrenade"):
+                UpdatePlayerHp(0,hit);
                 AttackedByTearGasGrenade();
                 break;
             case ("Knife"):
@@ -82,6 +86,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void AttackedByTearGasGrenade()
     {
-        //TODO:UIManagerから視界を一定時間暗くする処理を呼び出す
+        //視界を5.0秒間暗くする
+        StartCoroutine( uiManager.SetEventHorizonBlack(5.0f));
     }
 }
