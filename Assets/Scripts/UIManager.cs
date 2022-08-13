@@ -26,6 +26,9 @@ public class UIManager : MonoBehaviour
     private Text txtBulletCount;//残弾数テキスト
 
     [SerializeField]
+    private Text txtFps;//FPSのテキスト
+
+    [SerializeField]
     private Text floatingMessagePrefab;//フロート表示のプレファブ
 
     [SerializeField]
@@ -36,6 +39,15 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Transform canvasTran;//Canvasのtransform
+
+    /// <summary>
+    /// 毎フレーム呼び出される
+    /// </summary>
+    private void Update()
+    {
+        //フレームレートを計算し、表示を更新する
+        UpdateFpsText();
+    }
 
     /// <summary>
     /// ゲームスタート演出を行う
@@ -217,5 +229,17 @@ public class UIManager : MonoBehaviour
 
         //フロート表示を1.0秒かけて非表示にする
         txtFloatingMessage.DOFade(0.0f, 1.0f);
+    }
+
+    /// <summary>
+    /// フレームレートを計算し、表示を更新する
+    /// </summary>
+    private void UpdateFpsText()
+    {
+        //フレームレートを計算し、取得する
+        float fps = 1f / Time.deltaTime;
+
+        //表示を更新
+        txtFps.text=fps.ToString("F0")+"fps";
     }
 }
