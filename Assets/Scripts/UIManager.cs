@@ -14,9 +14,6 @@ public class UIManager : MonoBehaviour
     private Image logo;//ロゴ
 
     [SerializeField]
-    private Image[] itemImages=new Image[5];
-
-    [SerializeField]
     private Sprite gameStart;//ゲームスタートロゴ
 
     [SerializeField]
@@ -42,6 +39,11 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Transform canvasTran;//Canvasのtransform
+
+    [SerializeField]
+    private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
+
+    private List<GameObject> itemSlotList = new List<GameObject>();//アイテムスロットのリスト（GameObject型）
 
     /// <summary>
     /// 毎フレーム呼び出される
@@ -247,10 +249,48 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// アイテムのイメージを設定する
+    /// 指定された数だけアイテムスロットを生成する
     /// </summary>
-    public void SetItemImage(int itemNo)
+    /// <param name="generateNumber"></param>アイテムスロットの数
+    public void GenerateItemSlots(int generateNumber)
     {
-        //TODO:引数で受け取ったアイテムの種類のSpriteを、指定されたアイテムのイメージに設定する処理
+        //引数で指定された回数だけ生成処理を繰り返す
+        for (int i = 0; i < generateNumber; i++)
+        {
+            //アイテムスロットを生成
+            GameObject itemSlot = Instantiate(itemSlotSetPrefab);
+
+            //生成したアイテムスロットの親をcanvasGroupに設定
+            itemSlot.transform.SetParent(canvasGroup.transform);
+
+            //生成したアイテムスロットの大きさを設定
+            itemSlot.transform.localScale = Vector3.one;
+
+            //生成したアイテムスロットの位置を設定
+            itemSlot.transform.localPosition = new Vector3((-1 * (200 + (50 * (generateNumber - 5)))) + (100 * i), 0, 0);
+
+            //生成したアイテムスロットの子オブジェクトのImageを取得
+            if (itemSlot.transform.GetChild(2).TryGetComponent<Image>(out Image imgItem))//nullエラー回避
+            {
+                //取得したイメージを透明に設定
+                imgItem.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+            }
+
+            //生成したアイテムスロットの情報をリストに追加
+            itemSlotList.Add(itemSlot);
+        }
+    }
+
+    private void Start()
+    {
+        GenerateItemSlots(5);
+    }
+
+    /// <summary>
+    /// アイテムのSpriteを設定する
+    /// </summary>
+    public void SetItemImage(int itemNo,Sprite itemSprite)
+    {
+       
     }
 }
