@@ -14,6 +14,21 @@ public class UIManager : MonoBehaviour
     private Image logo;//ロゴ
 
     [SerializeField]
+    private Image imgItem1;//アイテムイメージ1
+
+    [SerializeField]
+    private Image imgItem2;//アイテムイメージ2
+
+    [SerializeField]
+    private Image imgItem3;//アイテムイメージ3
+
+    [SerializeField]
+    private Image imgItem4;//アイテムイメージ4
+
+    [SerializeField]
+    private Image imgItem5;//アイテムイメージ5
+
+    [SerializeField]
     private Sprite gameStart;//ゲームスタートロゴ
 
     [SerializeField]
@@ -241,5 +256,13 @@ public class UIManager : MonoBehaviour
 
         //表示を更新
         txtFps.text=fps.ToString("F0")+"fps";
+    }
+
+    /// <summary>
+    /// アイテムのイメージを設定する
+    /// </summary>
+    public void SetItemImage(int itemNo)
+    {
+        //TODO:引数で受け取ったアイテムの種類のSpriteを、指定されたアイテムのイメージに設定する処理
     }
 }
