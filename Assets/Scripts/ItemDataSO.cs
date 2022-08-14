@@ -1,18 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class ItemDataSO : MonoBehaviour
+//アセットメニューで「Create ItemDataSO」を選択すると、「ItemDataSO」を作成できる
+[CreateAssetMenu(fileName = "ItemDataSO", menuName = "Create ItemDataSO")]
+public class ItemDataSO : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// アイテムの名前
+    /// </summary>
+    public enum ItemName
     {
-        
+        Grenade,//手榴弾
+        TearGasGrenade,//催涙弾
+        Knife,//ナイフ
+        Bat,//バット
+        Assault,//アサルトライフル
+        Shotgun,//ショットガン
+        Sniper,//スナイパーライフル
+        Bandage,//包帯
+        MedicinalPlants,//薬草
+        Syringe,//注射器
+        AssaultBullet,//アサルト用弾
+        ShotgunBullet,//ショットガン用弾
+        SniperBullet//スナイパー用弾
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// アイテムのデータを管理するクラス
+    /// </summary>
+    [Serializable]
+    public class ItemData
     {
-        
+        public ItemName itemName;//アイテムの名前
+        public float restorativeValue;//回復量
+        public float occurrence;//出現確率
+        public float shotSpeed;//発射速度
+        public float attackPower;//攻撃力
+        public float reloadTime;//リロード時間
+        public float interval;//連射間隔
+        public float timeToExplode;//爆破・ガス発生までの時間
+        public Sprite sprite;//Sprite
     }
+
+    public List<ItemData> itemDataList=new List<ItemData>();//アイテムデータのリスト
 }
