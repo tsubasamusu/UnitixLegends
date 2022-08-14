@@ -52,7 +52,7 @@ MonoBehaviour:
     interval: 1
     timeToExplode: 0
     sprite: {fileID: 21300000, guid: ddcf5feb3e17009478c996101331519b, type: 3}
-    prefab: {fileID: 0}
+    prefab: {fileID: 6742914811187293397, guid: bc9b8950c627ece4886fcf9d44f6a535, type: 3}
   - itemName: 4
     restorativeValue: 0
     occurrence: 33
