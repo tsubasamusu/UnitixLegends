@@ -22,7 +22,7 @@ MonoBehaviour:
     interval: 1
     timeToExplode: 5
     sprite: {fileID: 21300000, guid: 4173be7b6c266fe45b67c4602ee39969, type: 3}
-    prefab: {fileID: 0}
+    prefab: {fileID: 5138146625706428292, guid: 4dd9edeb7b00a2042b91ac986cbbb02a, type: 3}
   - itemName: 1
     restorativeValue: 0
     occurrence: 25
@@ -32,7 +32,7 @@ MonoBehaviour:
     interval: 1
     timeToExplode: 0
     sprite: {fileID: 21300000, guid: 8b6eb3e89926bb94c974e2cc37ac778a, type: 3}
-    prefab: {fileID: 0}
+    prefab: {fileID: 1850137511094673971, guid: 94a3b31779ff25b4fafa989ceb44e81e, type: 3}
   - itemName: 2
     restorativeValue: 0
     occurrence: 25
@@ -55,67 +55,67 @@ MonoBehaviour:
     prefab: {fileID: 0}
   - itemName: 4
     restorativeValue: 0
-    occurrence: 0
-    attackPower: 0
-    shotSpeed: 0
-    reloadTime: 0
-    interval: 0
+    occurrence: 33
+    attackPower: 1
+    shotSpeed: 1000
+    reloadTime: 1
+    interval: 0.1
     timeToExplode: 0
     sprite: {fileID: 21300000, guid: 1b07c51ade9d68443b2f66910bda4990, type: 3}
-    prefab: {fileID: 0}
+    prefab: {fileID: 313122353905581272, guid: 8afcbc212a76e2344a71ee064f9fab6b, type: 3}
   - itemName: 5
     restorativeValue: 0
-    occurrence: 0
-    attackPower: 0
-    shotSpeed: 0
-    reloadTime: 0
-    interval: 0
+    occurrence: 33
+    attackPower: 30
+    shotSpeed: 1000
+    reloadTime: 2
+    interval: 1
     timeToExplode: 0
     sprite: {fileID: 21300000, guid: bfae38439f14da14db710fbe0aee7d33, type: 3}
     prefab: {fileID: 0}
   - itemName: 6
     restorativeValue: 0
-    occurrence: 0
-    attackPower: 0
-    shotSpeed: 0
-    reloadTime: 0
-    interval: 0
+    occurrence: 33
+    attackPower: 80
+    shotSpeed: 10000
+    reloadTime: 5
+    interval: 2
     timeToExplode: 0
     sprite: {fileID: 21300000, guid: d5da1e23ae2a5bb41b4fc1008894c983, type: 3}
     prefab: {fileID: 0}
   - itemName: 7
-    restorativeValue: 0
+    restorativeValue: 10
     occurrence: 0
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: cc9d1fb92a80bbc419f6bc1973c6f0a3, type: 3}
     prefab: {fileID: 0}
   - itemName: 8
-    restorativeValue: 0
+    restorativeValue: 50
     occurrence: 0
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 8b51bac5904437d45a3ce760a771605e, type: 3}
     prefab: {fileID: 0}
   - itemName: 9
-    restorativeValue: 0
+    restorativeValue: 100
     occurrence: 0
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: eff3f242e9ac79549b13936bdd8de78f, type: 3}
     prefab: {fileID: 0}
   - itemName: 10
     restorativeValue: 0
-    occurrence: 0
+    occurrence: 33
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
     prefab: {fileID: 0}
   - itemName: 11
     restorativeValue: 0
-    occurrence: 0
+    occurrence: 33
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
     prefab: {fileID: 0}
   - itemName: 12
     restorativeValue: 0
-    occurrence: 0
+    occurrence: 33
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
