@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+using System;//Serializable属性を使用
 
 //アセットメニューで「Create ItemDataSO」を選択すると、「ItemDataSO」を作成できる
 [CreateAssetMenu(fileName = "ItemDataSO", menuName = "Create ItemDataSO")]
@@ -34,14 +34,18 @@ public class ItemDataSO : ScriptableObject
     public class ItemData
     {
         public ItemName itemName;//アイテムの名前
+        [Range(0.0f, 100.0f)]
         public float restorativeValue;//回復量
+        [Range(0.0f,100.0f)]
         public float occurrence;//出現確率
-        public float shotSpeed;//発射速度
+        [Range(0.0f, 100.0f)]
         public float attackPower;//攻撃力
+        public float shotSpeed;//発射速度
         public float reloadTime;//リロード時間
         public float interval;//連射間隔
         public float timeToExplode;//爆破・ガス発生までの時間
         public Sprite sprite;//Sprite
+        public GameObject prefab;//プレファブ
     }
 
     public List<ItemData> itemDataList=new List<ItemData>();//アイテムデータのリスト

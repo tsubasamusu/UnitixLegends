@@ -12,4 +12,121 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70ee3ddfb9468e34db8df868c0394ddd, type: 3}
   m_Name: ItemDataSO
   m_EditorClassIdentifier: 
-  itemDataList: []
+  itemDataList:
+  - itemName: 0
+    restorativeValue: 0
+    occurrence: 25
+    attackPower: 30
+    shotSpeed: 100
+    reloadTime: 0
+    interval: 1
+    timeToExplode: 5
+    sprite: {fileID: 0}
+  - itemName: 1
+    restorativeValue: 0
+    occurrence: 25
+    attackPower: 0
+    shotSpeed: 100
+    reloadTime: 0
+    interval: 1
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 2
+    restorativeValue: 0
+    occurrence: 25
+    attackPower: 100
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 1
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 3
+    restorativeValue: 0
+    occurrence: 25
+    attackPower: 50
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 1
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 4
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 5
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 6
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 7
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 8
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 9
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 10
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 11
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
+  - itemName: 12
+    restorativeValue: 0
+    occurrence: 0
+    attackPower: 0
+    shotSpeed: 0
+    reloadTime: 0
+    interval: 0
+    timeToExplode: 0
+    sprite: {fileID: 0}
