@@ -36,8 +36,6 @@ public class ItemDataSO : ScriptableObject
         public ItemName itemName;//アイテムの名前
         [Range(0.0f, 100.0f)]
         public float restorativeValue;//回復量
-        [Range(0.0f,100.0f)]
-        public float occurrence;//出現確率
         [Range(0.0f, 100.0f)]
         public float attackPower;//攻撃力
         public float shotSpeed;//発射速度
