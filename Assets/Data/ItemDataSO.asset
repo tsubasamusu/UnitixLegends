@@ -122,7 +122,7 @@ MonoBehaviour:
     interval: 0
     timeToExplode: 0
     sprite: {fileID: 0}
-    prefab: {fileID: 0}
+    prefab: {fileID: 8991250133275760237, guid: cc51377fc5623004988998499244b6f3, type: 3}
   - itemName: 11
     restorativeValue: 0
     occurrence: 33
@@ -132,7 +132,7 @@ MonoBehaviour:
     interval: 0
     timeToExplode: 0
     sprite: {fileID: 0}
-    prefab: {fileID: 0}
+    prefab: {fileID: 4012682543602766010, guid: 2ca7ce3be3aa4ef4791b8c66f93c1f9c, type: 3}
   - itemName: 12
     restorativeValue: 0
     occurrence: 33
@@ -142,4 +142,4 @@ MonoBehaviour:
     interval: 0
     timeToExplode: 0
     sprite: {fileID: 0}
-    prefab: {fileID: 0}
+    prefab: {fileID: 375669562434948848, guid: 1c560f3d28636e24397cf39dfd818ef5, type: 3}
