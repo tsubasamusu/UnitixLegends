@@ -44,6 +44,7 @@ public class ItemDataSO : ScriptableObject
         public float reloadTime;//リロード時間
         public float interval;//連射間隔
         public float timeToExplode;//爆破・ガス発生までの時間
+        public bool enemyCanUse;//Enemyが使用できるかどうか
         public Sprite sprite;//Sprite
         public GameObject prefab;//プレファブ
     }
