@@ -9,18 +9,18 @@ public class CinemachineManager : MonoBehaviour
     private CinemachineFreeLook airplaneCamera;//飛行機視点カメラ
 
     [SerializeField]
-    private GameObject player;//Player
+    private Transform miniMapBackgroundTran;//ミニマップ背景の位置
 
     [SerializeField]
-    private GameObject miniMapCamera;//ミニマップカメラ
+    private Transform playerTran;//Playerの位置
 
     /// <summary>
     /// 毎フレーム呼び出される
     /// </summary>
     private void Update()
     {
-        //ミニマップカメラを常にPlayerの上空に滞在させる
-        miniMapCamera.transform.position=new Vector3(player.transform.position.x,miniMapCamera. transform.position.y,player.transform.position.z);
+        //ミニマップの背景の位置を常にPlayerの位置に合わせる
+        miniMapBackgroundTran.position = new Vector3(playerTran.position.x,miniMapBackgroundTran.position.y,playerTran.position.z);
     }
 
     /// <summary>
