@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;//DOTweenを使用
 using System;//enumを使用
 using Cinemachine;//Cinemachineを使用
 
@@ -19,14 +18,11 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private float speedX;//左右移動速度
 
-	[SerializeField]
-	private float jumpHeight;//ジャンプの高さ
-
 	[SerializeField, Range(1.0f, 30.0f)]
 	private float zoomFOV;//ズーム時の視野角
 
 	[SerializeField]
-	private KeyCode jumpKey;//ジャンプキー
+	private KeyCode fallKey;//飛び降りるキー
 
 	[SerializeField]
 	private KeyCode stoopKey;//かがむキー
@@ -71,7 +67,6 @@ public class PlayerController : MonoBehaviour
 		MovePrevious,//前進している
 		MoveRight,//右移動している
 		MoveLeft,//左移動している
-		Jumping,//ジャンプしている
 		Stooping//かがんでいる
 	}
 
@@ -80,6 +75,19 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     void Update()
 	{
+		//接地していなかったら
+		if (!CheckGrounded())
+		{
+			//飛び降りるキーを押されたら
+			if(Input.GetKeyDown(fallKey))
+            {
+				//TODO:飛行機から飛び降りる処理
+            }
+
+			//以降の処理を行わない
+			return;
+		}
+
 		//アニメーションの再生と、Playerの動きの制御を行う
 		PlayAnimation(MovePlayer());
 
@@ -119,10 +127,6 @@ public class PlayerController : MonoBehaviour
 				animationName = "MoveLeft";
 				break;
 
-			case PlayerCondition.Jumping:
-				animationName = "Jumping";
-				break;
-
 			case PlayerCondition.Stooping:
 				animationName = "Stooping";
 				break;
@@ -149,13 +153,6 @@ public class PlayerController : MonoBehaviour
 
 		//ローカル空間からワールド空間へdirectionを変換し、その向きと大きさに移動
 		controller.Move(transform.TransformDirection(moveDirection) * Time.deltaTime);
-
-		//Playerが接地していないなら
-		if (!CheckGrounded())
-		{
-			//Playerの状態を返す
-			return PlayerCondition.Jumping;
-		}
 
 		//Wを押されている間
 		if (Input.GetAxis("Vertical") > 0.0f)
@@ -193,16 +190,6 @@ public class PlayerController : MonoBehaviour
 
 			//Playerの状態を返す
 			return PlayerCondition.MoveLeft;
-		}
-
-		//ジャンプキーが押されたら
-		if (Input.GetKeyDown(jumpKey))
-		{
-			//jumpHeightの高さへ0.5秒かけて移動して、元の位置に戻る
-			transform.DOMove(new Vector3(transform.position.x, transform.position.y + jumpHeight, transform.position.z), 0.5f).SetLoops(2, LoopType.Yoyo);
-
-			//Playerの状態を返す
-			return PlayerCondition.Jumping;
 		}
 
 		//かがむキーが押されている間
