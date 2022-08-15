@@ -12,8 +12,13 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private ItemDataSO ItemDataSO;//ItemDataSO
 
+    [SerializeField]
+    private Transform playerTran;//Playerの位置情報
+
+    [HideInInspector]
     public List<ItemDataSO.ItemData> generatedItemDataList = new List<ItemDataSO.ItemData>();//生成したアイテムのデータのリスト
 
+    [HideInInspector]
     public List<Transform> generatedItemTranlist=new List<Transform>();//アイテムの生成位置のリスト
 
     /// <summary>
@@ -32,9 +37,6 @@ public class GameData : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ゲーム開始直後に呼び出される
-    /// </summary>
     private void Start()
     {
         //アイテムの生成位置のリストを作成
@@ -66,7 +68,7 @@ public class GameData : MonoBehaviour
     /// <summary>
     /// アイテムの生成位置のリストを作成する
     /// </summary>
-    private void CreateGeneratedItemTranList()
+    public void CreateGeneratedItemTranList()
     {
         //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数だけ繰り返す
         for (int i = 0; i < itemTrans.childCount; i++)
@@ -74,5 +76,15 @@ public class GameData : MonoBehaviour
             //アイテムの位置情報をまとめたフォルダーの子オブジェクトの位置情報をリストに追加していく
             generatedItemTranlist.Add(itemTrans.GetChild(i).transform);
         }
+    }
+
+    /// <summary>
+    /// 最も近くにあるアイテムの番号を返す
+    /// </summary>
+    /// <param name="myPos">自分の位置</param>
+    /// <returns></returns>
+    public int InvestigateNearItemNumber(Vector3 myPos)
+    {
+
     }
 }
