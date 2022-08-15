@@ -85,6 +85,6 @@ public class GameData : MonoBehaviour
     /// <returns></returns>
     public int InvestigateNearItemNumber(Vector3 myPos)
     {
-
+        return 1;//ÅiâºÅj
     }
 }
