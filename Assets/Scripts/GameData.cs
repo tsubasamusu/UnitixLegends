@@ -12,6 +12,10 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private ItemDataSO ItemDataSO;//ItemDataSO
 
+    public List<ItemDataSO.ItemData> generatedItemDataList = new List<ItemDataSO.ItemData>();//生成したアイテムのデータのリスト
+
+    public List<Transform> generatedItemTranlist=new List<Transform>();//アイテムの生成位置のリスト
+
     /// <summary>
     /// Startメソッドより前に呼び出される（以下、シングルトンに必須の記述）
     /// </summary>
@@ -33,6 +37,10 @@ public class GameData : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        //アイテムの生成位置のリストを作成
+        CreateGeneratedItemTranList();
+
+        //アイテムを生成
         GenerateItem();
     }
 
@@ -44,26 +52,27 @@ public class GameData : MonoBehaviour
         //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数だけ繰り返す
         for (int i = 0; i < itemTrans.childCount; i++)
         {
-            Instantiate(ItemDataSO.itemDataList[Random.Range(0, 13)].prefab, CreateItemPosList()[i]);
+            //ランダムな整数を取得
+            int px = Random.Range(0, 13);
+
+            //指定した位置にランダムなアイテムを生成
+            Instantiate(ItemDataSO.itemDataList[px].prefab, generatedItemTranlist[i]);
+
+            //生成したアイテムのデータをリストに追加
+            generatedItemDataList.Add(ItemDataSO.itemDataList[px]);   
         }
     }
 
     /// <summary>
     /// アイテムの生成位置のリストを作成する
     /// </summary>
-    private List<Transform> CreateItemPosList()
+    private void CreateGeneratedItemTranList()
     {
-        //リストを作成
-        List<Transform> generateItemPosList = new List<Transform>();
-
         //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数だけ繰り返す
         for (int i = 0; i < itemTrans.childCount; i++)
         {
             //アイテムの位置情報をまとめたフォルダーの子オブジェクトの位置情報をリストに追加していく
-            generateItemPosList.Add(itemTrans.GetChild(i).transform);
+            generatedItemTranlist.Add(itemTrans.GetChild(i).transform);
         }
-
-        //生成したリストを返す
-        return generateItemPosList;
     }
 }
