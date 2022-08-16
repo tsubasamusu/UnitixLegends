@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
 	[SerializeField, Range(1.0f, 30.0f)]
 	private float zoomFOV;//ズーム時の視野角
 
+    [SerializeField]
+	private float getItemLength;//アイテムを取得できる距離
+
 	[SerializeField]
 	private KeyCode fallKey;//飛び降りるキー
 
@@ -41,6 +44,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
 	private BulletManager bulletManager;//BulletManager
+
+    [SerializeField]
+	private UIManager uiManager;//UIManager
 
 	[SerializeField]
 	private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
@@ -257,12 +263,24 @@ public class PlayerController : MonoBehaviour
 			followZoom.m_MinFOV = 30.0f;
         }
 
-		//TODO:アイテムに近づいたら
+		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れていたら
+		if(GameData.instance.LengthToNearItem>getItemLength)
+        {
+			//メッセージを空にする
+			uiManager.SetMessageText("");
+
+			//以下の処理を行わない
+			return;
+        }
+
+		//メッセージを表示
+		uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem");
 
 		//アイテム取得キーが押されたら
 		if (Input.GetKeyDown(getItemKey))
 		{
-			//TODO:GameDataからアイテムの取得処理を呼び出す
+			//アイテムを取得する
+			GameData.instance.GetItem(GameData.instance.NearItemNo,true);
 		}
 	}
 

@@ -8,10 +8,13 @@ public class GameData : MonoBehaviour
     public static GameData instance;//インスタンス
 
     [SerializeField]
-    private Transform itemTrans;//アイテムの位置情報をまとめたフォルダー
+    private ItemDataSO ItemDataSO;//ItemDataSO
 
     [SerializeField]
-    private ItemDataSO ItemDataSO;//ItemDataSO
+    private UIManager uIManager;//UIManager
+
+    [SerializeField]
+    private Transform itemTrans;//アイテムの位置情報をまとめたフォルダー
 
     [SerializeField]
     private Transform playerTran;//Playerの位置情報
@@ -19,15 +22,25 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private float itemRotSpeed;//アイテムの回転速度
 
-    [HideInInspector]
+    //[HideInInspector]
     public List<ItemDataSO.ItemData> generatedItemDataList = new List<ItemDataSO.ItemData>();//生成したアイテムのデータのリスト
 
-    [HideInInspector]
+    //[HideInInspector]
     public List<Transform> generatedItemTranList = new List<Transform>();//アイテムの生成位置のリスト
 
     private int nearItemNo;//Playerの最も近くにあるアイテムの番号
 
+    public int NearItemNo//nearItemNo変数用のプロパティ
+    {
+        get { return nearItemNo; }//外部からは取得処理のみを可能に
+    }
+
     private float lengthToNearItem;//「Playerの最も近くにあるアイテム」と「Player」との距離
+
+    public float LengthToNearItem//lengthToNearItem変数用のプロパティ
+    {
+        get { return lengthToNearItem; }//外部からは取得処理のみを可能に
+    }
 
     /// <summary>
     /// Startメソッドより前に呼び出される（以下、シングルトンに必須の記述）
@@ -45,14 +58,21 @@ public class GameData : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ゲーム開始直後に呼び出される
+    /// </summary>
     private void Start()
     {
         //アイテムを生成
         GenerateItem();
     }
 
+    /// <summary>
+    /// 毎フレーム呼び出される
+    /// </summary>
     private void Update()
     {
+        //Playerの最も近くにあるアイテムの情報を取得
         GetInformationOfNearItem(playerTran.position, true);
     }
 
@@ -156,7 +176,38 @@ public class GameData : MonoBehaviour
             //アイテムを回転させる
             itemPrefab.transform.Rotate(0, itemRotSpeed, 0);
 
+            //次のフレームに飛ぶ（実質Updateメソッド）
             yield return null;
+        }
+    }
+
+    /// <summary>
+    /// アイテムを取得する処理
+    /// </summary>
+    /// <param name="nearItemNo">最も近くにあるアイテムの番号</param>
+    /// <param name="isPlayer">アイテムの取得者がPlayerかどうか</param>
+    public void GetItem(int nearItemNo,bool isPlayer)
+    {
+        //アイテムのデータのリストから要素を削除
+        generatedItemDataList.RemoveAt(nearItemNo);
+
+        //アイテムの位置情報のリストから要素を削除
+        generatedItemTranList.RemoveAt(nearItemNo);
+
+        //アイテムのゲームオブジェクトを消す
+        Destroy(itemTrans.GetChild(nearItemNo).gameObject);
+
+        //アイテムの取得者がPlayerではないなら
+        if (!isPlayer)
+        {
+            //以下の処理を行わない
+            return;
+        }
+
+        //nullエラー回避
+        if (generatedItemDataList[nearItemNo].sprite!=null)
+        {
+            uIManager.SetItemSprite(1, generatedItemDataList[nearItemNo].sprite);
         }
     }
 }

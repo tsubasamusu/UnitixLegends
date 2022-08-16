@@ -1,5 +1,5 @@
 using System.Collections;//IEnumeratorを使用
-using System.Collections.Generic;
+using System.Collections.Generic;//リストを使用
 using UnityEngine;
 using UnityEngine.UI;//UIを使用
 using DG.Tweening;//DOTweenを使用
@@ -29,6 +29,9 @@ public class UIManager : MonoBehaviour
     private Text txtFps;//FPSのテキスト
 
     [SerializeField]
+    private Text txtMessage;//メッセージのテキスト
+
+    [SerializeField]
     private Text floatingMessagePrefab;//フロート表示のプレファブ
 
     [SerializeField]
@@ -44,6 +47,15 @@ public class UIManager : MonoBehaviour
     private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
 
     private List<Image> imgItemSlotList = new List<Image>();//アイテムスロットのイメージのリスト
+
+    /// <summary>
+    /// ゲーム開始直後に呼び出される
+    /// </summary>
+    private void Start()
+    {
+        //アイテムスロットを生成
+        GenerateItemSlots(5);
+    }
 
     /// <summary>
     /// 毎フレーム呼び出される
@@ -218,7 +230,7 @@ public class UIManager : MonoBehaviour
         txtFloatingMessage.color = color;
 
         //フロート表示の場所を初期位置を設定
-        txtFloatingMessage.gameObject.transform.position= new Vector3(900.0f,50.0f,0);
+        txtFloatingMessage.gameObject.transform.position= new Vector3(900.0f,200.0f,0);
 
         //フロート表示の大きさを初期化
         txtFloatingMessage.gameObject.transform.localScale = Vector3.one;
@@ -251,7 +263,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 指定された数だけアイテムスロットを生成する
     /// </summary>
-    /// <param name="generateNumber"></param>アイテムスロットの数
+    /// <param name="generateNumber">アイテムスロットの数</param>
     public void GenerateItemSlots(int generateNumber)
     {
         //引数で指定された回数だけ生成処理を繰り返す
@@ -284,12 +296,21 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// アイテムのSpriteを設定する
     /// </summary>
-    public void SetItemImage(int itemNo,Sprite itemSprite)
+    public void SetItemSprite(int itemNo,Sprite itemSprite)
     {
         //引数を元に、指定されたアイテムのSpriteを設定する
         imgItemSlotList[itemNo-1].sprite = itemSprite;
 
         //指定されたイメージを可視化
         imgItemSlotList[itemNo - 1].color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    /// <summary>
+    /// メッセージのテキストを設定し、表示する
+    /// </summary>
+    public void SetMessageText(string text)
+    {
+        //引数を元に。メッセージのテキストを設定
+        txtMessage.text=text;
     }
 }
