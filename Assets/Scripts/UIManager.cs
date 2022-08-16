@@ -285,11 +285,14 @@ public class UIManager : MonoBehaviour
             if (itemSlot.transform.GetChild(2).TryGetComponent<Image>(out Image imgItem))//nullエラー回避
             {
                 //取得したイメージを透明に設定
-                imgItem.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+                imgItem.DOFade(0.0f, 0.01f);
             }
 
             //生成したアイテムスロットのイメージをリストに追加
             imgItemSlotList.Add(imgItem);
+
+            //Playerが所持しているアイテムのリストの要素を、アイテムスロットの数だけ作る
+            GameData.instance.playerItemList.Add(null);
         }
     }
 
@@ -302,7 +305,7 @@ public class UIManager : MonoBehaviour
         imgItemSlotList[itemNo-1].sprite = itemSprite;
 
         //指定されたイメージを可視化
-        imgItemSlotList[itemNo - 1].color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+        imgItemSlotList[itemNo - 1].DOFade(1.0f, 0.25f);
     }
 
     /// <summary>

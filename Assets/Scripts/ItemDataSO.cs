@@ -12,6 +12,7 @@ public class ItemDataSO : ScriptableObject
     /// </summary>
     public enum ItemName
     {
+        None,//何者でもない
         Grenade,//手榴弾
         TearGasGrenade,//催涙弾
         Knife,//ナイフ
@@ -43,6 +44,7 @@ public class ItemDataSO : ScriptableObject
         public float interval;//連射間隔
         public float timeToExplode;//爆破・ガス発生までの時間
         public bool enemyCanUse;//Enemyが使用できるかどうか
+        public bool isNotBullet;//弾のアイテムではないかどうか
         public Sprite sprite;//Sprite
         public GameObject prefab;//プレファブ
     }

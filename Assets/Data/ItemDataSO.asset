@@ -15,144 +15,144 @@ MonoBehaviour:
   itemDataList:
   - itemName: 0
     restorativeValue: 0
-    occurrence: 25
     attackPower: 30
     shotSpeed: 100
     reloadTime: 0
     interval: 1
     timeToExplode: 5
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: 4173be7b6c266fe45b67c4602ee39969, type: 3}
     prefab: {fileID: 5138146625706428292, guid: 4dd9edeb7b00a2042b91ac986cbbb02a, type: 3}
   - itemName: 1
     restorativeValue: 0
-    occurrence: 25
     attackPower: 0
     shotSpeed: 100
     reloadTime: 0
     interval: 1
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: 8b6eb3e89926bb94c974e2cc37ac778a, type: 3}
     prefab: {fileID: 1850137511094673971, guid: 94a3b31779ff25b4fafa989ceb44e81e, type: 3}
   - itemName: 2
     restorativeValue: 0
-    occurrence: 25
     attackPower: 100
     shotSpeed: 0
     reloadTime: 0
     interval: 1
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: ad553b38856212047ace67743e54d0fa, type: 3}
     prefab: {fileID: 6097560340080515096, guid: 02a20ca504888954fbc69da33ed2d8d6, type: 3}
   - itemName: 3
     restorativeValue: 0
-    occurrence: 25
     attackPower: 50
     shotSpeed: 0
     reloadTime: 0
     interval: 1
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: ddcf5feb3e17009478c996101331519b, type: 3}
     prefab: {fileID: 6742914811187293397, guid: bc9b8950c627ece4886fcf9d44f6a535, type: 3}
   - itemName: 4
     restorativeValue: 0
-    occurrence: 33
     attackPower: 1
     shotSpeed: 1000
     reloadTime: 1
     interval: 0.1
     timeToExplode: 0
     enemyCanUse: 1
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: 1b07c51ade9d68443b2f66910bda4990, type: 3}
     prefab: {fileID: 313122353905581272, guid: 8afcbc212a76e2344a71ee064f9fab6b, type: 3}
   - itemName: 5
     restorativeValue: 0
-    occurrence: 33
     attackPower: 30
     shotSpeed: 1000
     reloadTime: 2
     interval: 1
     timeToExplode: 0
     enemyCanUse: 1
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: bfae38439f14da14db710fbe0aee7d33, type: 3}
     prefab: {fileID: 8216595480013017426, guid: dc5765defa44e0c4daae785866edc10a, type: 3}
   - itemName: 6
     restorativeValue: 0
-    occurrence: 33
     attackPower: 80
     shotSpeed: 10000
     reloadTime: 5
     interval: 2
     timeToExplode: 0
     enemyCanUse: 1
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: d5da1e23ae2a5bb41b4fc1008894c983, type: 3}
     prefab: {fileID: 2622437530288346922, guid: d216797b1b74a484ab27039305e5c1df, type: 3}
   - itemName: 7
     restorativeValue: 10
-    occurrence: 0
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: cc9d1fb92a80bbc419f6bc1973c6f0a3, type: 3}
     prefab: {fileID: 7773521802532760737, guid: 1b75fe71a4449b04db308d85a5c29413, type: 3}
   - itemName: 8
     restorativeValue: 50
-    occurrence: 0
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: 8b51bac5904437d45a3ce760a771605e, type: 3}
     prefab: {fileID: 4326449026221822468, guid: c4687cf7f0c86604fb76d76d34674edc, type: 3}
   - itemName: 9
     restorativeValue: 100
-    occurrence: 0
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 1
     sprite: {fileID: 21300000, guid: eff3f242e9ac79549b13936bdd8de78f, type: 3}
     prefab: {fileID: 7119199490050375056, guid: b55dbdf566a253940ad3dca1166a9b18, type: 3}
   - itemName: 10
     restorativeValue: 0
-    occurrence: 33
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 0
     sprite: {fileID: 0}
     prefab: {fileID: 8991250133275760237, guid: cc51377fc5623004988998499244b6f3, type: 3}
   - itemName: 11
     restorativeValue: 0
-    occurrence: 33
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 0
     sprite: {fileID: 0}
     prefab: {fileID: 4012682543602766010, guid: 2ca7ce3be3aa4ef4791b8c66f93c1f9c, type: 3}
   - itemName: 12
     restorativeValue: 0
-    occurrence: 33
     attackPower: 0
     shotSpeed: 0
     reloadTime: 0
     interval: 0
     timeToExplode: 0
     enemyCanUse: 0
+    isNotBullet: 0
     sprite: {fileID: 0}
     prefab: {fileID: 375669562434948848, guid: 1c560f3d28636e24397cf39dfd818ef5, type: 3}

@@ -22,11 +22,13 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private float itemRotSpeed;//アイテムの回転速度
 
-    //[HideInInspector]
+    [HideInInspector]
     public List<ItemDataSO.ItemData> generatedItemDataList = new List<ItemDataSO.ItemData>();//生成したアイテムのデータのリスト
 
-    //[HideInInspector]
+    [HideInInspector]
     public List<Transform> generatedItemTranList = new List<Transform>();//アイテムの生成位置のリスト
+
+    public List<ItemDataSO.ItemData> playerItemList=new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
 
     private int nearItemNo;//Playerの最も近くにあるアイテムの番号
 
@@ -186,28 +188,66 @@ public class GameData : MonoBehaviour
     /// </summary>
     /// <param name="nearItemNo">最も近くにあるアイテムの番号</param>
     /// <param name="isPlayer">アイテムの取得者がPlayerかどうか</param>
-    public void GetItem(int nearItemNo,bool isPlayer)
+    public void GetItem(int nearItemNo, bool isPlayer)
     {
-        //アイテムのデータのリストから要素を削除
-        generatedItemDataList.RemoveAt(nearItemNo);
-
-        //アイテムの位置情報のリストから要素を削除
-        generatedItemTranList.RemoveAt(nearItemNo);
-
-        //アイテムのゲームオブジェクトを消す
-        Destroy(itemTrans.GetChild(nearItemNo).gameObject);
-
         //アイテムの取得者がPlayerではないなら
         if (!isPlayer)
         {
-            //以下の処理を行わない
+            //以降の処理を行わない
             return;
         }
 
-        //nullエラー回避
-        if (generatedItemDataList[nearItemNo].sprite!=null)
+        //取得するアイテムが弾のアイテムではないなら
+        if (generatedItemDataList[nearItemNo].isNotBullet)
         {
-            uIManager.SetItemSprite(1, generatedItemDataList[nearItemNo].sprite);
+            //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
+            for (int i = 0; i < playerItemList.Count; i++)
+            {
+                //i番目の要素が空なら
+                if (CheckTheElement(i))
+                {
+                    //アイテムスロットのSpriteを設定
+                    uIManager.SetItemSprite(i+1, generatedItemDataList[nearItemNo].sprite);
+
+                    //Playerが所持しているアイテムのリストの空いている要素に、アイテムの情報を代入
+                    playerItemList[i] = generatedItemDataList[nearItemNo];
+
+                    //フロート表示を生成
+                    StartCoroutine(uIManager.GenerateFloatingMessage(generatedItemDataList[nearItemNo].itemName.ToString(), Color.blue));
+
+                    //繰り返し処理を終了する
+                    break;
+                }
+            }
         }
+
+        //近くのアイテムをリストから削除する
+        RemoveItemList(nearItemNo);
+    }
+
+    /// <summary>
+    /// PlayerItemListの指定した番号の要素が空いているかどうかを調べる
+    /// </summary>
+    /// <param name="elementNo">要素の番号</param>
+    /// <returns> PlayerItemListの指定した番号の要素が空いていたらtrueを返す</returns>
+    public bool CheckTheElement(int elementNo)
+    {
+        return playerItemList[elementNo].itemName==ItemDataSO.ItemName.None?true:false;
+    }
+
+    /// <summary>
+    /// 指定した番号のアイテムをリストから削除する
+    /// </summary>
+    /// <param name="itemNo">アイテムの番号</param>
+    private void RemoveItemList(int itemNo)
+    {
+        //アイテムのデータのリストから要素を削除
+        generatedItemDataList.RemoveAt(itemNo);
+
+        //アイテムの位置情報のリストから要素を削除
+        generatedItemTranList.RemoveAt(itemNo);
+
+        //アイテムのゲームオブジェクトを消す
+        Destroy(itemTrans.GetChild(itemNo).gameObject);
     }
 }
