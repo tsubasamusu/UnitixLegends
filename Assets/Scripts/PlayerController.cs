@@ -56,11 +56,11 @@ public class PlayerController : MonoBehaviour
 
 	private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
 
-	private int useItemNo=1;//使用しているアイテムの番号
+	private int selectedItemNo=1;//使用しているアイテムの番号
 
-	public int UseItemNo//useItemNo変数用のプロパティ
+	public int SelectedItemNo//useItemNo変数用のプロパティ
     {
-		get { return useItemNo; }//外部からは取得処理のみ可能に
+		get { return selectedItemNo; }//外部からは取得処理のみ可能に
     }
 
 	/// <summary>
@@ -238,7 +238,8 @@ public class PlayerController : MonoBehaviour
 		//アイテム破棄キーが押されたら
 		if (Input.GetKeyDown(discardKey))
 		{
-			//TODO:GameDataからアイテムを破棄する処理を呼び出す
+			//アイテムを破棄する
+			GameData.instance.DiscardItem(SelectedItemNo-1);
 		}
 		//左クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse0))
@@ -277,7 +278,7 @@ public class PlayerController : MonoBehaviour
 		if (GameData.instance.IsFull)
 		{
 			//メッセージを表示
-			uiManager.SetMessageText("You Must\nDiscard\nItem");
+			uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item");
 
 			//以降の処理を行わない
 			return;
@@ -333,23 +334,28 @@ public class PlayerController : MonoBehaviour
         switch (code)
         {
 			case KeyCode.Alpha1:
-				useItemNo = 1;
+				selectedItemNo = 1;
+				uiManager.SetItemSlotBackgroundColor(1, Color.red);
 				break;
 
 			case KeyCode.Alpha2:
-				useItemNo = 2;
+				selectedItemNo = 2;
+				uiManager.SetItemSlotBackgroundColor(2, Color.red);
 				break;
 
 			case KeyCode.Alpha3:
-				useItemNo= 3;
+				selectedItemNo= 3;
+				uiManager.SetItemSlotBackgroundColor(3, Color.red);
 				break;
 
 			case KeyCode.Alpha4:
-				useItemNo = 4;
+				selectedItemNo = 4;
+				uiManager.SetItemSlotBackgroundColor(4, Color.red);
 				break;
 
 			case KeyCode.Alpha5:
-				useItemNo = 5;
+				selectedItemNo = 5;
+				uiManager.SetItemSlotBackgroundColor(5, Color.red);
 				break;
 		}
     }

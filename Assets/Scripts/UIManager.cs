@@ -41,12 +41,19 @@ public class UIManager : MonoBehaviour
     private CanvasGroup canvasGroup;//CanvasGroup
 
     [SerializeField]
+    private ItemDataSO itemDataSO;//ItemDataSO
+
+    [SerializeField]
     private Transform canvasTran;//Canvasのtransform
 
     [SerializeField]
     private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
 
-    private List<Image> imgItemSlotList = new List<Image>();//アイテムスロットのイメージのリスト
+    [HideInInspector]
+    public List<Image> imgItemSlotList = new List<Image>();//アイテムスロットのイメージのリスト
+
+    [HideInInspector]
+    public List<Image> imgItemSlotBackgroundList= new List<Image>();//アイテムスロットの背景のイメージのリスト
 
     /// <summary>
     /// ゲーム開始直後に呼び出される
@@ -55,6 +62,9 @@ public class UIManager : MonoBehaviour
     {
         //アイテムスロットを生成
         GenerateItemSlots(5);
+
+        //一番右のアイテムスロットの背景を設定
+        SetItemSlotBackgroundColor(1,Color.red);    
     }
 
     /// <summary>
@@ -284,15 +294,25 @@ public class UIManager : MonoBehaviour
             //生成したアイテムスロットの子オブジェクトのImageを取得
             if (itemSlot.transform.GetChild(2).TryGetComponent<Image>(out Image imgItem))//nullエラー回避
             {
+                //生成したアイテムスロットのイメージをリストに追加
+                imgItemSlotList.Add(imgItem);
+
                 //取得したイメージを透明に設定
-                imgItem.DOFade(0.0f, 0.01f);
+                imgItem.DOFade(0.0f, 0f);
             }
 
-            //生成したアイテムスロットのイメージをリストに追加
-            imgItemSlotList.Add(imgItem);
+            //生成したアイテムスロットの子オブジェクト（背景）のImageを取得
+            if (itemSlot.transform.GetChild(0).TryGetComponent<Image>(out Image imgBackGround))//nullエラー回避
+            {
+                //生成したアイテムスロットのイメージ（背景）をリストに追加
+                imgItemSlotBackgroundList.Add(imgBackGround);
+
+                //背景を半透明に設定
+                imgBackGround.DOFade(0.3f, 0f);
+            }
 
             //Playerが所持しているアイテムのリストの要素を、アイテムスロットの数だけ作る
-            GameData.instance.playerItemList.Add(null);
+            GameData.instance.playerItemList.Add(itemDataSO.itemDataList[0]);
         }
     }
 
@@ -315,5 +335,23 @@ public class UIManager : MonoBehaviour
     {
         //引数を元に。メッセージのテキストを設定
         txtMessage.text=text;
+    }
+
+   /// <summary>
+   /// 指定されたアイテムスロットの背景色を設定する
+   /// </summary>
+   /// <param name="itemslotNo">アイテムスロットの番号</param>
+   /// <param name="color">色</param>
+    public void SetItemSlotBackgroundColor(int itemslotNo,　Color color)
+    {
+        //アイテムスロットの背景のイメージのリストの要素数だけ繰り返す
+        for(int i = 0; i < imgItemSlotBackgroundList.Count; i++)
+        {
+            //指定されたアイテムスロットの背景色を設定し、それ以外は黒色に設定する
+            imgItemSlotBackgroundList[i].color =i == (itemslotNo - 1) ? color:Color.black;
+
+            //背景を半透明にする
+            imgItemSlotBackgroundList[i].DOFade(0.3f, 0f);
+        }
     }
 }

@@ -2097,8 +2097,10 @@ MonoBehaviour:
   floatingMessagePrefab: {fileID: 5145554211297303304, guid: c55516d6fb39a854986984f3ff2e9234, type: 3}
   hpSlider: {fileID: 1389548136}
   canvasGroup: {fileID: 1194680800}
+  itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   canvasTran: {fileID: 958339586}
   itemSlotSetPrefab: {fileID: 5594831519123227178, guid: abbbb2033d2e06e4a91152f2fca8a17b, type: 3}
+  imgItemSlotList: []
 --- !u!4 &1027788434
 Transform:
   m_ObjectHideFlags: 0
@@ -2214,7 +2216,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170332041}
-  m_LocalRotation: {x: 0.2862126, y: 0.16786686, z: -0.05100562, w: 0.94196683}
+  m_LocalRotation: {x: 0.2862126, y: 0.1678669, z: -0.051005635, w: 0.94196683}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3750,6 +3752,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   uIManager: {fileID: 1027788433}
+  playerController: {fileID: 0}
   itemTrans: {fileID: 848463422}
   playerTran: {fileID: 4889205611965899502}
   itemRotSpeed: 0.2

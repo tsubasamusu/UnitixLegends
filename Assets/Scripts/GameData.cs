@@ -14,6 +14,9 @@ public class GameData : MonoBehaviour
     private UIManager uIManager;//UIManager
 
     [SerializeField]
+    private PlayerController playerController;//PlayerController
+
+    [SerializeField]
     private Transform itemTrans;//アイテムの位置情報をまとめたフォルダー
 
     [SerializeField]
@@ -120,9 +123,11 @@ public class GameData : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 最も近くにあるアイテムの情報を得る
-    /// </summary>
+   /// <summary>
+   /// 最も近くにあるアイテムの番号と位置情報を得る
+   /// </summary>
+   /// <param name="myPos">自分自身の座標</param>
+   /// <param name="isPlayerPos">第一引数はPlayerの座標かどうか</param>
     public void GetInformationOfNearItem(Vector3 myPos, bool isPlayerPos)
     {
         //nullエラー回避
@@ -169,7 +174,8 @@ public class GameData : MonoBehaviour
     /// <summary>
     /// アイテムのアニメーションを行う
     /// </summary>
-    /// <returns></returns>
+    /// <param name="itemPrefab">アイテムのプレファブ</param>
+    /// <returns>待ち時間</returns>
     private IEnumerator PlayItemAnimation(GameObject itemPrefab)
     {
         //nullエラー回避
@@ -191,7 +197,7 @@ public class GameData : MonoBehaviour
     }
 
     /// <summary>
-    /// アイテムを取得する処理
+    /// アイテムを取得する
     /// </summary>
     /// <param name="nearItemNo">最も近くにあるアイテムの番号</param>
     /// <param name="isPlayer">アイテムの取得者がPlayerかどうか</param>
@@ -200,6 +206,9 @@ public class GameData : MonoBehaviour
         //アイテムの取得者がPlayerではないなら
         if (!isPlayer)
         {
+            //近くのアイテムをリストから削除する
+            RemoveItemList(nearItemNo);
+
             //以降の処理を行わない
             return;
         }
@@ -216,9 +225,6 @@ public class GameData : MonoBehaviour
                 //i番目の要素が空なら
                 if (CheckTheElement(i))
                 {
-                    //アイテムスロットのSpriteを設定
-                    uIManager.SetItemSprite(i+1, generatedItemDataList[nearItemNo].sprite);
-
                     //Playerが所持しているアイテムのリストの空いている要素に、アイテムの情報を代入
                     playerItemList[i] = generatedItemDataList[nearItemNo];
 
@@ -248,6 +254,9 @@ public class GameData : MonoBehaviour
         //許容オーバーではないなら
         if (!isFull)
         {
+            //全てのアイテムスロットのSpriteを再設定する
+            SetIAlltemSlotSprite();
+
             //フロート表示を生成
             StartCoroutine(uIManager.GenerateFloatingMessage(generatedItemDataList[nearItemNo].itemName.ToString(), Color.blue));
 
@@ -281,5 +290,54 @@ public class GameData : MonoBehaviour
 
         //アイテムのゲームオブジェクトを消す
         Destroy(itemTrans.GetChild(itemNo).gameObject);
+    }
+
+    /// <summary>
+    /// 選択されているアイテムのデータを取得する
+    /// </summary>
+    /// <returns>選択されているアイテムのデータ</returns>
+    public ItemDataSO.ItemData GetSelectedItemData()
+    {
+        //選択されているアイテムのデータをリストから取得して返す
+        return playerItemList[playerController.SelectedItemNo - 1];
+    }
+
+    /// <summary>
+    /// アイテムを破棄する
+    /// </summary>
+    /// <param name="itemNo">破棄するアイテムの番号</param>
+    public void DiscardItem(int itemNo)
+    {
+        //指定されたアイテムをリストから削除する
+        playerItemList.RemoveAt(itemNo);
+
+        //Playerが所持しているアイテムのリストの要素の数を一定に保つ
+        playerItemList.Add(ItemDataSO.itemDataList[0]);
+
+        //全てのアイテムスロットのSpriteを再設定する
+        SetIAlltemSlotSprite();
+    }
+
+    /// <summary>
+    /// Playerが所持しているアイテムのリストを元に、全てのアイテムスロットのSpriteを設定する
+    /// </summary>
+    public void SetIAlltemSlotSprite()
+    {
+        //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
+        for (int i = 0; i < playerItemList.Count; i++)
+        {
+            //Playerの所持しているアイテムのi番目が空なら
+            if (playerItemList[i].itemName == ItemDataSO.ItemName.None)
+            {
+                //アイテムスロットのイメージを透明にする
+                uIManager.imgItemSlotList[i].DOFade(0f, 0f);
+
+                //以降の処理を行わない
+                return;
+            }
+
+            //全てのアイテムスロットのSpriteを設定する
+            uIManager.SetItemSprite(i + 1, playerItemList[i].sprite);
+        }
     }
 }
