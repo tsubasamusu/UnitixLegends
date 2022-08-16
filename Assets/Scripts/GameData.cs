@@ -86,6 +86,9 @@ public class GameData : MonoBehaviour
     {
         //Playerの最も近くにあるアイテムの情報を取得
         GetInformationOfNearItem(playerTran.position, true);
+
+        //正しいSpriteが設定できているかを確認する
+        CheckRightSprite();
     }
 
     /// <summary>
@@ -239,20 +242,12 @@ public class GameData : MonoBehaviour
         //取得するアイテムが弾のアイテムなら
         else
         {
-            //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
-            for (int i = 0; i < playerItemList.Count; i++)
-            {
-                //i番目の要素が空なら
-                if (CheckTheElement(i))
-                {
-                    //まだ許容オーバーではない
-                    isFull = false;
-                }
-            }
+            //許容オーバーかどうか調べる
+            CheckIsFull();
         }
 
-        //許容オーバーではないなら
-        if (!isFull)
+        //許容オーバーではないか、取得するアイテムが弾なら
+        if (!isFull || !generatedItemDataList[nearItemNo].isNotBullet)
         {
             //全てのアイテムスロットのSpriteを再設定する
             SetIAlltemSlotSprite();
@@ -308,6 +303,9 @@ public class GameData : MonoBehaviour
     /// <param name="itemNo">破棄するアイテムの番号</param>
     public void DiscardItem(int itemNo)
     {
+        //許容オーバーかどうか調べる
+        CheckIsFull();
+
         //指定されたアイテムをリストから削除する
         playerItemList.RemoveAt(itemNo);
 
@@ -338,6 +336,46 @@ public class GameData : MonoBehaviour
 
             //全てのアイテムスロットのSpriteを設定する
             uIManager.SetItemSprite(i + 1, playerItemList[i].sprite);
+        }
+    }
+
+    /// <summary>
+    /// 許容オーバーかどうか調べる
+    /// </summary>
+    public void CheckIsFull()
+    {
+        //仮に許容オーバーの状態として登録する
+        isFull = true;
+
+        //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
+        for (int i = 0; i < playerItemList.Count; i++)
+        {
+            //i番目の要素が空なら
+            if (CheckTheElement(i))
+            {
+                //まだ許容オーバーではない
+                isFull = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 正しいSpriteが設定できているかを確認する
+    /// </summary>
+    private void CheckRightSprite()
+    {
+        //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
+        for (int i = 0; i < playerItemList.Count; i++)
+        {
+            //バグが生じていたら
+            if (playerItemList[i].sprite != uIManager.imgItemSlotList[i].sprite)
+            {
+                //Spriteを初期化
+                uIManager.imgItemSlotList[i].sprite = null;
+
+                //アイテムスロットのイメージを透明にする
+                uIManager.imgItemSlotList[i].DOFade(0f, 0f);
+            }
         }
     }
 }

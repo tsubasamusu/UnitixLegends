@@ -263,11 +263,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void UpdateFpsText()
     {
-        //フレームレートを計算し、取得する
-        float fps = 1f / Time.deltaTime;
-
         //表示を更新
-        txtFps.text=fps.ToString("F0")+"fps";
+        txtFps.text=(1f/Time.deltaTime).ToString("F0")+"fps";
     }
 
     /// <summary>
@@ -331,10 +328,15 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// メッセージのテキストを設定し、表示する
     /// </summary>
-    public void SetMessageText(string text)
+    /// <param name="text">文字</param>
+    /// <param name="color">色</param>
+    public void SetMessageText(string text,Color color)
     {
-        //引数を元に。メッセージのテキストを設定
+        //引数を元に、メッセージのテキストを設定
         txtMessage.text=text;
+
+        //引数を元に、テキストの色を設定
+        txtMessage.color=color;
     }
 
    /// <summary>

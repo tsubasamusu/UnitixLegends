@@ -14,7 +14,7 @@ public class BulletManager : MonoBehaviour
     private float shotSpeed;//（仮）
 
     [SerializeField]
-    private GameObject mainCamera;//メインカメラ
+    private Transform mainCamera;//メインカメラ
 
     [SerializeField]
     private Transform temporaryObjectContainerTran;//一時的にゲームオブジェクトを収容するTransform
@@ -25,7 +25,7 @@ public class BulletManager : MonoBehaviour
     void Update()
     {
         //Bulletを発射する向きをカメラの向きに合わせる
-        transform.eulerAngles = new Vector3(mainCamera.transform.eulerAngles.x,mainCamera.transform.eulerAngles.y,transform.eulerAngles.z);
+        transform.eulerAngles = new Vector3(mainCamera.eulerAngles.x,mainCamera.eulerAngles.y,transform.eulerAngles.z);
     }
 
     /// <summary>

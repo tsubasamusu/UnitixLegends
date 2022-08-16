@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private float speedX;//左右移動速度
 
+	[SerializeField]
+	private float fallSpeed;//落下速度
+
 	[SerializeField, Range(1.0f, 30.0f)]
 	private float zoomFOV;//ズーム時の視野角
 
@@ -81,15 +84,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Update()
 	{
+		//飛び降りるキーを押されたら
+		if (Input.GetKeyDown(fallKey))
+		{
+			//飛行機から飛び降りる
+			FallFromAirplane();
+		}
+
 		//接地していなかったら
 		if (!CheckGrounded())
 		{
-			//飛び降りるキーを押されたら
-			if(Input.GetKeyDown(fallKey))
-            {
-				//TODO:飛行機から飛び降りる処理
-            }
-
 			//以降の処理を行わない
 			return;
 		}
@@ -100,6 +104,23 @@ public class PlayerController : MonoBehaviour
 		//アイテムを制御
 		ControlItem();
 	}
+
+	/// <summary>
+	/// 飛行機から飛び降りる
+	/// </summary>
+	/// <returns>待ち時間</returns>
+	private IEnumerator FallFromAirplane()
+    {
+		//接地していない間、繰り返される
+		while(!CheckGrounded())
+        {
+			//落下する
+			transform.Translate(0,-fallSpeed,0);
+
+			//待ち時間を返す（実質、FixedUpdateと同じ）
+			yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+    }
 
 	/// <summary>
 	/// 受け取ったPlayerの状態を元に、アニメーションの再生を行う
@@ -264,30 +285,30 @@ public class PlayerController : MonoBehaviour
             followZoom.m_MinFOV = 30.0f;
         }
 
-		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れていたら
-		if(GameData.instance.LengthToNearItem>getItemLength)
+		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
+		if(GameData.instance.LengthToNearItem>getItemLength||GameData.instance.generatedItemDataList.Count==0)
         {
 			//メッセージを空にする
-			uiManager.SetMessageText("");
+			uiManager.SetMessageText("",Color.black);
 
 			//以下の処理を行わない
 			return;
         }
 
-		//許容オーバーなら
-		if (GameData.instance.IsFull)
+		//許容オーバーかどうか調べる
+		GameData.instance.CheckIsFull();
+
+		//許容オーバーかつ、取得しようとしているアイテムが弾ではなかったら
+		if (GameData.instance.IsFull &&GameData.instance.generatedItemDataList[GameData.instance.NearItemNo].isNotBullet)
 		{
 			//メッセージを表示
-			uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item");
-
-			//以降の処理を行わない
-			return;
+			uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item",Color.red);
 		}
 		//許容オーバーではないなら
 		else
 		{
 			//メッセージを表示
-			uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem");
+			uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem",Color.green);
 		}
 
 		//アイテム取得キーが押されたら
