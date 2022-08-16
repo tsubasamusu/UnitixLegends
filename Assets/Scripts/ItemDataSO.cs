@@ -43,10 +43,13 @@ public class ItemDataSO : ScriptableObject
         public float reloadTime;//リロード時間
         public float interval;//連射間隔
         public float timeToExplode;//爆破・ガス発生までの時間
+        public int bulletCount;//弾の数
         public bool enemyCanUse;//Enemyが使用できるかどうか
         public bool isNotBullet;//弾のアイテムではないかどうか
+        public bool isFirearms;//銃火器かどうか
         public Sprite sprite;//Sprite
         public GameObject prefab;//プレファブ
+        public Rigidbody bulletPrefab;//弾のプレファブ
     }
 
     public List<ItemData> itemDataList=new List<ItemData>();//アイテムデータのリスト

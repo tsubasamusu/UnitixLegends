@@ -19,31 +19,87 @@ public class BulletManager : MonoBehaviour
     [SerializeField]
     private Transform temporaryObjectContainerTran;//一時的にゲームオブジェクトを収容するTransform
 
+    [SerializeField]
+    private ItemDataSO itemDataSO;//ItemDataSO
+
+    private int assaultBulletCount;//アサルト用弾の残弾数
+
+    public int AssaultBulletCount//assaultBulletCount変数用のプロパティ
+    {
+        get { return assaultBulletCount; }//外部からは取得処理のみを可能に
+    }
+
+    private int sniperBulletCount;//スナイパー用弾の残弾数
+
+    public int SniperBulletCount//sniperBulletCount変数用のプロパティ
+    {
+        get { return sniperBulletCount; }//外部からは取得処理のみを可能に
+    }
+
+    private int shotgunBulletCount;//ショットガン用弾の残弾数
+
+    public int ShotgunBulletCount//shotgunBulletCount変数用のプロパティ
+    {
+        get { return shotgunBulletCount; }//外部からは取得処理のみを可能に
+    }
+
     /// <summary>
     /// 毎フレーム呼び出される
     /// </summary>
-    void Update()
+   　private void Update()
     {
         //Bulletを発射する向きをカメラの向きに合わせる
         transform.eulerAngles = new Vector3(mainCamera.eulerAngles.x,mainCamera.eulerAngles.y,transform.eulerAngles.z);
     }
 
     /// <summary>
-    /// ShotBulletゲームオブジェクトを有効化・無効化を行う
+    /// 残弾数を更新する
     /// </summary>
-    public void SetShotBulletActiveOrPassive(bool set)
+    /// <param name="itemName">アイテムの名前r</param>
+    public void UpdateBulletCount(ItemDataSO.ItemName itemName)
     {
-        //引数を元に、ShotBulletゲームオブジェクトの有効化・無効化を切り替える
-        transform.gameObject.SetActive(set);
+        //受け取ったアイテムの名前に応じて処理を変更
+        switch (itemName)
+        {
+            //アサルトなら
+            case (ItemDataSO.ItemName.Assault):
+                assaultBulletCount += itemDataSO.itemDataList[5].bulletCount;
+                break;
+
+            //ショットガンなら
+            case (ItemDataSO.ItemName.Shotgun):
+                shotgunBulletCount+=itemDataSO.itemDataList[6].bulletCount;
+                break;
+
+            //スナイパーなら
+            case (ItemDataSO.ItemName.Sniper):
+                sniperBulletCount+=itemDataSO.itemDataList[7].bulletCount;
+                break;
+
+            //アサルト用弾なら
+            case (ItemDataSO.ItemName.AssaultBullet):
+                assaultBulletCount += itemDataSO.itemDataList[11].bulletCount;
+                break;
+
+            //ショットガン用弾なら
+            case (ItemDataSO.ItemName.ShotgunBullet):
+                shotgunBulletCount += itemDataSO.itemDataList[12].bulletCount;
+                break;
+
+            //スナイパー用弾なら
+            case (ItemDataSO.ItemName.SniperBullet):
+                sniperBulletCount += itemDataSO.itemDataList[13].bulletCount;
+                break;
+        }
     }
 
-    /// <summary>
-    /// 弾を発射する
-    /// </summary>
-    public void ShotBullet()
+   /// <summary>
+   /// 弾を発射する
+   /// </summary>
+   /// <param name="bulletPrefab">発射する弾のプレファブ</param>
+   /// <param name="itemData">使用するアイテムのデータ</param>
+    public void ShotBullet(Rigidbody bulletPrefab,ItemDataSO.ItemData itemData)
     {
-        //TODO:GameDataから選択している武器の弾の情報を取得する処理を呼び出す
-
         //弾を生成
         Rigidbody bulletRb=Instantiate(bulletPrefab,transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
 
@@ -58,7 +114,5 @@ public class BulletManager : MonoBehaviour
 
         //発射した弾を3.0秒後に消す
         Destroy(bulletRb.gameObject,3.0f);
-
-        //TODO:SoundManagerから武器の発射音を再生する処理を呼び出す
     }
 }

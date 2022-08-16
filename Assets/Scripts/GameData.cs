@@ -14,6 +14,9 @@ public class GameData : MonoBehaviour
     private UIManager uIManager;//UIManager
 
     [SerializeField]
+    private BulletManager bulletManager;//BulletManager
+
+    [SerializeField]
     private PlayerController playerController;//PlayerController
 
     [SerializeField]
@@ -31,7 +34,8 @@ public class GameData : MonoBehaviour
     [HideInInspector]
     public List<Transform> generatedItemTranList = new List<Transform>();//アイテムの生成位置のリスト
 
-    public List<ItemDataSO.ItemData> playerItemList=new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
+    [HideInInspector]
+    public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
 
     private int nearItemNo;//Playerの最も近くにあるアイテムの番号
 
@@ -86,9 +90,6 @@ public class GameData : MonoBehaviour
     {
         //Playerの最も近くにあるアイテムの情報を取得
         GetInformationOfNearItem(playerTran.position, true);
-
-        //正しいSpriteが設定できているかを確認する
-        CheckRightSprite();
     }
 
     /// <summary>
@@ -106,7 +107,7 @@ public class GameData : MonoBehaviour
             int px = Random.Range(1, 14);
 
             //指定した位置にランダムなアイテムを生成し、アニメーションを開始
-            StartCoroutine(PlayItemAnimation( Instantiate(ItemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
+            StartCoroutine(PlayItemAnimation(Instantiate(ItemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
 
             //生成したアイテムのデータをリストに追加
             generatedItemDataList.Add(ItemDataSO.itemDataList[px]);
@@ -126,11 +127,11 @@ public class GameData : MonoBehaviour
         }
     }
 
-   /// <summary>
-   /// 最も近くにあるアイテムの番号と位置情報を得る
-   /// </summary>
-   /// <param name="myPos">自分自身の座標</param>
-   /// <param name="isPlayerPos">第一引数はPlayerの座標かどうか</param>
+    /// <summary>
+    /// 最も近くにあるアイテムの番号と位置情報を得る
+    /// </summary>
+    /// <param name="myPos">自分自身の座標</param>
+    /// <param name="isPlayerPos">第一引数はPlayerの座標かどうか</param>
     public void GetInformationOfNearItem(Vector3 myPos, bool isPlayerPos)
     {
         //nullエラー回避
@@ -141,7 +142,7 @@ public class GameData : MonoBehaviour
         }
 
         //アイテムの番号
-        int itemNo=0;
+        int itemNo = 0;
 
         //リストの0番の要素の座標をnearPosに仮に登録
         Vector3 nearPos = generatedItemTranList[0].position;
@@ -185,7 +186,7 @@ public class GameData : MonoBehaviour
         if (itemPrefab != null)
         {
             //アイテムを上下に無限に運動させる
-            itemPrefab.transform.DOLocalMoveY(0.5f, 2.0f).SetEase(Ease.Linear). SetLoops(-1, LoopType.Yoyo);
+            itemPrefab.transform.DOLocalMoveY(0.5f, 2.0f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
         }
 
         //nullエラー回避
@@ -249,6 +250,9 @@ public class GameData : MonoBehaviour
         //許容オーバーではないか、取得するアイテムが弾なら
         if (!isFull || !generatedItemDataList[nearItemNo].isNotBullet)
         {
+            //残弾数を更新
+            bulletManager.UpdateBulletCount(generatedItemDataList[nearItemNo].itemName);
+
             //全てのアイテムスロットのSpriteを再設定する
             SetIAlltemSlotSprite();
 
@@ -360,22 +364,32 @@ public class GameData : MonoBehaviour
     }
 
     /// <summary>
-    /// 正しいSpriteが設定できているかを確認する
+    /// アイテムを使用する
     /// </summary>
-    private void CheckRightSprite()
+    /// <param name="itemData">使用するアイテムのデータ</param>
+    public void UseItem(ItemDataSO.ItemData itemData)
     {
-        //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
-        for (int i = 0; i < playerItemList.Count; i++)
+        //使用するアイテムの名前に応じて処理を変更
+        switch (itemData.itemName)
         {
-            //バグが生じていたら
-            if (playerItemList[i].sprite != uIManager.imgItemSlotList[i].sprite)
-            {
-                //Spriteを初期化
-                uIManager.imgItemSlotList[i].sprite = null;
+            //アサルトなら
+            case ItemDataSO.ItemName.Assault:
+                //アサルト用弾を発射
+                
+                break;
 
-                //アイテムスロットのイメージを透明にする
-                uIManager.imgItemSlotList[i].DOFade(0f, 0f);
-            }
+            //スナイパーなら
+            case ItemDataSO.ItemName.Sniper:
+                //スナイパー用弾を発射
+                
+                break;
+
+            //ショットガンなら
+            case ItemDataSO.ItemName.Shotgun:
+                //ショットガン用弾を発射
+                
+                break;
         }
+
     }
 }

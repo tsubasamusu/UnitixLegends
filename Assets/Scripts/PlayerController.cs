@@ -265,10 +265,8 @@ public class PlayerController : MonoBehaviour
 		//左クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse0))
 		{
-			//TODO:選択しているアイテムが銃火器なら
-
-			//弾を発射
-			bulletManager.ShotBullet();
+			//アイテムを使用する
+			GameData.instance.UseItem(GameData.instance.GetSelectedItemData());
 		}
 		//右クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse1))
