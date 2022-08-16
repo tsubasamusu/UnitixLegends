@@ -32,6 +32,13 @@ public class GameData : MonoBehaviour
 
     private int nearItemNo;//Playerの最も近くにあるアイテムの番号
 
+    private bool isFull;//Playerの所有物が許容オーバーかどうか
+
+    public bool IsFull//isFull変数用のプロパティ
+    {
+        get { return isFull; }//外部からは取得処理のみを可能に
+    }
+
     public int NearItemNo//nearItemNo変数用のプロパティ
     {
         get { return nearItemNo; }//外部からは取得処理のみを可能に
@@ -90,10 +97,10 @@ public class GameData : MonoBehaviour
         for (int i = 0; i < itemTrans.childCount; i++)
         {
             //ランダムな整数を取得
-            int px = Random.Range(0, 13);
+            int px = Random.Range(1, 14);
 
             //指定した位置にランダムなアイテムを生成し、アニメーションを開始
-           StartCoroutine(PlayItemAnimation( Instantiate(ItemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
+            StartCoroutine(PlayItemAnimation( Instantiate(ItemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
 
             //生成したアイテムのデータをリストに追加
             generatedItemDataList.Add(ItemDataSO.itemDataList[px]);
@@ -197,6 +204,9 @@ public class GameData : MonoBehaviour
             return;
         }
 
+        //仮に許容オーバーの状態として登録する
+        isFull = true;
+
         //取得するアイテムが弾のアイテムではないなら
         if (generatedItemDataList[nearItemNo].isNotBullet)
         {
@@ -212,17 +222,38 @@ public class GameData : MonoBehaviour
                     //Playerが所持しているアイテムのリストの空いている要素に、アイテムの情報を代入
                     playerItemList[i] = generatedItemDataList[nearItemNo];
 
-                    //フロート表示を生成
-                    StartCoroutine(uIManager.GenerateFloatingMessage(generatedItemDataList[nearItemNo].itemName.ToString(), Color.blue));
+                    //まだ許容オーバーではない
+                    isFull = false;
 
                     //繰り返し処理を終了する
                     break;
                 }
             }
         }
+        //取得するアイテムが弾のアイテムなら
+        else
+        {
+            //Playerが所持しているアイテムのリストの要素の数だけ繰り返す
+            for (int i = 0; i < playerItemList.Count; i++)
+            {
+                //i番目の要素が空なら
+                if (CheckTheElement(i))
+                {
+                    //まだ許容オーバーではない
+                    isFull = false;
+                }
+            }
+        }
 
-        //近くのアイテムをリストから削除する
-        RemoveItemList(nearItemNo);
+        //許容オーバーではないなら
+        if (!isFull)
+        {
+            //フロート表示を生成
+            StartCoroutine(uIManager.GenerateFloatingMessage(generatedItemDataList[nearItemNo].itemName.ToString(), Color.blue));
+
+            //近くのアイテムをリストから削除する
+            RemoveItemList(nearItemNo);
+        }
     }
 
     /// <summary>
@@ -232,7 +263,8 @@ public class GameData : MonoBehaviour
     /// <returns> PlayerItemListの指定した番号の要素が空いていたらtrueを返す</returns>
     public bool CheckTheElement(int elementNo)
     {
-        return playerItemList[elementNo].itemName==ItemDataSO.ItemName.None?true:false;
+        //PlayerItemListの指定した番号の要素が空いていたらtrueを返す
+        return playerItemList[elementNo].itemName == ItemDataSO.ItemName.None ? true : false;
     }
 
     /// <summary>

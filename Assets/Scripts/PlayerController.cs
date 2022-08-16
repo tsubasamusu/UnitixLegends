@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 	private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
 
 	[SerializeField]
-	private GameObject mainCamera;//メインカメラ
+	private Transform mainCamera;//メインカメラ
 
 	private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
 
@@ -76,9 +76,9 @@ public class PlayerController : MonoBehaviour
 		Stooping//かがんでいる
 	}
 
-	/// <summary>
-	/// 毎フレーム呼び出される
-	/// </summary>
+    /// <summary>
+    /// 毎フレーム呼び出される
+    /// </summary>
     void Update()
 	{
 		//接地していなかったら
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
 	private PlayerCondition MovePlayer()
 	{
 		//Playerの向きをカメラの向きに合わせる
-		transform.eulerAngles = new Vector3(transform.eulerAngles.x, mainCamera.transform.eulerAngles.y, transform.eulerAngles.z);
+		transform.eulerAngles = new Vector3(transform.eulerAngles.x, mainCamera.eulerAngles.y, transform.eulerAngles.z);
 
 		//重力を生成
 		moveDirection.y -= gravity * Time.deltaTime;
@@ -251,16 +251,16 @@ public class PlayerController : MonoBehaviour
 		//右クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse1))
 		{
-			//ズームする
-			followZoom.m_MaxFOV = zoomFOV;
-			followZoom.m_MinFOV = 1.0f;
-		}
+            //ズームする
+            followZoom.m_MaxFOV = zoomFOV;
+            followZoom.m_MinFOV = 1.0f;
+        }
 		//右クリックが終ったら
 		else if(Input.GetKeyUp(KeyCode.Mouse1))
         {
-			//元のカメラの倍率に戻す
-			followZoom.m_MaxFOV = 30.0f;
-			followZoom.m_MinFOV = 30.0f;
+            //元のカメラの倍率に戻す
+            followZoom.m_MaxFOV = 30.0f;
+            followZoom.m_MinFOV = 30.0f;
         }
 
 		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れていたら
@@ -273,8 +273,21 @@ public class PlayerController : MonoBehaviour
 			return;
         }
 
-		//メッセージを表示
-		uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem");
+		//許容オーバーなら
+		if (GameData.instance.IsFull)
+		{
+			//メッセージを表示
+			uiManager.SetMessageText("You Must\nDiscard\nItem");
+
+			//以降の処理を行わない
+			return;
+		}
+		//許容オーバーではないなら
+		else
+		{
+			//メッセージを表示
+			uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem");
+		}
 
 		//アイテム取得キーが押されたら
 		if (Input.GetKeyDown(getItemKey))
