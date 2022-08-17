@@ -5,6 +5,9 @@ using UnityEngine;
 public class BulletManager : MonoBehaviour
 {
     [SerializeField]
+    private int maxBulletCount;//所持できるアイテム1つ当たりの弾の最大数
+
+    [SerializeField]
     private Transform mainCamera;//メインカメラ
 
     [SerializeField]
@@ -100,27 +103,27 @@ public class BulletManager : MonoBehaviour
             {
                 //手榴弾なら
                 case ItemDataSO.ItemName.Grenade:
-                    grenadeBulletCount += updateValue;
+                    grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, maxBulletCount);
                     break;
 
                 //催涙弾なら
                 case ItemDataSO.ItemName.TearGasGrenade:
-                    tearGasGrenadeBulletCount += updateValue;
+                    tearGasGrenadeBulletCount=Mathf.Clamp(tearGasGrenadeBulletCount+updateValue,0,maxBulletCount);
                     break;
 
                 //アサルトなら
                 case ItemDataSO.ItemName.Assault:
-                    assaultBulletCount += updateValue;
+                    assaultBulletCount=Mathf.Clamp(assaultBulletCount+updateValue,0,maxBulletCount);
                     break;
 
                 //ショットガンなら
                 case ItemDataSO.ItemName.Shotgun:
-                    shotgunBulletCount += updateValue;
+                    shotgunBulletCount=Mathf.Clamp(shotgunBulletCount+updateValue,0,maxBulletCount);
                     break;
 
                 //スナイパーなら
                 case ItemDataSO.ItemName.Sniper:
-                    sniperBulletCount += updateValue;
+                    sniperBulletCount =Mathf.Clamp(sniperBulletCount+updateValue,0,maxBulletCount);
                     break;
             }
 
@@ -180,8 +183,8 @@ public class BulletManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     public IEnumerator ShotBullet(ItemDataSO.ItemData itemData)
     {
-        //経過時間が連射間隔より小さいなら
-        if (timer < itemData.interval)
+        //経過時間が連射間隔より小さいか、残弾数が0なら
+        if (timer < itemData.interval||GetBulletCount(itemData.itemName)==0)
         {
             //以降の処理を行わない
             yield break;
@@ -228,6 +231,32 @@ public class BulletManager : MonoBehaviour
     /// <returns>そのアイテムが使用する弾の残弾数</returns>
     public int GetBulletCount(ItemDataSO.ItemName itemName)
     {
-        return 0;//（仮）
+        //選択しているアイテムの名前に応じて処理を変更
+        switch (itemName)
+        {
+            //手榴弾なら
+            case ItemDataSO.ItemName.Grenade:
+                return grenadeBulletCount;
+
+            //催涙弾なら
+            case ItemDataSO.ItemName.TearGasGrenade:
+                return tearGasGrenadeBulletCount;
+
+            //アサルトなら
+            case ItemDataSO.ItemName.Assault:
+                return assaultBulletCount;
+
+            //スナイパーなら
+            case ItemDataSO.ItemName.Sniper:
+                return sniperBulletCount;
+
+            //ショットガンなら
+            case ItemDataSO.ItemName.Shotgun:
+                return shotgunBulletCount;
+
+            //上記以外なら
+            default:
+                return 0;
+        }
     }
 }

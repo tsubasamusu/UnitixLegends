@@ -40,7 +40,6 @@ public class ItemDataSO : ScriptableObject
         [Range(0.0f, 100.0f)]
         public float attackPower;//UŒ‚—Í
         public float shotSpeed;//”­Ë‘¬“x
-        public float reloadTime;//ƒŠƒ[ƒhŠÔ
         public float interval;//˜AËŠÔŠu
         public float timeToExplode;//”š”jEƒKƒX”­¶‚Ü‚Å‚ÌŠÔ
         public int bulletCount;//’e‚Ì”

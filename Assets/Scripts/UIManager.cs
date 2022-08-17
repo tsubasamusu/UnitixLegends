@@ -55,6 +55,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
 
+    [SerializeField]
+    private GameObject scope;//スコープ
+
     [HideInInspector]
     public List<Image> imgItemSlotList = new List<Image>();//アイテムスロットのイメージのリスト
 
@@ -71,8 +74,6 @@ public class UIManager : MonoBehaviour
 
         //一番右のアイテムスロットの背景を設定
         SetItemSlotBackgroundColor(1,Color.red);   
-
-        StartCoroutine( GenerateFloatingMessage("Hello",Color.blue));
     }
 
     /// <summary>
@@ -245,34 +246,8 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        //選択しているアイテムの名前に応じて処理を変更
-        switch(GameData.instance.GetSelectedItemData().itemName)
-        {
-            //手榴弾なら
-            case ItemDataSO.ItemName.Grenade:
-                txtBulletCount.text = bulletManager.GrenadeBulletCount.ToString();
-                break;
-
-            //催涙弾なら
-            case ItemDataSO.ItemName.TearGasGrenade:
-                txtBulletCount.text = bulletManager.TearGasGrenadeBulletCount.ToString();
-                break;
-
-            //アサルトなら
-            case ItemDataSO.ItemName.Assault:
-                txtBulletCount.text = bulletManager.AssaultBulletCount.ToString();
-                break;
-
-            //スナイパーなら
-            case ItemDataSO.ItemName.Sniper:
-                txtBulletCount.text = bulletManager.SniperBulletCount.ToString();
-                break;
-
-            //ショットガンなら
-            case ItemDataSO.ItemName.Shotgun:
-                txtBulletCount.text = bulletManager.ShotgunBulletCount.ToString();
-                break;
-        }
+        //選択されているアイテムの残弾数をテキストに設定
+        txtBulletCount.text = bulletManager.GetBulletCount(GameData.instance.GetSelectedItemData().itemName).ToString();
     }
 
     /// <summary>
@@ -419,5 +394,29 @@ public class UIManager : MonoBehaviour
             //背景を半透明にする
             imgItemSlotBackgroundList[i].DOFade(0.3f, 0f);
         }
+    }
+
+    /// <summary>
+    /// スコープを覗く
+    /// </summary>
+    public void PeekIntoTheScope()
+    {
+        //キャンバスグループを無効に
+        canvasGroup.gameObject.SetActive(false);
+
+        //スコープを有効に
+        scope.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// スコープを覗くのをやめる
+    /// </summary>
+    public void NotPeekIntoTheScope()
+    {
+        //キャンバスグループを有効に
+        canvasGroup.gameObject.SetActive(true);
+
+        //スコープを無効に
+        scope.gameObject.SetActive(false);
     }
 }

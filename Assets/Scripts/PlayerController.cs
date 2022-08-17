@@ -22,9 +22,12 @@ public class PlayerController : MonoBehaviour
 	private float fallSpeed;//落下速度
 
 	[SerializeField, Range(1.0f, 30.0f)]
-	private float zoomFOV;//ズーム時の視野角
+	private float normalZoomFOV;//通常のズーム時の視野角
 
-    [SerializeField]
+	[SerializeField, Range(1.0f, 30.0f)]
+	private float ScopeZoomFOV;//スコープによるズームの視野角
+
+	[SerializeField]
 	private float getItemLength;//アイテムを取得できる距離
 
 	[SerializeField]
@@ -271,9 +274,23 @@ public class PlayerController : MonoBehaviour
 		//右クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse1))
 		{
-            //ズームする
-            followZoom.m_MaxFOV = zoomFOV;
-            followZoom.m_MinFOV = 1.0f;
+			//選択しているアイテムがスナイパーではないなら
+			if (GameData.instance.GetSelectedItemData().itemName != ItemDataSO.ItemName.Sniper)
+			{
+				//ズームする
+				followZoom.m_MaxFOV = normalZoomFOV;
+				followZoom.m_MinFOV = 1.0f;
+			}
+			//選択しているアイテムがスナイパーなら
+			else
+            {
+				//ズームする
+				followZoom.m_MaxFOV =ScopeZoomFOV;
+				followZoom.m_MinFOV = 1.0f;
+
+				//スコープを覗く
+				uiManager.PeekIntoTheScope();
+            }
         }
 		//右クリックが終ったら
 		else if(Input.GetKeyUp(KeyCode.Mouse1))
@@ -281,6 +298,9 @@ public class PlayerController : MonoBehaviour
             //元のカメラの倍率に戻す
             followZoom.m_MaxFOV = 30.0f;
             followZoom.m_MinFOV = 30.0f;
+
+			//スコープを覗くのをやめる
+			uiManager.NotPeekIntoTheScope();
         }
 
 		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
