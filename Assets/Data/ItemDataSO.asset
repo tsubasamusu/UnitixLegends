@@ -34,7 +34,7 @@ MonoBehaviour:
     reloadTime: 0
     interval: 1
     timeToExplode: 5
-    bulletCount: 0
+    bulletCount: 1
     enemyCanUse: 0
     isNotBullet: 1
     isFirearms: 1
@@ -47,8 +47,8 @@ MonoBehaviour:
     shotSpeed: 100
     reloadTime: 0
     interval: 1
-    timeToExplode: 0
-    bulletCount: 0
+    timeToExplode: 5
+    bulletCount: 1
     enemyCanUse: 0
     isNotBullet: 1
     isFirearms: 1

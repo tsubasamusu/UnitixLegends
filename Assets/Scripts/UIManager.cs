@@ -219,10 +219,13 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 残弾数の表示の更新を行う
     /// </summary>
-    public void UpdateTxtBulletCount(int bulletCount)
+    private void UpdateTxtBulletCount()
     {
-        //引数を元に、残弾数のテキストを設定
-       txtBulletCount.text=bulletCount.ToString();
+        //選択しているアイテムが銃火器なら
+        if( GameData.instance.GetSelectedItemData().isFirearms)
+        {
+
+        }
     }
 
     /// <summary>

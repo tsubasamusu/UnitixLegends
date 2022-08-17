@@ -370,7 +370,7 @@ public class GameData : MonoBehaviour
     public void UseItem(ItemDataSO.ItemData itemData)
     {
         //使用するアイテムが銃火器なら
-        if(itemData.isFirearms)
+        if (itemData.isFirearms)
         {
             //弾を発射
             StartCoroutine(bulletManager.ShotBullet(itemData));
