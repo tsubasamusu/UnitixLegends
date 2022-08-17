@@ -218,7 +218,16 @@ public class BulletManager : MonoBehaviour
         //爆破時間まで待つ
         yield return new WaitForSeconds(itemData.timeToExplode);
 
-        //TODO:爆発する処理
+        //使用するアイテムが手榴弾なら
+        if(itemData.itemName == ItemDataSO.ItemName.Grenade)
+        {
+            //TODO:爆発する処理
+        }
+        //使用するアイテムが催涙弾なら
+        else if(itemData.itemName == ItemDataSO.ItemName.TearGasGrenade)
+        {
+            //TODO:ガスを放出する処理
+        }
 
         //発射した弾を消す
         Destroy(bulletRb.gameObject);

@@ -375,5 +375,10 @@ public class GameData : MonoBehaviour
             //弾を発射
             StartCoroutine(bulletManager.ShotBullet(itemData));
         }
+        //使用するアイテムに回復効果があったら
+        else if(itemData.restorativeValue>0)
+        {
+            //TODO:体力の回復処理
+        }
     }
 }
