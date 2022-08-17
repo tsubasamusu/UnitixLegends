@@ -41,6 +41,9 @@ public class UIManager : MonoBehaviour
     private CanvasGroup canvasGroup;//CanvasGroup
 
     [SerializeField]
+    private Transform itemSlot;//アイテムスロットの親
+
+    [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
@@ -279,14 +282,14 @@ public class UIManager : MonoBehaviour
             //アイテムスロットを生成
             GameObject itemSlot = Instantiate(itemSlotSetPrefab);
 
-            //生成したアイテムスロットの親をcanvasGroupに設定
-            itemSlot.transform.SetParent(canvasGroup.transform);
+            //生成したアイテムスロットの親をitemSlotに設定
+            itemSlot.transform.SetParent(this.itemSlot);
 
             //生成したアイテムスロットの大きさを設定
             itemSlot.transform.localScale = Vector3.one;
 
             //生成したアイテムスロットの位置を設定
-            itemSlot.transform.localPosition = new Vector3((-1 * (200 + (50 * (generateNumber - 5)))) + (100 * i), 0, 0);
+            itemSlot.transform.localPosition = new Vector3((-1 * (200 + (50 * (generateNumber - 5)))) + (100 * i), -100, 0);
 
             //生成したアイテムスロットの子オブジェクトのImageを取得
             if (itemSlot.transform.GetChild(2).TryGetComponent<Image>(out Image imgItem))//nullエラー回避
@@ -311,6 +314,12 @@ public class UIManager : MonoBehaviour
             //Playerが所持しているアイテムのリストの要素を、アイテムスロットの数だけ作る
             GameData.instance.playerItemList.Add(itemDataSO.itemDataList[0]);
         }
+
+        //アイテムスロット全体の大きさを2倍にする
+        itemSlot.localScale = new Vector3(2f, 2f, 2f);
+
+        //アイテムスロット全体の位置を調整
+        itemSlot.localPosition= new Vector3(0f,270f,0f);
     }
 
     /// <summary>
