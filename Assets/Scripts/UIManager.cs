@@ -47,6 +47,9 @@ public class UIManager : MonoBehaviour
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
+    private BulletManager bulletManager;//BulletManager
+
+    [SerializeField]
     private Transform canvasTran;//Canvasのtransform
 
     [SerializeField]
@@ -77,6 +80,9 @@ public class UIManager : MonoBehaviour
     {
         //フレームレートを計算し、表示を更新する
         UpdateFpsText();
+
+        //残弾数の表示を更新する
+        UpdateTxtBulletCount();
     }
 
     /// <summary>
@@ -221,10 +227,43 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void UpdateTxtBulletCount()
     {
-        //選択しているアイテムが銃火器なら
-        if( GameData.instance.GetSelectedItemData().isFirearms)
+        //選択しているアイテムが銃火器ではないなら
+        if(!GameData.instance.GetSelectedItemData().isFirearms)
         {
+            //テキストを空にする
+            txtBulletCount.text = "";
 
+            //以降の処理を行わない
+            return;
+        }
+
+        //選択しているアイテムの名前に応じて処理を変更
+        switch(GameData.instance.GetSelectedItemData().itemName)
+        {
+            //手榴弾なら
+            case ItemDataSO.ItemName.Grenade:
+                txtBulletCount.text = bulletManager.GrenadeBulletCount.ToString();
+                break;
+
+            //催涙弾なら
+            case ItemDataSO.ItemName.TearGasGrenade:
+                txtBulletCount.text = bulletManager.TearGasGrenadeBulletCount.ToString();
+                break;
+
+            //アサルトなら
+            case ItemDataSO.ItemName.Assault:
+                txtBulletCount.text = bulletManager.AssaultBulletCount.ToString();
+                break;
+
+            //スナイパーなら
+            case ItemDataSO.ItemName.Sniper:
+                txtBulletCount.text = bulletManager.SniperBulletCount.ToString();
+                break;
+
+            //ショットガンなら
+            case ItemDataSO.ItemName.Shotgun:
+                txtBulletCount.text = bulletManager.ShotgunBulletCount.ToString();
+                break;
         }
     }
 
