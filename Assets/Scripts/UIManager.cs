@@ -70,7 +70,9 @@ public class UIManager : MonoBehaviour
         GenerateItemSlots(5);
 
         //一番右のアイテムスロットの背景を設定
-        SetItemSlotBackgroundColor(1,Color.red);    
+        SetItemSlotBackgroundColor(1,Color.red);   
+
+        StartCoroutine( GenerateFloatingMessage("Hello",Color.blue));
     }
 
     /// <summary>
@@ -88,6 +90,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// ゲームスタート演出を行う
     /// </summary>
+    /// <returns>待ち時間</returns>
     public IEnumerator PlayGameStart()
     {
         //視界を白色に設定
@@ -117,7 +120,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// ゲームクリア演出を行う
     /// </summary>
-    /// <returns></returns>
+    /// <returns>待ち時間</returns>
     public IEnumerator PlayGameClear()
     {
         //視界を白色に設定
@@ -145,7 +148,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// ゲームオーバー演出を行う
     /// </summary>
-    /// <returns></returns>
+    /// <returns>待ち時間</returns>
     public IEnumerator PlayGameOver()
     {
         //視界を黒色に設定
@@ -170,6 +173,8 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 視界を指定された時間だけ暗くする
     /// </summary>
+    /// <param name="time">暗くする時間</param>
+    /// <returns>待ち時間</returns>
     public IEnumerator SetEventHorizonBlack(float time)
     {
         //視界を黒色に設定
@@ -188,6 +193,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 被弾した際の視界の処理
     /// </summary>
+    /// <returns>待ち時間</returns>
     public IEnumerator AttackEventHorizon()
     {
         //視界を赤色に設定
@@ -206,16 +212,18 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 体力用スライダーを更新する
     /// </summary>
+    /// <param name="currentValue">現在の体力</param>
+    /// <param name="updateValue">変更する体力量</param>
     public void UpdateHpSliderValue(float currentValue,float updateValue)
     {
         //0.5秒かけて体力用スライダーを更新する
-        hpSlider.DOValue((currentValue + updateValue)/100.0f, 0.5f);
+        hpSlider.DOValue((currentValue + updateValue)/100f, 0.5f);
     }
 
     /// <summary>
     /// CanvasGroupの表示、非表示を切り替える
     /// </summary>
-    /// <param name="set"></param>
+    /// <param name="set">表示するならtrue</param>
     public void SetCanvasGroup(bool isSetting)
     {
         //引数を元に、CanvasGroupの透明度を設定
@@ -268,8 +276,11 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// フロート表示の生成を行う
+    /// フロート表示を生成する
     /// </summary>
+    /// <param name="messageText">表示したいテキスト</param>
+    /// <param name="color">表示する色</param>
+    /// <returns>待ち時間</returns>
     public IEnumerator GenerateFloatingMessage(string messageText,Color color)
     {
         //フロート表示を生成
@@ -285,7 +296,7 @@ public class UIManager : MonoBehaviour
         txtFloatingMessage.color = color;
 
         //フロート表示の場所を初期位置を設定
-        txtFloatingMessage.gameObject.transform.position= new Vector3(900.0f,200.0f,0);
+        txtFloatingMessage.gameObject.transform.localPosition = Vector3.zero;
 
         //フロート表示の大きさを初期化
         txtFloatingMessage.gameObject.transform.localScale = Vector3.one;
@@ -367,6 +378,8 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// アイテムのSpriteを設定する
     /// </summary>
+    /// <param name="itemNo">アイテムの番号</param>
+    /// <param name="itemSprite">アイテムのSprite</param>
     public void SetItemSprite(int itemNo,Sprite itemSprite)
     {
         //引数を元に、指定されたアイテムのSpriteを設定する
