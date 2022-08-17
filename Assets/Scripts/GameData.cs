@@ -369,26 +369,11 @@ public class GameData : MonoBehaviour
     /// <param name="itemData">使用するアイテムのデータ</param>
     public void UseItem(ItemDataSO.ItemData itemData)
     {
-        //使用するアイテムの名前に応じて処理を変更
-        switch (itemData.itemName)
+        //使用するアイテムが銃火器なら
+        if(itemData.isFirearms)
         {
-            //アサルトなら
-            case ItemDataSO.ItemName.Assault:
-                //アサルト用弾を発射
-                
-                break;
-
-            //スナイパーなら
-            case ItemDataSO.ItemName.Sniper:
-                //スナイパー用弾を発射
-                
-                break;
-
-            //ショットガンなら
-            case ItemDataSO.ItemName.Shotgun:
-                //ショットガン用弾を発射
-                
-                break;
+            //弾を発射
+            bulletManager.ShotBullet(itemData);
         }
 
     }
