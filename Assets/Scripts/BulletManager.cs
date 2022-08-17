@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class BulletManager : MonoBehaviour
 {
@@ -101,16 +102,23 @@ public class BulletManager : MonoBehaviour
     /// 弾を発射する
     /// </summary>
     /// <param name="itemData">使用するアイテムのデータ</param>
-    public void ShotBullet(ItemDataSO.ItemData itemData)
+    /// <returns>待ち時間</returns>
+    public IEnumerator ShotBullet(ItemDataSO.ItemData itemData)
     {
-        //経過時間を計測
-        timer += Time.deltaTime;
-
-        //経過時間が連射間隔より小さいなら
-        if (timer < itemData.interval)
+        while (true)
         {
-            //以降の処理を行わない
-            return;
+            //経過時間を計測
+            timer += Time.deltaTime;
+
+            //経過時間が連射間隔より小さいなら
+            //if (timer < itemData.interval)
+            //{
+            //    //以降の処理を行わない
+            //    return null;
+            //}
+
+            //次のフレームに飛ばす（実質、Updateメソッド）
+            yield return null;
         }
 
         //弾を生成
@@ -132,7 +140,7 @@ public class BulletManager : MonoBehaviour
             Destroy(bulletRb.gameObject, 3.0f);
 
             //以降の処理を行わない
-            return;
+            //return null ;
         }
 
         //経過時間を計測
@@ -142,8 +150,6 @@ public class BulletManager : MonoBehaviour
         if(timer2>=itemData.timeToExplode)
         {
             //TODO:爆発する処理
-
-            Debug.Log("爆発");
 
             //発射した弾を消す
             Destroy(bulletRb.gameObject);

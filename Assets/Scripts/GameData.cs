@@ -373,8 +373,7 @@ public class GameData : MonoBehaviour
         if(itemData.isFirearms)
         {
             //’e‚ð”­ŽË
-            bulletManager.ShotBullet(itemData);
+            StartCoroutine(bulletManager.ShotBullet(itemData));
         }
-
     }
 }
