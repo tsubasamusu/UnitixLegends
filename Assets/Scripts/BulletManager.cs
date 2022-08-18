@@ -16,6 +16,9 @@ public class BulletManager : MonoBehaviour
     [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
+    [SerializeField]
+    private PlayerController playerController;//PlayerController
+
     private float timer;//経過時間
 
     private int grenadeBulletCount;//手榴弾の残りの数
@@ -89,7 +92,7 @@ public class BulletManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 残段数を更新する
+    /// 残弾数を更新する
     /// </summary>
     /// <param name="itemName">アイテムの名前</param>
     /// <param name="updateValue">残弾数の変更量</param>
@@ -213,6 +216,13 @@ public class BulletManager : MonoBehaviour
 
             //以降の処理を行わない
             yield break;
+        }
+
+        //手榴弾か催涙弾の残りの数が0になったら
+        if(grenadeBulletCount==0||tearGasGrenadeBulletCount==0)
+        {
+            //アイテムを破棄する
+            GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
         }
 
         //爆破時間まで待つ

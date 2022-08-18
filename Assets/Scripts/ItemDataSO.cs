@@ -43,9 +43,11 @@ public class ItemDataSO : ScriptableObject
         public float interval;//連射間隔
         public float timeToExplode;//爆破・ガス発生までの時間
         public int bulletCount;//弾の数
+        public int maxBulletCount;//一度に所持できる弾の最大数
         public bool enemyCanUse;//Enemyが使用できるかどうか
         public bool isNotBullet;//弾のアイテムではないかどうか
         public bool isFirearms;//銃火器かどうか
+        public bool isHandWeapon;//近接武器かどうか
         public Sprite sprite;//Sprite
         public GameObject prefab;//プレファブ
         public Rigidbody bulletPrefab;//弾のプレファブ
