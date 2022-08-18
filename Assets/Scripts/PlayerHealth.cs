@@ -7,6 +7,9 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;//UIManager
 
+    [SerializeField]
+    private ItemDataSO ItemDataSO;//ItemDataSO
+
     private float playerHp=100.0f;//Playerの体力
 
     public float PlayerHp//PlayerHp変数用のプロパティ
@@ -23,25 +26,38 @@ public class PlayerHealth : MonoBehaviour
         //触れたゲームオブジェクトのタグに応じて処理を変更
         switch(hit.gameObject.tag)
         {
+            //手榴弾なら
             case ("Grenade"):
                 UpdatePlayerHp(-30.0f,hit);
                 break;
+
+            //催涙弾なら
             case ("TearGasGrenade"):
                 UpdatePlayerHp(0,hit);
                 AttackedByTearGasGrenade();
                 break;
+
+            //ナイフなら
             case ("Knife"):
                 UpdatePlayerHp(-100.0f,hit);
                 break;
+
+            //バットなら
             case ("Bat"):
                 UpdatePlayerHp(-50.0f,hit);
                 break;
+
+            //アサルトなら
             case ("Assault"):
                 UpdatePlayerHp(-1.0f,hit);
                 break;
+
+            //スナイパーなら
             case ("Sniper"):
                 UpdatePlayerHp(-80.0f,hit);
                 break;
+
+            //ショットガンなら
             case ("Shotgun"):
                 UpdatePlayerHp(-30.0f, hit);
                 break;
@@ -51,13 +67,13 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// PlayerのHpを更新
     /// </summary>
-    private void UpdatePlayerHp(float updateValue, ControllerColliderHit hit = null)
+    public void UpdatePlayerHp(float updateValue, ControllerColliderHit hit = null)
     {
         //攻撃を受けた際の処理なら
         if(updateValue<0.0f)
         {
             //被弾した際の視界の処理を行う
-            StartCoroutine( uiManager.AttackEventHorizon());
+            StartCoroutine(uiManager.AttackEventHorizon());
         }
 
         //体力用スライダーを更新

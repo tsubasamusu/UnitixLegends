@@ -20,6 +20,9 @@ public class GameData : MonoBehaviour
     private PlayerController playerController;//PlayerController
 
     [SerializeField]
+    private PlayerHealth playerHealth;//PlayerHealth
+
+    [SerializeField]
     private Transform itemTrans;//アイテムの位置情報をまとめたフォルダー
 
     [SerializeField]
@@ -378,7 +381,8 @@ public class GameData : MonoBehaviour
         //使用するアイテムに回復効果があったら
         else if(itemData.restorativeValue>0)
         {
-            //TODO:体力の回復処理
+            //PlayerのHpを更新
+            playerHealth.UpdatePlayerHp(itemData.restorativeValue);
         }
     }
 }
