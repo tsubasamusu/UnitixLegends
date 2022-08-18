@@ -48,6 +48,7 @@ public class ItemDataSO : ScriptableObject
         public bool isNotBullet;//弾のアイテムではないかどうか
         public bool isFirearms;//銃火器かどうか
         public bool isHandWeapon;//近接武器かどうか
+        public bool isThrowingWeapon;//投擲武器かどうか
         public Sprite sprite;//Sprite
         public GameObject prefab;//プレファブ
         public Rigidbody bulletPrefab;//弾のプレファブ

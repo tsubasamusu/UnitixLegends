@@ -265,6 +265,24 @@ public class GameData : MonoBehaviour
             //近くのアイテムをリストから削除する
             RemoveItemList(nearItemNo);
         }
+
+        //取得するアイテムが投擲武器ではないなら
+        if (!generatedItemDataList[nearItemNo].isThrowingWeapon)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
+        //取得するアイテムが手榴弾かつ、Playerが所持しているアイテムのリストに手榴弾が既にあるなら
+        if (generatedItemDataList[nearItemNo].itemName==ItemDataSO.ItemName.Grenade&&playerItemList.Contains(ItemDataSO.itemDataList[1]))
+        {
+            //TODO:手榴弾の残弾数を増やす処理
+        }
+        //取得するアイテムが催涙弾かつ、Playerが所持しているアイテムのリストに催涙弾が既にあるなら
+        else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.TearGasGrenade && playerItemList.Contains(ItemDataSO.itemDataList[2]))
+        {
+            //TODO:催涙弾の残弾数を増やす処理
+        }
     }
 
     /// <summary>
