@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// 他のコライダーに触れた際に呼び出される
     /// </summary>
-    /// <param name="hit"></param>
+    /// <param name="hit">触れた相手</param>
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         //触れたゲームオブジェクトのタグに応じて処理を変更
@@ -67,6 +67,8 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// PlayerのHpを更新
     /// </summary>
+    /// <param name="updateValue">Hpの更新量</param>
+    /// <param name="hit">触れた相手</param>
     public void UpdatePlayerHp(float updateValue, ControllerColliderHit hit = null)
     {
         //攻撃を受けた際の処理なら
