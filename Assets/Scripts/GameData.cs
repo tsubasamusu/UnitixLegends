@@ -8,7 +8,7 @@ public class GameData : MonoBehaviour
     public static GameData instance;//インスタンス
 
     [SerializeField]
-    private ItemDataSO ItemDataSO;//ItemDataSO
+    private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
     private UIManager uIManager;//UIManager
@@ -110,10 +110,10 @@ public class GameData : MonoBehaviour
             int px = Random.Range(1, 14);
 
             //指定した位置にランダムなアイテムを生成し、アニメーションを開始
-            StartCoroutine(PlayItemAnimation(Instantiate(ItemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
+            StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
 
             //生成したアイテムのデータをリストに追加
-            generatedItemDataList.Add(ItemDataSO.itemDataList[px]);
+            generatedItemDataList.Add(itemDataSO.itemDataList[px]);
         }
     }
 
@@ -220,6 +220,19 @@ public class GameData : MonoBehaviour
             return;
         }
 
+        //取得するアイテムが手榴弾かつ、Playerが所持しているアイテムのリストに手榴弾が既にあるなら
+        if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.Grenade && playerItemList.Contains(itemDataSO.itemDataList[1]))
+        {
+            //Playerが所持しているアイテムのリストから手榴弾の要素を1つ取り除く
+            playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[1]));
+        }
+        //取得するアイテムが催涙弾かつ、Playerが所持しているアイテムのリストに催涙弾が既にあるなら
+        else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.TearGasGrenade && playerItemList.Contains(itemDataSO.itemDataList[2]))
+        {
+            //Playerが所持しているアイテムのリストから催涙弾の要素を1つ取り除く
+            playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[2]));
+        }
+
         //仮に許容オーバーの状態として登録する
         isFull = true;
 
@@ -264,24 +277,6 @@ public class GameData : MonoBehaviour
 
             //近くのアイテムをリストから削除する
             RemoveItemList(nearItemNo);
-        }
-
-        //取得するアイテムが投擲武器ではないなら
-        if (!generatedItemDataList[nearItemNo].isThrowingWeapon)
-        {
-            //以降の処理を行わない
-            return;
-        }
-
-        //取得するアイテムが手榴弾かつ、Playerが所持しているアイテムのリストに手榴弾が既にあるなら
-        if (generatedItemDataList[nearItemNo].itemName==ItemDataSO.ItemName.Grenade&&playerItemList.Contains(ItemDataSO.itemDataList[1]))
-        {
-            //TODO:手榴弾の残弾数を増やす処理
-        }
-        //取得するアイテムが催涙弾かつ、Playerが所持しているアイテムのリストに催涙弾が既にあるなら
-        else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.TearGasGrenade && playerItemList.Contains(ItemDataSO.itemDataList[2]))
-        {
-            //TODO:催涙弾の残弾数を増やす処理
         }
     }
 
@@ -335,7 +330,7 @@ public class GameData : MonoBehaviour
         playerItemList.RemoveAt(itemNo);
 
         //Playerが所持しているアイテムのリストの要素の数を一定に保つ
-        playerItemList.Add(ItemDataSO.itemDataList[0]);
+        playerItemList.Add(itemDataSO.itemDataList[0]);
 
         //全てのアイテムスロットのSpriteを再設定する
         SetIAlltemSlotSprite();
@@ -390,8 +385,8 @@ public class GameData : MonoBehaviour
     /// <param name="itemData">使用するアイテムのデータ</param>
     public void UseItem(ItemDataSO.ItemData itemData)
     {
-        //使用するアイテムが銃火器なら
-        if (itemData.isFirearms)
+        //使用するアイテムが飛び道具なら
+        if (itemData.isMissile)
         {
             //弾を発射
             StartCoroutine(bulletManager.ShotBullet(itemData));

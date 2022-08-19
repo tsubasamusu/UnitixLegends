@@ -23,7 +23,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 0
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 0}
@@ -39,7 +39,7 @@ MonoBehaviour:
     maxBulletCount: 10
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 1
+    isMissile: 1
     isHandWeapon: 0
     isThrowingWeapon: 1
     sprite: {fileID: 21300000, guid: 4173be7b6c266fe45b67c4602ee39969, type: 3}
@@ -55,7 +55,7 @@ MonoBehaviour:
     maxBulletCount: 10
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 1
+    isMissile: 1
     isHandWeapon: 0
     isThrowingWeapon: 1
     sprite: {fileID: 21300000, guid: 8b6eb3e89926bb94c974e2cc37ac778a, type: 3}
@@ -71,7 +71,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 1
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: ad553b38856212047ace67743e54d0fa, type: 3}
@@ -87,7 +87,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 1
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: ddcf5feb3e17009478c996101331519b, type: 3}
@@ -103,7 +103,7 @@ MonoBehaviour:
     maxBulletCount: 10000
     enemyCanUse: 1
     isNotBullet: 1
-    isFirearms: 1
+    isMissile: 1
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: 1b07c51ade9d68443b2f66910bda4990, type: 3}
@@ -119,7 +119,7 @@ MonoBehaviour:
     maxBulletCount: 1000
     enemyCanUse: 1
     isNotBullet: 1
-    isFirearms: 1
+    isMissile: 1
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: bfae38439f14da14db710fbe0aee7d33, type: 3}
@@ -135,7 +135,7 @@ MonoBehaviour:
     maxBulletCount: 100
     enemyCanUse: 1
     isNotBullet: 1
-    isFirearms: 1
+    isMissile: 1
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: d5da1e23ae2a5bb41b4fc1008894c983, type: 3}
@@ -151,7 +151,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: cc9d1fb92a80bbc419f6bc1973c6f0a3, type: 3}
@@ -167,7 +167,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: 8b51bac5904437d45a3ce760a771605e, type: 3}
@@ -183,7 +183,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 1
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 21300000, guid: eff3f242e9ac79549b13936bdd8de78f, type: 3}
@@ -199,7 +199,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 0
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 0}
@@ -215,7 +215,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 0
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 0}
@@ -231,7 +231,7 @@ MonoBehaviour:
     maxBulletCount: 0
     enemyCanUse: 0
     isNotBullet: 0
-    isFirearms: 0
+    isMissile: 0
     isHandWeapon: 0
     isThrowingWeapon: 0
     sprite: {fileID: 0}

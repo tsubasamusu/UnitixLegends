@@ -46,7 +46,7 @@ public class ItemDataSO : ScriptableObject
         public int maxBulletCount;//一度に所持できる弾の最大数
         public bool enemyCanUse;//Enemyが使用できるかどうか
         public bool isNotBullet;//弾のアイテムではないかどうか
-        public bool isFirearms;//銃火器かどうか
+        public bool isMissile;//飛び道具かどうか
         public bool isHandWeapon;//近接武器かどうか
         public bool isThrowingWeapon;//投擲武器かどうか
         public Sprite sprite;//Sprite
