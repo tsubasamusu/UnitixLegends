@@ -397,5 +397,11 @@ public class GameData : MonoBehaviour
             //PlayerのHpを更新
             playerHealth.UpdatePlayerHp(itemData.restorativeValue);
         }
+        //使用するアイテムが近接武器なら
+        else if(itemData.isHandWeapon)
+        {
+            //近接武器を使用する
+            StartCoroutine(　bulletManager.UseHandWeapon(itemData));
+        }
     }
 }

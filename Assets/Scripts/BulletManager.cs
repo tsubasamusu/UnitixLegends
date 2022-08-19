@@ -275,4 +275,14 @@ public class BulletManager : MonoBehaviour
                 return 0;
         }
     }
+
+    /// <summary>
+    /// 近接武器を使用する
+    /// </summary>
+    /// <param name="itemData">使用するアイテムのデータ</param>
+    /// <returns>待ち時間</returns>
+    public IEnumerator UseHandWeapon(ItemDataSO.ItemData itemData)
+    {
+        yield return null;//（仮）
+    }
 }
