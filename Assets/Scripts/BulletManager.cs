@@ -5,9 +5,6 @@ using UnityEngine;
 public class BulletManager : MonoBehaviour
 {
     [SerializeField]
-    private int maxBulletCount;//所持できるアイテム1つ当たりの弾の最大数
-
-    [SerializeField]
     private Transform mainCamera;//メインカメラ
 
     [SerializeField]
@@ -106,27 +103,27 @@ public class BulletManager : MonoBehaviour
             {
                 //手榴弾なら
                 case ItemDataSO.ItemName.Grenade:
-                    grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, maxBulletCount);
+                    grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[1].maxBulletCount);
                     break;
 
                 //催涙弾なら
                 case ItemDataSO.ItemName.TearGasGrenade:
-                    tearGasGrenadeBulletCount=Mathf.Clamp(tearGasGrenadeBulletCount+updateValue,0,maxBulletCount);
+                    tearGasGrenadeBulletCount=Mathf.Clamp(tearGasGrenadeBulletCount+updateValue,0, itemDataSO.itemDataList[2].maxBulletCount);
                     break;
 
                 //アサルトなら
                 case ItemDataSO.ItemName.Assault:
-                    assaultBulletCount=Mathf.Clamp(assaultBulletCount+updateValue,0,maxBulletCount);
+                    assaultBulletCount=Mathf.Clamp(assaultBulletCount+updateValue,0,itemDataSO.itemDataList[5].maxBulletCount);
                     break;
 
                 //ショットガンなら
                 case ItemDataSO.ItemName.Shotgun:
-                    shotgunBulletCount=Mathf.Clamp(shotgunBulletCount+updateValue,0,maxBulletCount);
+                    shotgunBulletCount=Mathf.Clamp(shotgunBulletCount+updateValue,0,itemDataSO.itemDataList[6].maxBulletCount);
                     break;
 
                 //スナイパーなら
                 case ItemDataSO.ItemName.Sniper:
-                    sniperBulletCount =Mathf.Clamp(sniperBulletCount+updateValue,0,maxBulletCount);
+                    sniperBulletCount =Mathf.Clamp(sniperBulletCount+updateValue,0, itemDataSO.itemDataList[7].maxBulletCount);
                     break;
             }
 
