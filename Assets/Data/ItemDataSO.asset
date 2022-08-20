@@ -30,7 +30,7 @@ MonoBehaviour:
     bulletPrefab: {fileID: 0}
   - itemName: 1
     restorativeValue: 0
-    attackPower: 0
+    attackPower: 30
     shotSpeed: 100
     interval: 1
     timeToExplode: 5
@@ -139,7 +139,7 @@ MonoBehaviour:
     shotSpeed: 0
     interval: 0
     timeToExplode: 0
-    bulletCount: 0
+    bulletCount: 1
     maxBulletCount: 10
     enemyCanUse: 0
     isNotBullet: 1
@@ -154,7 +154,7 @@ MonoBehaviour:
     shotSpeed: 0
     interval: 0
     timeToExplode: 0
-    bulletCount: 0
+    bulletCount: 1
     maxBulletCount: 2
     enemyCanUse: 0
     isNotBullet: 1
@@ -169,7 +169,7 @@ MonoBehaviour:
     shotSpeed: 0
     interval: 0
     timeToExplode: 0
-    bulletCount: 0
+    bulletCount: 1
     maxBulletCount: 1
     enemyCanUse: 0
     isNotBullet: 1

@@ -272,7 +272,7 @@ public class GameData : MonoBehaviour
         if (!isFull || !generatedItemDataList[nearItemNo].isNotBullet)
         {
             //残弾数を更新
-            bulletManager.UpdateBulletCount(generatedItemDataList[nearItemNo].itemName);
+            bulletManager.UpdateBulletCount(generatedItemDataList[nearItemNo].itemName, generatedItemDataList[nearItemNo].bulletCount);
 
             //全てのアイテムスロットのSpriteを再設定する
             SetIAlltemSlotSprite();

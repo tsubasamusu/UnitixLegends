@@ -96,85 +96,34 @@ public class BulletManager : MonoBehaviour
     /// </summary>
     /// <param name="itemName">アイテムの名前</param>
     /// <param name="updateValue">残弾数の変更量</param>
-    public void UpdateBulletCount(ItemDataSO.ItemName itemName, int updateValue = 0)
+    public void UpdateBulletCount(ItemDataSO.ItemName itemName, int updateValue)
     {
-        //残弾数の更新数が0ではなかったら
-        if (updateValue != 0)
-        {
-            //受け取ったアイテムの名前に応じて処理を変更
-            switch (itemName)
-            {
-                //手榴弾なら
-                case ItemDataSO.ItemName.Grenade:
-                    grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[1].maxBulletCount);
-                    break;
-
-                //催涙弾なら
-                case ItemDataSO.ItemName.TearGasGrenade:
-                    tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[2].maxBulletCount);
-                    break;
-
-                //アサルトなら
-                case ItemDataSO.ItemName.Assault:
-                    assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, itemDataSO.itemDataList[5].maxBulletCount);
-                    break;
-
-                //ショットガンなら
-                case ItemDataSO.ItemName.Shotgun:
-                    shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, itemDataSO.itemDataList[6].maxBulletCount);
-                    break;
-
-                //スナイパーなら
-                case ItemDataSO.ItemName.Sniper:
-                    sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, itemDataSO.itemDataList[7].maxBulletCount);
-                    break;
-            }
-
-            //以降の処理を行わない
-            return;
-        }
-
         //受け取ったアイテムの名前に応じて処理を変更
         switch (itemName)
         {
             //手榴弾なら
             case ItemDataSO.ItemName.Grenade:
-                grenadeBulletCount += itemDataSO.itemDataList[1].bulletCount;
+                grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[1].maxBulletCount);
                 break;
 
             //催涙弾なら
             case ItemDataSO.ItemName.TearGasGrenade:
-                tearGasGrenadeBulletCount += itemDataSO.itemDataList[2].bulletCount;
+                tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[2].maxBulletCount);
                 break;
 
             //アサルトなら
             case ItemDataSO.ItemName.Assault:
-                assaultBulletCount += itemDataSO.itemDataList[5].bulletCount;
+                assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, itemDataSO.itemDataList[5].maxBulletCount);
                 break;
 
             //ショットガンなら
             case ItemDataSO.ItemName.Shotgun:
-                shotgunBulletCount += itemDataSO.itemDataList[6].bulletCount;
+                shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, itemDataSO.itemDataList[6].maxBulletCount);
                 break;
 
             //スナイパーなら
             case ItemDataSO.ItemName.Sniper:
-                sniperBulletCount += itemDataSO.itemDataList[7].bulletCount;
-                break;
-
-            //アサルト用弾なら
-            case ItemDataSO.ItemName.AssaultBullet:
-                assaultBulletCount += itemDataSO.itemDataList[11].bulletCount;
-                break;
-
-            //ショットガン用弾なら
-            case ItemDataSO.ItemName.ShotgunBullet:
-                shotgunBulletCount += itemDataSO.itemDataList[12].bulletCount;
-                break;
-
-            //スナイパー用弾なら
-            case ItemDataSO.ItemName.SniperBullet:
-                sniperBulletCount += itemDataSO.itemDataList[13].bulletCount;
+                sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, itemDataSO.itemDataList[7].maxBulletCount);
                 break;
         }
     }
@@ -218,10 +167,16 @@ public class BulletManager : MonoBehaviour
             yield break;
         }
 
-        //手榴弾か催涙弾の残りの数が0になったら
-        if (grenadeBulletCount == 0 || tearGasGrenadeBulletCount == 0)
+        //手榴弾の残りの数が0かつ、選択しているアイテムが手榴弾なら
+        if (grenadeBulletCount == 0&&GameData.instance.GetSelectedItemData().itemName==ItemDataSO.ItemName.Grenade)
         {
-            //アイテムを破棄する
+            //選択しているアイテムを破棄する
+            GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
+        }
+        //催涙弾の残りの数が0かつ、選択しているアイテムが催涙弾なら
+        else if (tearGasGrenadeBulletCount==0&& GameData.instance.GetSelectedItemData().itemName == ItemDataSO.ItemName.TearGasGrenade)
+        {
+            //選択しているアイテムを破棄する
             GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
         }
 
