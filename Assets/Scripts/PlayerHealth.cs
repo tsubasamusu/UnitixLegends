@@ -60,12 +60,12 @@ public class PlayerHealth : MonoBehaviour
 
             //ナイフなら
             case ("Knife"):
-                UpdatePlayerHp(-itemDataSO.itemDataList[3].attackPower,hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[3].attackPower);
                 break;
 
             //バットなら
             case ("Bat"):
-                UpdatePlayerHp(-itemDataSO.itemDataList[4].attackPower,hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[4].attackPower);
                 break;
 
             //アサルトなら

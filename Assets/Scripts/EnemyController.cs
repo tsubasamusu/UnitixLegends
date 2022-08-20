@@ -12,11 +12,24 @@ public class EnemyController : MonoBehaviour
     private Animator animator;//Animator
 
     [SerializeField]
+    private Rigidbody enemyRb;//Rigidbody
+
+    [SerializeField]
+    private ItemDataSO itemDataSO;//ItemDataSO
+
+    [SerializeField]
     private float fallSpeed;//落下速度
 
-    private bool componentFlag;//コンポーネント関連の処理を行ったかどうかの判断
+    [SerializeField]
+    private float getItemLength;//アイテムを取得できる距離
+
+    private bool didPostLandingProcessing;//着地直後の処理を行ったかどうか
+
+    private bool gotItem;//アイテムを取得したかどうか
 
     private float enemyhp = 100.0f;//Enemyの体力
+
+    private float lengthToNearItem;//近くの使用可能アイテムまでの距離
 
     /// <summary>
     /// ゲーム開始直後に呼び出される
@@ -52,33 +65,99 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-        //まだコンポーネントの処理を行っていないなら
-        if(!componentFlag)
+        //最も近くにある使用可能アイテムの番号
+        int nearItemNo = 0;
+
+        //まだ着地直後の処理を行っていないなら
+        if(!didPostLandingProcessing)
         {
             //NavMeshAgentを有効化
             agent.enabled=true;
 
-            //コンポーネントの処理が完了した状態に切り替える
-            componentFlag=true;
+            //停止距離を0に設定
+            agent.stoppingDistance = 0f;
+
+            //最も近くにある使用可能アイテムの番号を設定
+            nearItemNo = GetNearItemNo(); 
+
+            //目標地点を設定
+            SetTargetPosition(GameData.instance.generatedItemTranList[nearItemNo].position);
+
+            //着地直後の処理が完了した状態に切り替える
+            didPostLandingProcessing =true;
+        }
+
+        //アイテムを取得できる距離まで近づいているかつ、まだアイテムを取得していないなら
+        if(GetLengthToNearItem(nearItemNo)<=getItemLength&&!gotItem)
+        {
+            //アイテムを取得し、アイテムを取得済みの状態に切り替える
+            gotItem=GetItem(nearItemNo);
         }
     }
 
     /// <summary>
-    /// 最も近くにある使用可能アイテムの位置情報を返す
+    /// 最も近くにある使用可能アイテムの番号を取得する
     /// </summary>
-    /// <returns></returns>
-    public Transform FindNearItem()
+    /// <returns>最も近くにある使用可能アイテムの番号</returns>
+    private int GetNearItemNo()
     {
-        //TODO:GameDataのアイテムのリストを元に、最も近くにある攻撃可能アイテムを見つける処理
+        //nullエラー回避
+        if (GameData.instance. generatedItemTranList.Count <= 0)
+        {
+            //以降の処理を行わない
+            return 0;
+        }
 
-        return null;//（仮）
+        //アイテムの番号
+        int itemNo = 0;
+
+        //リストの0番の要素の座標をnearPosに仮に登録
+        Vector3 nearPos =GameData.instance. generatedItemTranList[0].position;
+
+        //リストの要素数だけ繰り返す
+        for (int i = 0; i <GameData.instance. generatedItemTranList.Count; i++)
+        {
+            //繰り返し処理で見つけたアイテムが使用不可だったら
+            if (!GameData.instance.generatedItemDataList[i].enemyCanUse)
+            {
+                //以降の処理は行わずに、次の繰り返しに移る
+                continue;
+            }
+
+            //リストのi番の要素の座標をposに登録
+            Vector3 pos =GameData.instance. generatedItemTranList[i].position;
+
+            //仮登録した要素と、for文で得た要素の、myPosとの距離を比較
+            if (Vector3.Scale((pos - transform.position), new Vector3(1, 0, 1)).magnitude < Vector3.Scale((nearPos - transform.position), new Vector3(1, 0, 1)).magnitude)
+            {
+                //Playerの最も近くにあるアイテムの番号をiで登録
+                itemNo = i;
+
+                //nearPosを再登録
+                nearPos = pos;
+            }
+        }
+
+        //最も近くにある使用可能アイテムの番号を返す
+        return itemNo;
+    }
+
+    /// <summary>
+    /// 最も近くにある使用可能アイテムとの距離を取得
+    /// </summary>
+    /// <param name="nearItemNo">最も近くにある使用可能アイテムの番号</param>
+    /// <returns>最も近くにある使用可能アイテムとの距離</returns>
+    private float GetLengthToNearItem(int nearItemNo)
+    {
+        //最も近くにある使用可能アイテムとの距離を返す
+        return Vector3.Scale((GameData.instance.generatedItemTranList[nearItemNo].position - transform.position), new Vector3(1, 0, 1)).magnitude;
     }
 
     /// <summary>
     /// 最も近くにいる敵の位置情報を返す
     /// </summary>
     /// <returns></returns>
-    public Transform FindNearEnemy()
+    private Transform FindNearEnemy()
     {
         //TODO:EnemyGeneratorの敵のリストを元に、最も近くにいる敵を見つける処理
 
@@ -89,10 +168,10 @@ public class EnemyController : MonoBehaviour
     /// 受け取った位置情報の目標値に設定する
     /// </summary>
     /// <param name="targetTran"></param>
-    public void SetTargetPosition(Transform targetTran)
+    private void SetTargetPosition(Vector3 targetPos)
     {
         //引数を元に、AIの目標地点を設定
-        agent.destination = targetTran.position;
+        agent.destination = targetPos;
     }
 
     /// <summary>
@@ -112,12 +191,14 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// アイテムを拾い終えたらtrueを返す
+    /// アイテムを拾う
     /// </summary>
-    /// <returns></returns>
-    public bool GetItem()
+    /// <param name="nearItemNo">近くのアイテムの番号</param>
+    /// <returns>アイテムを拾い終えたらtrueを返す</returns>
+    public bool GetItem(int nearItemNo)
     {
-        //TODO:アイテムを拾う処理
+        //アイテムを拾う
+        GameData.instance.GetItem(nearItemNo, false);
 
         //trueを返す
         return true;
@@ -134,33 +215,46 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// 他のコライダーに触れた際に呼び出される
     /// </summary>
-    /// <param name="collision"></param>
+    /// <param name="collision">触れた相手</param>
     private void OnCollisionEnter(Collision collision)
     {
         //触れたゲームオブジェクトのタグに応じて処理を変更
         switch (collision.gameObject.tag)
         {
+            //手榴弾なら
             case ("Grenade"):
-                UpdateEnemyHp(-30.0f, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[1].attackPower, collision);
                 break;
+
+            //催涙弾なら
             case ("TearGasGrenade"):
-                UpdateEnemyHp(0, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[2].attackPower, collision);
                 StartCoroutine( AttackedByTearGasGrenade());
                 break;
+
+            //ナイフなら
             case ("Knife"):
-                UpdateEnemyHp(-100.0f, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[3].attackPower);
                 break;
+
+            //バットなら
             case ("Bat"):
-                UpdateEnemyHp(-50.0f, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[4].attackPower);
                 break;
+
+            //アサルトなら
             case ("Assault"):
-                UpdateEnemyHp(-1.0f, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[5].attackPower, collision);
                 break;
-            case ("Sniper"):
-                UpdateEnemyHp(-80.0f, collision);
-                break;
+
+            //ショットガンなら
             case ("Shotgun"):
-                UpdateEnemyHp(-30.0f, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[6].attackPower, collision);
+                break;
+
+            //スナイパーなら
+            case ("Sniper"):
+                UpdateEnemyHp(-itemDataSO.itemDataList[7].attackPower, collision);
                 break;
         }
     }
@@ -168,10 +262,10 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// Enemyの体力を更新する
     /// </summary>
-    private void UpdateEnemyHp(float updateValue, Collision collision)
+    private void UpdateEnemyHp(float updateValue, Collision collision=null)
     {
         //Enemyの体力を0以上100以下に制限しながら、更新する
-        enemyhp = Mathf.Clamp(enemyhp + updateValue, 0.0f, 100.0f);
+        enemyhp = Mathf.Clamp(enemyhp + updateValue, 0f, 100f);
 
         //nullエラー回避
         if(collision != null)

@@ -91,7 +91,7 @@ public class GameData : MonoBehaviour
     private void Update()
     {
         //Playerの最も近くにあるアイテムの情報を取得
-        GetInformationOfNearItem(playerTran.position, true);
+        GetInformationOfNearItem(playerTran.position);
     }
 
     /// <summary>
@@ -102,8 +102,14 @@ public class GameData : MonoBehaviour
         //アイテムの生成位置のリストを作成
         CreateGeneratedItemTranList();
 
-        //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数だけ繰り返す
-        for (int i = 0; i < itemTrans.childCount; i++)
+        //0番の生成位置にアサルトを生成する（Enemyが使用可能アイテムを探すため）
+        StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[5].prefab, generatedItemTranList[0])));
+
+        //生成したアイテムのデータをリストに追加
+        generatedItemDataList.Add(itemDataSO.itemDataList[5]);
+
+        //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数から1引いた数だけ繰り返す
+        for (int i = 1; i < itemTrans.childCount; i++)
         {
             //ランダムな整数を取得
             int px = Random.Range(1, 14);
@@ -133,8 +139,7 @@ public class GameData : MonoBehaviour
     /// 最も近くにあるアイテムの番号と位置情報を得る
     /// </summary>
     /// <param name="myPos">自分自身の座標</param>
-    /// <param name="isPlayerPos">第一引数はPlayerの座標かどうか</param>
-    public void GetInformationOfNearItem(Vector3 myPos, bool isPlayerPos)
+    public void GetInformationOfNearItem(Vector3 myPos)
     {
         //nullエラー回避
         if (generatedItemTranList.Count <= 0)
@@ -166,15 +171,11 @@ public class GameData : MonoBehaviour
             }
         }
 
-        //myPosがPlayerの座標なら
-        if (isPlayerPos)
-        {
-            //Playerの最も近くにあるアイテムの番号を登録
-            nearItemNo = itemNo;
+        //Playerの最も近くにあるアイテムの番号を登録
+        nearItemNo = itemNo;
 
-            //「Playerの最も近くにあるアイテム」と「Player」との距離を登録
-            lengthToNearItem = Vector3.Scale((nearPos - myPos), new Vector3(1, 0, 1)).magnitude;
-        }
+        //「Playerの最も近くにあるアイテム」と「Player」との距離を登録
+        lengthToNearItem = Vector3.Scale((nearPos - myPos), new Vector3(1, 0, 1)).magnitude;
     }
 
     /// <summary>
