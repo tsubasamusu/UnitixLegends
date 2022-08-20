@@ -236,8 +236,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void UpdateTxtBulletCount()
     {
-        //選択しているアイテムが飛び道具ではないなら
-        if(!GameData.instance.GetSelectedItemData().isMissile)
+        //選択しているアイテムが飛び道具ではないか、選択されているアイテムの名前がNoneなら
+        if(!GameData.instance.GetSelectedItemData().isMissile||GameData.instance.GetSelectedItemData().itemName==ItemDataSO.ItemName.None)
         {
             //テキストを空にする
             txtBulletCount.text = "";

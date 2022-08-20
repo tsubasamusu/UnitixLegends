@@ -37,7 +37,6 @@ public class GameData : MonoBehaviour
     [HideInInspector]
     public List<Transform> generatedItemTranList = new List<Transform>();//アイテムの生成位置のリスト
 
-    [HideInInspector]
     public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
 
     private int nearItemNo;//Playerの最も近くにあるアイテムの番号
@@ -225,12 +224,18 @@ public class GameData : MonoBehaviour
         {
             //Playerが所持しているアイテムのリストから手榴弾の要素を1つ取り除く
             playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[1]));
+
+            //Playerが所持しているアイテムのリストの要素数を一定に保つ
+            playerItemList.Add(itemDataSO.itemDataList[0]);
         }
         //取得するアイテムが催涙弾かつ、Playerが所持しているアイテムのリストに催涙弾が既にあるなら
         else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.TearGasGrenade && playerItemList.Contains(itemDataSO.itemDataList[2]))
         {
             //Playerが所持しているアイテムのリストから催涙弾の要素を1つ取り除く
             playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[2]));
+
+            //Playerが所持しているアイテムのリストの要素数を一定に保つ
+            playerItemList.Add(itemDataSO.itemDataList[0]);
         }
 
         //仮に許容オーバーの状態として登録する
