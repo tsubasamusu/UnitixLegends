@@ -17,18 +17,26 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float fallSpeed;//落下速度
 
+    [SerializeField, Header("射程距離")]
+    private float range;//射程距離
+
     [SerializeField]
     private float getItemLength;//アイテムを取得できる距離
+
+    [SerializeField]
+    private Transform enemyWeapon;//Enemyが武器を構える位置
 
     private bool didPostLandingProcessing;//着地直後の処理を行ったかどうか
 
     private bool gotItem;//アイテムを取得したかどうか
 
+    private bool stopFlag;//動きを停止するかどうか
+
     private float enemyhp = 100.0f;//Enemyの体力
 
-    private float lengthToNearItem;//近くの使用可能アイテムまでの距離
-
     private Vector3 firstPos;//初期位置
+
+    private ItemDataSO.ItemData usedItemdata;//使用しているアイテムのデータ
 
     private int nearItemNo;//最も近くにある使用可能アイテムの番号
 
@@ -82,7 +90,14 @@ public class EnemyController : MonoBehaviour
             didPostLandingProcessing = true;
         }
 
-        //まだアイテムを取得していなかったら
+        //停止状態なら
+        if(stopFlag)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
+        //まだアイテムを取得していないなら
         if(!gotItem)
         {
             //最も近くにある使用可能アイテムの番号を設定
@@ -96,8 +111,22 @@ public class EnemyController : MonoBehaviour
             {
                 //アイテムを取得し、アイテムを取得済みの状態に切り替える
                 gotItem = GetItem(nearItemNo);
+
+                //停止距離を設定
+                agent.stoppingDistance = 5f;
             }
+
+            //以降の処理を行わない
+            return;
         }
+
+        //射線上に敵がいたら
+        if (CheckEnemy()) 
+        {
+            //射撃する
+            ShotBullet();
+        }
+       
     }
 
     /// <summary>
@@ -163,15 +192,15 @@ public class EnemyController : MonoBehaviour
     /// <returns></returns>
     private Transform FindNearEnemy()
     {
-        //TODO:EnemyGeneratorの敵のリストを元に、最も近くにいる敵を見つける処理
+        //TODO:EnemyGeneratorの敵のリストと、Playerの場所を元に、最も近くにいる敵を見つける処理
 
         return null;//（仮）
     }
 
     /// <summary>
-    /// 受け取った位置情報の目標値に設定する
+    /// 目標地点を設定する
     /// </summary>
-    /// <param name="targetTran"></param>
+    /// <param name="targetPos">目標地点</param>
     private void SetTargetPosition(Vector3 targetPos)
     {
         //引数を元に、AIの目標地点を設定
@@ -179,19 +208,46 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-	/// 自身が接地していたらtrueを返す
+	/// 接地判定を行う
 	/// </summary>
-	/// <returns></returns>
-	public bool CheckGrounded()
+	/// <returns>接地していたらtrue</returns>
+	private bool CheckGrounded()
     {
         //rayの初期位置と向き（姿勢）を設定
-        var ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+        Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
 
         //rayの探索距離（長さ）を設定
-        var tolerance = 0.3f;
+        float tolerance = 0.3f;
 
         //rayのヒット判定（bool型）を返す
         return Physics.Raycast(ray, tolerance);
+    }
+
+    /// <summary>
+    /// 射線上に敵がいるかどうか調べる
+    /// </summary>
+    /// <returns>射線上に敵がいたらtrue</returns>
+    private bool CheckEnemy()
+    {
+        //光線の初期位置と向き（姿勢）を設定
+        Ray ray = new Ray(enemyWeapon.position, enemyWeapon.forward);
+
+        //光線が何にも当たらなかったら
+        if (!Physics.Raycast(ray, out RaycastHit hitInfo, range))
+        {
+            //falseを返し、以降の処理を行わない
+            return false;
+        }
+
+        //光線がPlayerかEnemyに当たったら
+        if (hitInfo.transform.gameObject.CompareTag("Player") || hitInfo.transform.gameObject.CompareTag("Enemy"))
+        {
+            //trueを返す
+            return true;
+        }
+
+        //PlayerとEnemy以外に光線が当たったらfalseを返す
+        return false;
     }
 
     /// <summary>
@@ -201,7 +257,11 @@ public class EnemyController : MonoBehaviour
     /// <returns>アイテムを拾い終えたらtrueを返す</returns>
     public bool GetItem(int nearItemNo)
     {
-        Debug.Log("Get");
+        //使用するアイテムのデータを設定
+        usedItemdata=GameData.instance.generatedItemDataList[nearItemNo];
+
+        //取得したアイテムを配置
+        Instantiate(GameData.instance.generatedItemDataList[nearItemNo].prefab, enemyWeapon);
 
         //アイテムを拾う
         GameData.instance.GetItem(nearItemNo, false);
@@ -213,8 +273,9 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// 弾を撃つ
     /// </summary>
-    public void ShotBullet()
+    private void ShotBullet()
     {
+        Debug.Log("発射");
         //TODO:弾を撃つ処理
     }
 
@@ -293,14 +354,17 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private IEnumerator AttackedByTearGasGrenade()
     {
-        //Enemyの動きを止める
-        agent.enabled = false;
+        //停止状態にする
+        stopFlag = true;
+
+        //目標地点を自身の座標に設定
+        SetTargetPosition(transform.position);
 
         //5.0秒間、動きを止め続ける
         yield return new WaitForSeconds(5.0f);
 
-        //Enemyの活動を再開する
-        agent.enabled = true;
+        //停止状態を解除する
+        stopFlag = false;
     }
 
     /// <summary>
