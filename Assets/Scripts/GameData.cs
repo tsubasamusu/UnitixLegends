@@ -39,8 +39,6 @@ public class GameData : MonoBehaviour
 
     public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
 
-    private int nearItemNo;//Playerの最も近くにあるアイテムの番号
-
     private bool isFull;//Playerの所有物が許容オーバーかどうか
 
     public bool IsFull//isFull変数用のプロパティ
@@ -48,9 +46,19 @@ public class GameData : MonoBehaviour
         get { return isFull; }//外部からは取得処理のみを可能に
     }
 
+    private int nearItemNo;//Playerの最も近くにあるアイテムの番号
+
     public int NearItemNo//nearItemNo変数用のプロパティ
     {
         get { return nearItemNo; }//外部からは取得処理のみを可能に
+    }
+
+    private int killCount;//Playerが倒した敵の数
+
+    public int KillCount//killCount変数用のプロパティ
+    {
+        get { return killCount; }//取得処理
+        set { killCount = value; }//設定処理
     }
 
     private float lengthToNearItem;//「Playerの最も近くにあるアイテム」と「Player」との距離

@@ -326,12 +326,19 @@ public class EnemyController : MonoBehaviour
     /// <param name="destoryFlag">Õ“Ë‘Šè‚ğÁ‚·‚©‚Ç‚¤‚©</param>
     private void UpdateEnemyHp(float updateValue, Collision collision,bool destoryFlag)
     {
+        //UŒ‚‚µ‚Ä‚«‚½‘Šè‚ªPlayer‚©‚Ç‚¤‚©
+        bool isPlayer = false;
+
         //Enemy‚Ì‘Ì—Í‚ğ0ˆÈã100ˆÈ‰º‚É§ŒÀ‚µ‚È‚ª‚çAXV‚·‚é
         enemyhp = Mathf.Clamp(enemyhp + updateValue, 0f, 100f);
 
         //Õ“Ë‘Šè‚Ìe‚ªPlayerTran‚È‚ç
         if(collision.transform.parent.gameObject.CompareTag("PlayerTran"))
         {
+            //UŒ‚‚µ‚Ä‚«‚½‘Šè‚ğPlayer‚Éİ’è
+            isPlayer = true;
+
+            //ƒtƒ[ƒg•\¦‚ğ¶¬
             StartCoroutine(uiManager.GenerateFloatingMessage(Mathf.Abs(updateValue).ToString("F0"), Color.yellow));
         }
 
@@ -345,8 +352,15 @@ public class EnemyController : MonoBehaviour
         //Enemy‚Ì‘Ì—Í‚ª0‚É‚È‚Á‚½‚ç
         if (enemyhp == 0.0f)
         {
-            //€–Sˆ—‚ğs‚¤
-            WasKilled();
+            //UŒ‚‚µ‚Ä‚«‚½‘Šè‚ªPlayer‚È‚ç
+            if(isPlayer)
+            {
+                //Player‚ª“|‚µ‚½“G‚Ì”‚É1‚ğ‰Á‚¦‚é
+                GameData.instance.KillCount++;
+            }
+
+            //©g‚ğÁ‚·
+            Destroy(gameObject);
         }
     }
 
@@ -366,14 +380,6 @@ public class EnemyController : MonoBehaviour
 
         //’â~ó‘Ô‚ğ‰ğœ‚·‚é
         stopFlag = false;
-    }
-
-    /// <summary>
-    /// €–Sˆ—
-    /// </summary>
-    private void WasKilled()
-    {
-        //TODO:€–Sˆ—
     }
 
     /// <summary>
