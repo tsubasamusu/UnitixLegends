@@ -128,8 +128,58 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine( uiManager.SetEventHorizonBlack(5.0f));
     }
 
-    public void UpdateRecoveryItemsCount()
+    /// <summary>
+    /// 回復アイテムの所持数を更新する
+    /// </summary>
+    /// <param name="itemName">アイテムの名前</param>
+    /// <param name="updateValue">所持数の更新量</param>
+    public void UpdateRecoveryItemCount(ItemDataSO.ItemName itemName, int updateValue)
     {
+        //アイテムの名前に応じて処理を変更
+        switch(itemName)
+        {
+            //包帯なら
+            case ItemDataSO.ItemName.Bandage:
+                bandageCount = Mathf.Clamp(bandageCount + updateValue, 0, itemDataSO.itemDataList[8].maxBulletCount);
+                break;
 
+            //薬草なら
+            case ItemDataSO.ItemName.MedicinalPlants:
+                medicinalPlantscount=Mathf.Clamp(medicinalPlantscount + updateValue, 0,itemDataSO.itemDataList[9].maxBulletCount);
+                break;
+
+            //注射器なら
+            case ItemDataSO.ItemName.Syringe:
+                syringeCount=Mathf.Clamp(syringeCount+updateValue, 0, itemDataSO.itemDataList[10].maxBulletCount);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 指定した回復アイテムの所持数を取得する
+    /// </summary>
+    /// <param name="itemName">回復アイテムの名前</param>
+    /// <returns>その回復アイテムの所持数</returns>
+    public int GetRecoveryItemCount(ItemDataSO.ItemName itemName)
+    {
+        //アイテムの名前に応じて処理を変更
+        switch (itemName)
+        {
+            //包帯なら
+            case ItemDataSO.ItemName.Bandage:
+                return bandageCount;
+              
+            //薬草なら
+            case ItemDataSO.ItemName.MedicinalPlants:
+                return medicinalPlantscount;
+
+            //注射器なら
+            case ItemDataSO.ItemName.Syringe:
+                return syringeCount;
+
+            //上記以外なら
+            default:
+                return 0;
+        }
     }
 }

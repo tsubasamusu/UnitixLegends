@@ -237,6 +237,33 @@ public class GameData : MonoBehaviour
             //Playerが所持しているアイテムのリストの要素数を一定に保つ
             playerItemList.Add(itemDataSO.itemDataList[0]);
         }
+        //取得するアイテムが包帯かつ、Playerが所持しているアイテムのリストに包帯が既にあるなら
+        else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.Bandage && playerItemList.Contains(itemDataSO.itemDataList[8]))
+        {
+            //Playerが所持しているアイテムのリストから包帯の要素を1つ取り除く
+            playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[8]));
+
+            //Playerが所持しているアイテムのリストの要素数を一定に保つ
+            playerItemList.Add(itemDataSO.itemDataList[0]);
+        }
+        //取得するアイテムが薬草かつ、Playerが所持しているアイテムのリストに薬草が既にあるなら
+        else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.MedicinalPlants && playerItemList.Contains(itemDataSO.itemDataList[9]))
+        {
+            //Playerが所持しているアイテムのリストから薬草の要素を1つ取り除く
+            playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[9]));
+
+            //Playerが所持しているアイテムのリストの要素数を一定に保つ
+            playerItemList.Add(itemDataSO.itemDataList[0]);
+        }
+        //取得するアイテムが注射器かつ、Playerが所持しているアイテムのリストに注射器が既にあるなら
+        else if (generatedItemDataList[nearItemNo].itemName == ItemDataSO.ItemName.Syringe && playerItemList.Contains(itemDataSO.itemDataList[10]))
+        {
+            //Playerが所持しているアイテムのリストから注射器の要素を1つ取り除く
+            playerItemList.RemoveAt(playerItemList.IndexOf(itemDataSO.itemDataList[10]));
+
+            //Playerが所持しているアイテムのリストの要素数を一定に保つ
+            playerItemList.Add(itemDataSO.itemDataList[0]);
+        }
 
         //仮に許容オーバーの状態として登録する
         isFull = true;
@@ -268,21 +295,34 @@ public class GameData : MonoBehaviour
             CheckIsFull();
         }
 
-        //許容オーバーではないか、取得するアイテムが弾なら
-        if (!isFull || !generatedItemDataList[nearItemNo].isNotBullet)
+        //許容オーバーかつ、取得するアイテムが弾ではないなら
+        if (isFull && generatedItemDataList[nearItemNo].isNotBullet)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
+        //取得するアイテムが飛び道具なら
+        if (generatedItemDataList[nearItemNo].isMissile)
         {
             //残弾数を更新
             bulletManager.UpdateBulletCount(generatedItemDataList[nearItemNo].itemName, generatedItemDataList[nearItemNo].bulletCount);
-
-            //全てのアイテムスロットのSpriteを再設定する
-            SetIAlltemSlotSprite();
-
-            //フロート表示を生成
-            StartCoroutine(uIManager.GenerateFloatingMessage(generatedItemDataList[nearItemNo].itemName.ToString(), Color.blue));
-
-            //近くのアイテムをリストから削除する
-            RemoveItemList(nearItemNo);
         }
+        //取得するアイテムに回復効果があるなら
+        else if (generatedItemDataList[nearItemNo].restorativeValue>0)
+        {
+            //回復アイテムの所持数を更新
+            playerHealth.UpdateRecoveryItemCount(generatedItemDataList[nearItemNo].itemName, generatedItemDataList[nearItemNo].bulletCount);
+        }
+
+        //全てのアイテムスロットのSpriteを再設定する
+        SetIAlltemSlotSprite();
+
+        //フロート表示を生成
+        StartCoroutine(uIManager.GenerateFloatingMessage(generatedItemDataList[nearItemNo].itemName.ToString(), Color.blue));
+
+        //近くのアイテムをリストから削除する
+        RemoveItemList(nearItemNo);
     }
 
     /// <summary>
@@ -396,11 +436,21 @@ public class GameData : MonoBehaviour
             //弾を発射
             StartCoroutine(bulletManager.ShotBullet(itemData));
         }
-        //使用するアイテムに回復効果があったら
-        else if(itemData.restorativeValue>0)
+        //使用するアイテムに回復効果があり、左クリックされたら
+        else if (itemData.restorativeValue>0 && Input.GetKeyDown(KeyCode.Mouse0))
         {
             //PlayerのHpを更新
             playerHealth.UpdatePlayerHp(itemData.restorativeValue);
+
+            //その回復アイテムの所持数を1減らす
+            playerHealth.UpdateRecoveryItemCount(itemData.itemName, -1);
+
+            //選択している回復アイテムの所持数が0になったら
+            if(playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName)==0)
+            {
+                //選択しているアイテムの要素を消す
+                DiscardItem(playerController.SelectedItemNo-1);
+            }
         }
         //使用するアイテムが近接武器かつ、左クリックされたら
         else if(itemData.isHandWeapon&&Input.GetKeyDown(KeyCode.Mouse0))

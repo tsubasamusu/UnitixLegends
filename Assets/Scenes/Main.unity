@@ -1530,7 +1530,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.29878548, y: 0.16716969, z: -0.053246226, w: 0.9380546}
+  m_LocalRotation: {x: 0.2987855, y: 0.16716968, z: -0.053246226, w: 0.9380546}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2048,7 +2048,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.2987855, y: 0.16716969, z: -0.05324624, w: 0.93805456}
+  m_LocalRotation: {x: 0.2987855, y: 0.16716966, z: -0.053246237, w: 0.93805456}
   m_LocalPosition: {x: 0, y: 0, z: -3.7537532}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2127,7 +2127,7 @@ MonoBehaviour:
   gameStart: {fileID: 21300000, guid: 7c7bf14cb445b6b44940e6d244d89dc0, type: 3}
   gameClear: {fileID: 21300000, guid: 8461b1cafab9a2f479b50b6f9e9d3297, type: 3}
   txtGameOver: {fileID: 2057905871}
-  txtBulletCount: {fileID: 1486269118}
+  txtItemCount: {fileID: 1486269118}
   txtFps: {fileID: 2049556063}
   txtMessage: {fileID: 1859767793}
   floatingMessagePrefab: {fileID: 5145554211297303304, guid: c55516d6fb39a854986984f3ff2e9234, type: 3}
@@ -2136,6 +2136,7 @@ MonoBehaviour:
   itemSlot: {fileID: 931892668}
   itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   bulletManager: {fileID: 112694188}
+  playerHealth: {fileID: 4889205611976788819}
   canvasTran: {fileID: 958339586}
   itemSlotSetPrefab: {fileID: 5594831519123227178, guid: abbbb2033d2e06e4a91152f2fca8a17b, type: 3}
   scope: {fileID: 1768902473}
@@ -3263,7 +3264,7 @@ GameObject:
   - component: {fileID: 1486269119}
   - component: {fileID: 1486269118}
   m_Layer: 5
-  m_Name: BulletCount
+  m_Name: ItemCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

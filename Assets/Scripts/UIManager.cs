@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     private Text txtGameOver;//ゲームオーバーテキスト
 
     [SerializeField]
-    private Text txtBulletCount;//残弾数テキスト
+    private Text txtItemCount;//残弾数テキスト
 
     [SerializeField]
     private Text txtFps;//FPSのテキスト
@@ -48,6 +48,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private BulletManager bulletManager;//BulletManager
+
+    [SerializeField]
+    private PlayerHealth playerHealth;//PlayerHealth
 
     [SerializeField]
     private Transform canvasTran;//Canvasのtransform
@@ -232,22 +235,28 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 残弾数の表示の更新を行う
+    /// アイテムの数の表示の更新を行う
     /// </summary>
     private void UpdateTxtBulletCount()
     {
-        //選択しているアイテムが飛び道具ではないか、選択されているアイテムの名前がNoneなら
-        if(!GameData.instance.GetSelectedItemData().isMissile||GameData.instance.GetSelectedItemData().itemName==ItemDataSO.ItemName.None)
+        //選択しているアイテムが飛び道具なら
+        if (GameData.instance.GetSelectedItemData().isMissile)
+        {
+            //選択されている飛び道具の残弾数をテキストに設定
+            txtItemCount.text = bulletManager.GetBulletCount(GameData.instance.GetSelectedItemData().itemName).ToString();
+        }
+        //選択しているアイテムに回復効果があるなら
+        else if(GameData.instance.GetSelectedItemData().restorativeValue>0)
+        {
+            //選択されている回復アイテムの所持数をテキストに設定
+            txtItemCount.text = playerHealth.GetRecoveryItemCount(GameData.instance.GetSelectedItemData().itemName).ToString();
+        }
+        //選択しているアイテムが、飛び道具でも回復アイテムでもないなら
+        else
         {
             //テキストを空にする
-            txtBulletCount.text = "";
-
-            //以降の処理を行わない
-            return;
+            txtItemCount.text = "";
         }
-
-        //選択されているアイテムの残弾数をテキストに設定
-        txtBulletCount.text = bulletManager.GetBulletCount(GameData.instance.GetSelectedItemData().itemName).ToString();
     }
 
     /// <summary>
