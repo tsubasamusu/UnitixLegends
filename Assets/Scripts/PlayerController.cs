@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour
 
 	private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
 
+	private Vector3 firstPos;//初期位置
+
 	private int selectedItemNo=1;//使用しているアイテムの番号
 
 	public int SelectedItemNo//useItemNo変数用のプロパティ
@@ -82,6 +84,15 @@ public class PlayerController : MonoBehaviour
 		Stooping//かがんでいる
 	}
 
+	/// <summary>
+	/// ゲーム開始直後に呼び出される
+	/// </summary>
+    private void Start()
+    {
+		//初期位置を設定
+        firstPos = transform.position;
+    }
+
     /// <summary>
     /// 毎フレーム呼び出される
     /// </summary>
@@ -93,6 +104,19 @@ public class PlayerController : MonoBehaviour
 			//飛行機から飛び降りる
 			FallFromAirplane();
 		}
+
+		//Playerが裏世界に行ってしまったら
+		if(transform.position.y <= -1f)
+        {
+			//CharacterControllerを無効化
+			controller.enabled = false;
+
+			//自身の座標を初期位置に設定
+			transform.position = firstPos;
+
+			//CharacterControllerを有効化
+			controller.enabled = true;
+        }
 
 		//接地していなかったら
 		if (!CheckGrounded())
