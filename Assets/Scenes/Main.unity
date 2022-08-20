@@ -1057,6 +1057,7 @@ GameObject:
   - component: {fileID: 604678078}
   - component: {fileID: 604678077}
   - component: {fileID: 604678076}
+  - component: {fileID: 604678079}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Grenade
@@ -1142,6 +1143,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 604678074}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &604678079
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604678074}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &637062611
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,7 +1547,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.29878548, y: 0.16716969, z: -0.053246226, w: 0.9380546}
+  m_LocalRotation: {x: 0.2987855, y: 0.16716968, z: -0.053246226, w: 0.9380546}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2048,7 +2065,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.2987855, y: 0.16716969, z: -0.05324624, w: 0.93805456}
+  m_LocalRotation: {x: 0.2987855, y: 0.16716965, z: -0.053246226, w: 0.93805456}
   m_LocalPosition: {x: 0, y: 0, z: -3.7537532}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2257,7 +2274,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170332041}
-  m_LocalRotation: {x: 0.2862126, y: 0.16786686, z: -0.051005624, w: 0.94196683}
+  m_LocalRotation: {x: 0.28621256, y: 0.16786687, z: -0.051005628, w: 0.94196683}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12122,8 +12139,17 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 1027788433}
+    - target: {fileID: 6725230617385302191, guid: 06adddbf103068144b908be479f5d62d, type: 3}
+      propertyPath: shotBulletTran
+      value: 
+      objectReference: {fileID: 7020752968766945343}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06adddbf103068144b908be479f5d62d, type: 3}
+--- !u!4 &7020752968766945343 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5943854402727108942, guid: 06adddbf103068144b908be479f5d62d, type: 3}
+  m_PrefabInstance: {fileID: 7020752968766945342}
+  m_PrefabAsset: {fileID: 0}
 --- !u!33 &7253046155247243592
 MeshFilter:
   m_ObjectHideFlags: 0

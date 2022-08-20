@@ -48,38 +48,38 @@ public class PlayerHealth : MonoBehaviour
         switch(hit.gameObject.tag)
         {
             //手榴弾なら
-            case ("Grenade"):
+            case "Grenade":
                 UpdatePlayerHp(-itemDataSO.itemDataList[1].attackPower,hit);
                 break;
 
             //催涙弾なら
-            case ("TearGasGrenade"):
+            case "TearGasGrenade":
                 UpdatePlayerHp(-itemDataSO.itemDataList[2].attackPower,hit);
                 AttackedByTearGasGrenade();
                 break;
 
             //ナイフなら
-            case ("Knife"):
+            case "Knife":
                 UpdatePlayerHp(-itemDataSO.itemDataList[3].attackPower);
                 break;
 
             //バットなら
-            case ("Bat"):
+            case "Bat":
                 UpdatePlayerHp(-itemDataSO.itemDataList[4].attackPower);
                 break;
 
             //アサルトなら
-            case ("Assault"):
+            case "Assault":
                 UpdatePlayerHp(-itemDataSO.itemDataList[5].attackPower,hit);
                 break;
 
             //ショットガンなら
-            case ("Shotgun"):
+            case "Shotgun":
                 UpdatePlayerHp(-itemDataSO.itemDataList[6].attackPower, hit);
                 break;
 
             //スナイパーなら
-            case ("Sniper"):
+            case "Sniper":
                 UpdatePlayerHp(-itemDataSO.itemDataList[7].attackPower,hit);
                 break;
         }

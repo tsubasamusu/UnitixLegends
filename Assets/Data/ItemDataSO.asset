@@ -121,7 +121,7 @@ MonoBehaviour:
   - itemName: 7
     restorativeValue: 0
     attackPower: 80
-    shotSpeed: 10000
+    shotSpeed: 1000
     interval: 2
     timeToExplode: 0
     bulletCount: 10

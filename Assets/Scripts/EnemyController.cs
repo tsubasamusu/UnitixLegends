@@ -29,6 +29,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private Transform enemyWeaponTran;//Enemyが武器を構える位置
 
+    [SerializeField]
+    private Transform shotBulletTran;//弾を生成する位置
+
     private bool didPostLandingProcessing;//着地直後の処理を行ったかどうか
 
     private bool gotItem;//アイテムを取得したかどうか
@@ -297,7 +300,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //弾を生成
-        Rigidbody bulletRb =Instantiate(itemData.bulletPrefab,enemyWeaponTran.position,Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
+        Rigidbody bulletRb = Instantiate(itemData.bulletPrefab, shotBulletTran.position,Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0));
 
         //弾を発射
         bulletRb.AddForce(enemyWeaponTran.forward * itemData.shotSpeed);
