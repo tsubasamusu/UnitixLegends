@@ -449,7 +449,7 @@ public class GameData : MonoBehaviour
             if(playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName)==0)
             {
                 //選択しているアイテムの要素を消す
-                DiscardItem(playerController.SelectedItemNo-1);
+                GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
             }
         }
         //使用するアイテムが近接武器かつ、左クリックされたら
