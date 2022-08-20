@@ -12,9 +12,6 @@ public class EnemyController : MonoBehaviour
     private Animator animator;//Animator
 
     [SerializeField]
-    private Rigidbody enemyRb;//Rigidbody
-
-    [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
@@ -31,6 +28,10 @@ public class EnemyController : MonoBehaviour
 
     private float lengthToNearItem;//近くの使用可能アイテムまでの距離
 
+    private Vector3 firstPos;//初期位置
+
+    private int nearItemNo;//最も近くにある使用可能アイテムの番号
+
     /// <summary>
     /// ゲーム開始直後に呼び出される
     /// </summary>
@@ -46,10 +47,10 @@ public class EnemyController : MonoBehaviour
     private void FixedUpdate()//全ての端末で同じ移動速度にするためにFixedUpdateメソッドを使う
     {
         //接地していなかったら
-        if(!CheckGrounded())
+        if (!CheckGrounded())
         {
             //落下する
-            transform.Translate(0,-fallSpeed, 0);
+            transform.Translate(0, -fallSpeed, 0);
         }
     }
 
@@ -59,63 +60,66 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         //接地していないなら
-        if(!CheckGrounded())
+        if (!CheckGrounded())
         {
             //以下の処理を行わない
             return;
         }
 
-        //最も近くにある使用可能アイテムの番号
-        int nearItemNo = 0;
-
         //まだ着地直後の処理を行っていないなら
-        if(!didPostLandingProcessing)
+        if (!didPostLandingProcessing)
         {
             //NavMeshAgentを有効化
-            agent.enabled=true;
+            agent.enabled = true;
 
             //停止距離を0に設定
             agent.stoppingDistance = 0f;
 
+            //アニメーションの制御を開始
+            StartCoroutine(ControlAnimation());
+
+            //着地直後の処理が完了した状態に切り替える
+            didPostLandingProcessing = true;
+        }
+
+        //まだアイテムを取得していなかったら
+        if(!gotItem)
+        {
             //最も近くにある使用可能アイテムの番号を設定
-            nearItemNo = GetNearItemNo(); 
+            SetNearItemNo();
 
             //目標地点を設定
             SetTargetPosition(GameData.instance.generatedItemTranList[nearItemNo].position);
 
-            //着地直後の処理が完了した状態に切り替える
-            didPostLandingProcessing =true;
-        }
-
-        //アイテムを取得できる距離まで近づいているかつ、まだアイテムを取得していないなら
-        if(GetLengthToNearItem(nearItemNo)<=getItemLength&&!gotItem)
-        {
-            //アイテムを取得し、アイテムを取得済みの状態に切り替える
-            gotItem=GetItem(nearItemNo);
+            //アイテムを取得できる距離まで近づいたら
+            if (GetLengthToNearItem(nearItemNo) <= getItemLength)
+            {
+                //アイテムを取得し、アイテムを取得済みの状態に切り替える
+                gotItem = GetItem(nearItemNo);
+            }
         }
     }
 
     /// <summary>
-    /// 最も近くにある使用可能アイテムの番号を取得する
+    /// 最も近くにある使用可能アイテムの番号を設定する
     /// </summary>
-    /// <returns>最も近くにある使用可能アイテムの番号</returns>
-    private int GetNearItemNo()
+    private void SetNearItemNo()
     {
         //nullエラー回避
-        if (GameData.instance. generatedItemTranList.Count <= 0)
+        if (GameData.instance.generatedItemTranList.Count <= 0)
         {
             //以降の処理を行わない
-            return 0;
+            return;
         }
 
         //アイテムの番号
         int itemNo = 0;
 
         //リストの0番の要素の座標をnearPosに仮に登録
-        Vector3 nearPos =GameData.instance. generatedItemTranList[0].position;
+        Vector3 nearPos = GameData.instance.generatedItemTranList[0].position;
 
         //リストの要素数だけ繰り返す
-        for (int i = 0; i <GameData.instance. generatedItemTranList.Count; i++)
+        for (int i = 0; i < GameData.instance.generatedItemTranList.Count; i++)
         {
             //繰り返し処理で見つけたアイテムが使用不可だったら
             if (!GameData.instance.generatedItemDataList[i].enemyCanUse)
@@ -125,7 +129,7 @@ public class EnemyController : MonoBehaviour
             }
 
             //リストのi番の要素の座標をposに登録
-            Vector3 pos =GameData.instance. generatedItemTranList[i].position;
+            Vector3 pos = GameData.instance.generatedItemTranList[i].position;
 
             //仮登録した要素と、for文で得た要素の、myPosとの距離を比較
             if (Vector3.Scale((pos - transform.position), new Vector3(1, 0, 1)).magnitude < Vector3.Scale((nearPos - transform.position), new Vector3(1, 0, 1)).magnitude)
@@ -138,8 +142,8 @@ public class EnemyController : MonoBehaviour
             }
         }
 
-        //最も近くにある使用可能アイテムの番号を返す
-        return itemNo;
+        //最も近くにある使用可能アイテムの番号を設定
+        nearItemNo= itemNo;
     }
 
     /// <summary>
@@ -161,7 +165,7 @@ public class EnemyController : MonoBehaviour
     {
         //TODO:EnemyGeneratorの敵のリストを元に、最も近くにいる敵を見つける処理
 
-        return null ;//（仮）
+        return null;//（仮）
     }
 
     /// <summary>
@@ -197,6 +201,8 @@ public class EnemyController : MonoBehaviour
     /// <returns>アイテムを拾い終えたらtrueを返す</returns>
     public bool GetItem(int nearItemNo)
     {
+        Debug.Log("Get");
+
         //アイテムを拾う
         GameData.instance.GetItem(nearItemNo, false);
 
@@ -229,7 +235,7 @@ public class EnemyController : MonoBehaviour
             //催涙弾なら
             case ("TearGasGrenade"):
                 UpdateEnemyHp(-itemDataSO.itemDataList[2].attackPower, collision);
-                StartCoroutine( AttackedByTearGasGrenade());
+                StartCoroutine(AttackedByTearGasGrenade());
                 break;
 
             //ナイフなら
@@ -262,20 +268,20 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// Enemyの体力を更新する
     /// </summary>
-    private void UpdateEnemyHp(float updateValue, Collision collision=null)
+    private void UpdateEnemyHp(float updateValue, Collision collision = null)
     {
         //Enemyの体力を0以上100以下に制限しながら、更新する
         enemyhp = Mathf.Clamp(enemyhp + updateValue, 0f, 100f);
 
         //nullエラー回避
-        if(collision != null)
+        if (collision != null)
         {
             //触れた相手を消す
             Destroy(collision.gameObject);
         }
 
         //Enemyの体力が0になったら
-        if(enemyhp==0.0f)
+        if (enemyhp == 0.0f)
         {
             //死亡処理を行う
             WasKilled();
@@ -303,5 +309,37 @@ public class EnemyController : MonoBehaviour
     private void WasKilled()
     {
         //TODO:死亡処理
+    }
+
+    /// <summary>
+    /// アニメーションを制御する
+    /// </summary>
+    /// <returns>待ち時間</returns>
+    private IEnumerator ControlAnimation()
+    {
+        //無限に繰り返す
+        while (true)
+        {
+            //初期位置を設定
+            firstPos = transform.position;
+
+            //0.1秒待つ
+            yield return new WaitForSeconds(0.1f);
+
+            //現在位置を設定
+            Vector3 currentPos = transform.position;
+
+            //速度を取得
+            float velocity = (currentPos - firstPos).magnitude /0.1f;
+
+            //走る
+            animator.SetBool("MovePrevious", velocity > 0.1f);
+
+            //何もしない
+            animator.SetBool("Idle", velocity <= 0.1f);
+
+            //次のフレームへ飛ばす（実質、Updateメソッド）
+            yield return null;
+        }
     }
 }
