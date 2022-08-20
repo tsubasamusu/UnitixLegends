@@ -15,6 +15,9 @@ public class EnemyController : MonoBehaviour
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
+    private UIManager uiManager;//UIManager
+
+    [SerializeField]
     private float fallSpeed;//落下速度
 
     [SerializeField, Header("射程距離")]
@@ -187,17 +190,6 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// 最も近くにいる敵の位置情報を返す
-    /// </summary>
-    /// <returns></returns>
-    private Transform FindNearEnemy()
-    {
-        //TODO:EnemyGeneratorの敵のリストと、Playerの場所を元に、最も近くにいる敵を見つける処理
-
-        return null;//（仮）
-    }
-
-    /// <summary>
     /// 目標地点を設定する
     /// </summary>
     /// <param name="targetPos">目標地点</param>
@@ -290,52 +282,61 @@ public class EnemyController : MonoBehaviour
         {
             //手榴弾なら
             case ("Grenade"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[1].attackPower, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[1].attackPower, collision,false);
                 break;
 
             //催涙弾なら
             case ("TearGasGrenade"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[2].attackPower, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[2].attackPower, collision,false);
                 StartCoroutine(AttackedByTearGasGrenade());
                 break;
 
             //ナイフなら
             case ("Knife"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[3].attackPower);
+                UpdateEnemyHp(-itemDataSO.itemDataList[3].attackPower,collision,false);
                 break;
 
             //バットなら
             case ("Bat"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[4].attackPower);
+                UpdateEnemyHp(-itemDataSO.itemDataList[4].attackPower,collision,false);
                 break;
 
             //アサルトなら
             case ("Assault"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[5].attackPower, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[5].attackPower, collision, true);
                 break;
 
             //ショットガンなら
             case ("Shotgun"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[6].attackPower, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[6].attackPower, collision, true);
                 break;
 
             //スナイパーなら
             case ("Sniper"):
-                UpdateEnemyHp(-itemDataSO.itemDataList[7].attackPower, collision);
+                UpdateEnemyHp(-itemDataSO.itemDataList[7].attackPower, collision, true);
                 break;
         }
     }
 
     /// <summary>
-    /// Enemyの体力を更新する
+    /// EnemyのHpを更新
     /// </summary>
-    private void UpdateEnemyHp(float updateValue, Collision collision = null)
+    /// <param name="updateValue">EnemyのHpの更新量</param>
+    /// <param name="collision">衝突相手</param>
+    /// <param name="destoryFlag">衝突相手を消すかどうか</param>
+    private void UpdateEnemyHp(float updateValue, Collision collision,bool destoryFlag)
     {
         //Enemyの体力を0以上100以下に制限しながら、更新する
         enemyhp = Mathf.Clamp(enemyhp + updateValue, 0f, 100f);
 
-        //nullエラー回避
-        if (collision != null)
+        //衝突相手の親がPlayerTranなら
+        if(collision.transform.parent.gameObject.CompareTag("PlayerTran"))
+        {
+            StartCoroutine(uiManager.GenerateFloatingMessage(Mathf.Abs(updateValue).ToString("F0"), Color.yellow));
+        }
+
+        //衝突相手を消すという指示なら
+        if (destoryFlag)
         {
             //触れた相手を消す
             Destroy(collision.gameObject);

@@ -283,7 +283,7 @@ public class UIManager : MonoBehaviour
         txtFloatingMessage.gameObject.transform.localPosition = Vector3.zero;
 
         //フロート表示の大きさを初期化
-        txtFloatingMessage.gameObject.transform.localScale = Vector3.one;
+        txtFloatingMessage.gameObject.transform.localScale = new Vector3(3f,3f,3f);
 
         //生成したフロート表示を3.0秒後に消す
         Destroy(txtFloatingMessage.gameObject, 3.0f);

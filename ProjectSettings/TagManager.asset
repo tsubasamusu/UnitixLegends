@@ -8,6 +8,7 @@ TagManager:
   - TearGasGrenade
   - Grenade
   - Enemy
+  - PlayerTran
   layers:
   - Default
   - TransparentFX
