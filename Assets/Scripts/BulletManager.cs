@@ -1,6 +1,7 @@
 using System.Collections;//IEnumeratorを使用
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;//DOTweenを使用
 
 public class BulletManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class BulletManager : MonoBehaviour
     private PlayerController playerController;//PlayerController
 
     private float timer;//経過時間
+
+    private bool stopFlag;//重複処理を防ぐ
 
     private int grenadeBulletCount;//手榴弾の残りの数
 
@@ -108,22 +111,22 @@ public class BulletManager : MonoBehaviour
 
                 //催涙弾なら
                 case ItemDataSO.ItemName.TearGasGrenade:
-                    tearGasGrenadeBulletCount=Mathf.Clamp(tearGasGrenadeBulletCount+updateValue,0, itemDataSO.itemDataList[2].maxBulletCount);
+                    tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[2].maxBulletCount);
                     break;
 
                 //アサルトなら
                 case ItemDataSO.ItemName.Assault:
-                    assaultBulletCount=Mathf.Clamp(assaultBulletCount+updateValue,0,itemDataSO.itemDataList[5].maxBulletCount);
+                    assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, itemDataSO.itemDataList[5].maxBulletCount);
                     break;
 
                 //ショットガンなら
                 case ItemDataSO.ItemName.Shotgun:
-                    shotgunBulletCount=Mathf.Clamp(shotgunBulletCount+updateValue,0,itemDataSO.itemDataList[6].maxBulletCount);
+                    shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, itemDataSO.itemDataList[6].maxBulletCount);
                     break;
 
                 //スナイパーなら
                 case ItemDataSO.ItemName.Sniper:
-                    sniperBulletCount =Mathf.Clamp(sniperBulletCount+updateValue,0, itemDataSO.itemDataList[7].maxBulletCount);
+                    sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, itemDataSO.itemDataList[7].maxBulletCount);
                     break;
             }
 
@@ -184,7 +187,7 @@ public class BulletManager : MonoBehaviour
     public IEnumerator ShotBullet(ItemDataSO.ItemData itemData)
     {
         //経過時間が連射間隔より小さいか、残弾数が0なら
-        if (timer < itemData.interval||GetBulletCount(itemData.itemName)==0)
+        if (timer < itemData.interval || GetBulletCount(itemData.itemName) == 0)
         {
             //以降の処理を行わない
             yield break;
@@ -216,7 +219,7 @@ public class BulletManager : MonoBehaviour
         }
 
         //手榴弾か催涙弾の残りの数が0になったら
-        if(grenadeBulletCount==0||tearGasGrenadeBulletCount==0)
+        if (grenadeBulletCount == 0 || tearGasGrenadeBulletCount == 0)
         {
             //アイテムを破棄する
             GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
@@ -226,12 +229,12 @@ public class BulletManager : MonoBehaviour
         yield return new WaitForSeconds(itemData.timeToExplode);
 
         //使用するアイテムが手榴弾なら
-        if(itemData.itemName == ItemDataSO.ItemName.Grenade)
+        if (itemData.itemName == ItemDataSO.ItemName.Grenade)
         {
             //TODO:爆発する処理
         }
         //使用するアイテムが催涙弾なら
-        else if(itemData.itemName == ItemDataSO.ItemName.TearGasGrenade)
+        else if (itemData.itemName == ItemDataSO.ItemName.TearGasGrenade)
         {
             //TODO:ガスを放出する処理
         }
@@ -283,6 +286,63 @@ public class BulletManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     public IEnumerator UseHandWeapon(ItemDataSO.ItemData itemData)
     {
-        yield return null;//（仮）
+        //stopFlagがtrueなら
+        if (stopFlag)
+        {
+            //以降の処理を行わない
+            yield break;
+        }
+
+        //アイテムを生成
+        Rigidbody itemRb = Instantiate(itemData.bulletPrefab, transform);
+
+        //アイテムの位置を設定
+        itemRb.gameObject.transform.localPosition = Vector3.zero;
+
+        //重複処理を防ぐ
+        stopFlag = true;
+
+        //生成したアイテムからBoxColliderの情報を取得できなかったら
+        if (!itemRb.TryGetComponent(out BoxCollider boxCollider))//nullエラー回避
+        {
+            //問題を報告
+            Debug.Log("BoxColliderの取得に失敗");
+
+            //以降の処理を行わない
+            yield break;
+        }
+
+        //使用するアイテムがナイフなら
+        if (itemData.itemName == ItemDataSO.ItemName.Knife)
+        {
+            //ナイフのアニメーションを開始（前後移動）
+            itemRb.gameObject.transform.DOLocalMoveZ(2f,0.5f).SetLoops(2,LoopType.Yoyo);
+
+            //ナイフのアニメーションが終わるまで待つ
+            yield return new WaitForSeconds(1f);
+
+            //生成したアイテムを消す
+            Destroy(itemRb.gameObject);
+
+            //重複処理を防ぐ
+            stopFlag = false;
+        }
+        //使用するアイテムがバットなら
+        else if (itemData.itemName == ItemDataSO.ItemName.Bat)
+        {
+            //バットのアニメーションを開始（前後移動）
+            itemRb.gameObject.transform.DOLocalMoveZ(2f, 0.5f).SetLoops(2, LoopType.Yoyo);
+
+            itemRb.gameObject.transform.DOLocalRotate(new Vector3(60f,0f,0f),0.5f).SetLoops(2, LoopType.Yoyo);
+
+            //バットのアニメーションが終わるまで待つ
+            yield return new WaitForSeconds(1f);
+
+            //生成したアイテムを消す
+            Destroy(itemRb.gameObject);
+
+            //重複処理を防ぐ
+            stopFlag = false;
+        }
     }
 }
