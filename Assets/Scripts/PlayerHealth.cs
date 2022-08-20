@@ -8,13 +8,21 @@ public class PlayerHealth : MonoBehaviour
     private UIManager uiManager;//UIManager
 
     [SerializeField]
-    private ItemDataSO ItemDataSO;//ItemDataSO
+    private ItemDataSO itemDataSO;//ItemDataSO
 
     private float playerHp=100.0f;//Playerの体力
 
     public float PlayerHp//PlayerHp変数用のプロパティ
     {
         get { return playerHp; }//外部からは取得処理のみ可能に
+    }
+
+    private int bandageCount;//包帯の数
+
+    public int BandageCount
+    {
+        get { return bandageCount; }
+        set { bandageCount = value; }
     }
 
     /// <summary>
@@ -28,38 +36,38 @@ public class PlayerHealth : MonoBehaviour
         {
             //手榴弾なら
             case ("Grenade"):
-                UpdatePlayerHp(-30.0f,hit);
+                UpdatePlayerHp(itemDataSO.itemDataList[1].attackPower,hit);
                 break;
 
             //催涙弾なら
             case ("TearGasGrenade"):
-                UpdatePlayerHp(0,hit);
+                UpdatePlayerHp(itemDataSO.itemDataList[2].attackPower,hit);
                 AttackedByTearGasGrenade();
                 break;
 
             //ナイフなら
             case ("Knife"):
-                UpdatePlayerHp(-100.0f,hit);
+                UpdatePlayerHp(itemDataSO.itemDataList[3].attackPower,hit);
                 break;
 
             //バットなら
             case ("Bat"):
-                UpdatePlayerHp(-50.0f,hit);
+                UpdatePlayerHp(itemDataSO.itemDataList[4].attackPower,hit);
                 break;
 
             //アサルトなら
             case ("Assault"):
-                UpdatePlayerHp(-1.0f,hit);
-                break;
-
-            //スナイパーなら
-            case ("Sniper"):
-                UpdatePlayerHp(-80.0f,hit);
+                UpdatePlayerHp(itemDataSO.itemDataList[5].attackPower,hit);
                 break;
 
             //ショットガンなら
             case ("Shotgun"):
-                UpdatePlayerHp(-30.0f, hit);
+                UpdatePlayerHp(itemDataSO.itemDataList[6].attackPower, hit);
+                break;
+
+            //スナイパーなら
+            case ("Sniper"):
+                UpdatePlayerHp(itemDataSO.itemDataList[7].attackPower,hit);
                 break;
         }
     }

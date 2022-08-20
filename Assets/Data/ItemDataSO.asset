@@ -140,7 +140,7 @@ MonoBehaviour:
     interval: 0
     timeToExplode: 0
     bulletCount: 0
-    maxBulletCount: 0
+    maxBulletCount: 10
     enemyCanUse: 0
     isNotBullet: 1
     isMissile: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
     interval: 0
     timeToExplode: 0
     bulletCount: 0
-    maxBulletCount: 0
+    maxBulletCount: 2
     enemyCanUse: 0
     isNotBullet: 1
     isMissile: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
     interval: 0
     timeToExplode: 0
     bulletCount: 0
-    maxBulletCount: 0
+    maxBulletCount: 1
     enemyCanUse: 0
     isNotBullet: 1
     isMissile: 0
