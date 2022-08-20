@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
     private float getItemLength;//アイテムを取得できる距離
 
     [SerializeField]
-    private Transform enemyWeapon;//Enemyが武器を構える位置
+    private Transform enemyWeaponTran;//Enemyが武器を構える位置
 
     private bool didPostLandingProcessing;//着地直後の処理を行ったかどうか
 
@@ -35,11 +35,13 @@ public class EnemyController : MonoBehaviour
 
     private bool stopFlag;//動きを停止するかどうか
 
-    private float enemyhp = 100.0f;//Enemyの体力
+    private float enemyhp = 100f;//Enemyの体力
+
+    private float timer;//経過時間
 
     private Vector3 firstPos;//初期位置
 
-    private ItemDataSO.ItemData usedItemdata;//使用しているアイテムのデータ
+    private ItemDataSO.ItemData usedItemData;//使用しているアイテムのデータ
 
     private int nearItemNo;//最も近くにある使用可能アイテムの番号
 
@@ -50,6 +52,9 @@ public class EnemyController : MonoBehaviour
     {
         //NavMeshAgentを無効化
         agent.enabled = false;
+
+        //経過時間を計測
+        StartCoroutine(MeasureTime());
     }
 
     /// <summary>
@@ -122,14 +127,13 @@ public class EnemyController : MonoBehaviour
             //以降の処理を行わない
             return;
         }
-
+        
         //射線上に敵がいたら
         if (CheckEnemy()) 
         {
             //射撃する
-            ShotBullet();
+            ShotBullet(usedItemData);
         }
-       
     }
 
     /// <summary>
@@ -222,7 +226,7 @@ public class EnemyController : MonoBehaviour
     private bool CheckEnemy()
     {
         //光線の初期位置と向き（姿勢）を設定
-        Ray ray = new Ray(enemyWeapon.position, enemyWeapon.forward);
+        Ray ray = new Ray(enemyWeaponTran.position, enemyWeaponTran.forward);
 
         //光線が何にも当たらなかったら
         if (!Physics.Raycast(ray, out RaycastHit hitInfo, range))
@@ -250,10 +254,10 @@ public class EnemyController : MonoBehaviour
     public bool GetItem(int nearItemNo)
     {
         //使用するアイテムのデータを設定
-        usedItemdata=GameData.instance.generatedItemDataList[nearItemNo];
+        usedItemData=GameData.instance.generatedItemDataList[nearItemNo];
 
         //取得したアイテムを配置
-        Instantiate(GameData.instance.generatedItemDataList[nearItemNo].prefab, enemyWeapon);
+        Instantiate(GameData.instance.generatedItemDataList[nearItemNo].prefab, enemyWeaponTran);
 
         //アイテムを拾う
         GameData.instance.GetItem(nearItemNo, false);
@@ -263,12 +267,46 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// 弾を撃つ
+    /// 経過時間を計測する
     /// </summary>
-    private void ShotBullet()
+    /// <returns>待ち時間</returns>
+    private IEnumerator MeasureTime()
     {
-        Debug.Log("発射");
-        //TODO:弾を撃つ処理
+        //無限ループ
+        while (true)
+        {
+            //経過時間を計測
+            timer += Time.deltaTime;
+
+            //次のフレームへ飛ばす（実質、Updateメソッド）
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// 射撃する
+    /// </summary>
+    /// <param name="itemData">使用するアイテムのデータ</param>
+    private void ShotBullet(ItemDataSO.ItemData itemData)
+    {
+        //経過時間が連射間隔より小さいなら
+        if (timer < itemData.interval)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
+        //弾を生成
+        Rigidbody bulletRb =Instantiate(itemData.bulletPrefab,enemyWeaponTran.position,Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0));
+
+        //弾を発射
+        bulletRb.AddForce(enemyWeaponTran.forward * itemData.shotSpeed);
+
+        //経過時間を初期化
+        timer = 0;
+
+        //発射した弾を3.0秒後に消す
+        Destroy(bulletRb.gameObject, 3.0f);
     }
 
     /// <summary>

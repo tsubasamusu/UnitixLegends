@@ -8511,7 +8511,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428101982797924863}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.39249, y: 0.00000023841858, z: 0.66569746}
+  m_LocalPosition: {x: 45.45, y: 5, z: 34.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8560,7 +8560,7 @@ MonoBehaviour:
   fallSpeed: 0.1
   range: 100
   getItemLength: 1
-  enemyWeapon: {fileID: 1812235560}
+  enemyWeaponTran: {fileID: 1812235560}
 --- !u!195 &6725230617385302192
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -62,7 +62,7 @@ public class BulletManager : MonoBehaviour
     private void Start()
     {
         //経過時間の計測を開始
-        StartCoroutine(MeasureTime1());
+        StartCoroutine(MeasureTime());
     }
 
     /// <summary>
@@ -75,10 +75,10 @@ public class BulletManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 経過時間1を計測する
+    /// 経過時間を計測する
     /// </summary>
     /// <returns>待ち時間</returns>
-    private IEnumerator MeasureTime1()
+    private IEnumerator MeasureTime()
     {
         //無限ループ
         while (true)

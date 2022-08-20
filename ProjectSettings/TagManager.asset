@@ -9,6 +9,11 @@ TagManager:
   - Grenade
   - Enemy
   - PlayerTran
+  - TemporaryObjectContainerTran
+  - Bat
+  - Knife
+  - Shotgun
+  - Sniper
   layers:
   - Default
   - TransparentFX
