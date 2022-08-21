@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour
 	private Rigidbody playerRb;//Rigidbody
 
 	[SerializeField]
+	private BoxCollider boxCollider;//BoxCollider
+
+	[SerializeField]
 	private Animator anim;//Animator
 
     [SerializeField]
@@ -65,6 +68,10 @@ public class PlayerController : MonoBehaviour
 	private Vector3 desiredMove=Vector3.zero;//移動ベクトル
 
 	private Vector3 firstPos;//初期位置
+
+	private Vector3 firstColliderCenter;//コライダーのセンターの初期値
+
+	private Vector3 firstColliderSize;//コライダーの大きさの初期値
 
 	private int selectedItemNo=1;//使用しているアイテムの番号
 
@@ -91,6 +98,12 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     private void Start()
     {
+		//コライダーのセンターの初期値を取得
+		firstColliderCenter = boxCollider.center;
+
+		//コライダーの大きさの初期値を取得
+		firstColliderSize = boxCollider.size;
+
 		//初期位置を設定
         firstPos = transform.position;
     }
@@ -258,9 +271,24 @@ public class PlayerController : MonoBehaviour
 		//かがむキーが押されている間
 		if (Input.GetKey(stoopKey))
 		{
+			//コライダーのセンターを設定
+			boxCollider.center=new Vector3(0f,0.25f,0f);
+
+			//コライダーの大きさを設定
+			boxCollider.size = new Vector3(0.5f,0.5f,0.5f);
+
 			//Playerの状態を返す
 			return PlayerCondition.Stooping;
 		}
+		//かがむキーが押されていないなら
+		else
+        {
+			//コライダーのセンターを初期値に設定
+			boxCollider.center = firstColliderCenter;
+
+			//コライダーの大きさを初期値に設定
+			boxCollider.size = firstColliderSize;
+        }
 
 		//Playerの状態を返す
 		return PlayerCondition.Idle;
