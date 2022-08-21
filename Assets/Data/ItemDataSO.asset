@@ -105,7 +105,7 @@ MonoBehaviour:
     bulletPrefab: {fileID: -2188171406369663995, guid: 003737ebc8a18b145868ce1344a9c36b, type: 3}
   - itemName: 6
     restorativeValue: 0
-    attackPower: 30
+    attackPower: 10
     shotSpeed: 1000
     interval: 1
     timeToExplode: 0
@@ -120,8 +120,8 @@ MonoBehaviour:
     bulletPrefab: {fileID: -2395311647132578789, guid: 8109983f3e058b74a980d419344f1cb1, type: 3}
   - itemName: 7
     restorativeValue: 0
-    attackPower: 80
-    shotSpeed: 1000
+    attackPower: 50
+    shotSpeed: 3000
     interval: 2
     timeToExplode: 0
     bulletCount: 10
