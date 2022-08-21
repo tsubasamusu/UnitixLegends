@@ -84,11 +84,6 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(GameData.instance==null)
-        {
-            return;
-        }
-
         //フレームレートを計算し、表示を更新する
         UpdateFpsText();
 
