@@ -105,6 +105,9 @@ public class EnemyController : MonoBehaviour
         //— ¢ŠE‚És‚Á‚Ä‚µ‚Ü‚Á‚½‚ç
         if (transform.position.y <= -1f)
         {
+            //–â‘è‚ğ•ñ
+            Debug.Log("Enemy‚ª— ¢ŠE‚É—‰º");
+
             //©g‚ÌÀ•W‚ğ(0,0,0)‚Éİ’è
             transform.position = Vector3.zero;
         }
