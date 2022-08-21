@@ -37,6 +37,7 @@ public class GameData : MonoBehaviour
     [HideInInspector]
     public List<Transform> generatedItemTranList = new List<Transform>();//アイテムの生成位置のリスト
 
+    [HideInInspector]
     public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
 
     private bool isFull;//Playerの所有物が許容オーバーかどうか
@@ -110,14 +111,8 @@ public class GameData : MonoBehaviour
         //アイテムの生成位置のリストを作成
         CreateGeneratedItemTranList();
 
-        //0番の生成位置にアサルトを生成する（Enemyが使用可能アイテムを探すため）
-        StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[5].prefab, generatedItemTranList[0])));
-
-        //生成したアイテムのデータをリストに追加
-        generatedItemDataList.Add(itemDataSO.itemDataList[5]);
-
-        //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数から1引いた数だけ繰り返す
-        for (int i = 1; i < itemTrans.childCount; i++)
+        //アイテムの位置情報をまとめたフォルダーの子オブジェクトだけ繰り返す
+        for (int i = 0; i < itemTrans.childCount; i++)
         {
             //0から2までのランダムな整数を取得
             int px = Random.Range(0, 3);

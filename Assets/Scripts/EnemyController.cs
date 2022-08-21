@@ -42,7 +42,13 @@ public class EnemyController : MonoBehaviour
 
     private UIManager uiManager;//UIManager
 
+    private EnemyGenerator enemyGenerator;//EnemyGenerator
+
     private Transform shotBulletTran;//弾を生成する位置
+
+    private Transform playerTran;//Playerの位置
+
+    private GameObject usedItemObj;//使用しているアイテムのオブジェクト
 
     private int nearItemNo;//最も近くにある使用可能アイテムの番号
 
@@ -58,12 +64,26 @@ public class EnemyController : MonoBehaviour
         StartCoroutine(MeasureTime());
 
         //UIManagerを取得
-        if (!GameObject.Find("UIManager").TryGetComponent<UIManager>(out uiManager))
+        if (!GameObject.Find("UIManager").TryGetComponent(out uiManager))
         {
             //問題を報告
             Debug.Log("UIManagerの取得に失敗");
         }
 
+        //EnemyGeneratorを取得
+        if(!GameObject.Find("EnemyGenerator").TryGetComponent(out enemyGenerator))
+        {
+            //問題を報告
+            Debug.Log("EnemyGeneratorの取得に失敗");
+        }
+
+        //Playerの位置情報を取得
+        if(!GameObject.Find("Player").TryGetComponent(out playerTran))
+        {
+            Debug.Log("Playerの位置情報の取得に失敗");
+        }
+
+        //発射位置を取得
         shotBulletTran = transform.GetChild(3).transform;
     }
 
@@ -131,16 +151,32 @@ public class EnemyController : MonoBehaviour
                 gotItem = GetItem(nearItemNo);
 
                 //停止距離を設定
-                agent.stoppingDistance = 5f;
+                agent.stoppingDistance = 30f;
             }
 
             //以降の処理を行わない
             return;
         }
 
-        //鏑の位置を目標地点に設定
+        //使用できないアイテムを拾ってしまったら
+        if(!usedItemData.enemyCanUse)
+        {
+            //アイテムをまだ取得していない状態に切り替える
+            gotItem = false;
+
+            //停止距離を0に設定
+            agent.stoppingDistance = 0f;
+
+            //使用しているアイテムのオブジェクトを消す
+            Destroy(usedItemObj);
+
+            //以降の処理を行わない
+            return;
+        }
+
+        //敵の位置を目標地点に設定
         SetTargetPosition(GetNearEnemyPos());
-        
+
         //射線上に敵がいたら
         if (CheckEnemy()) 
         {
@@ -155,9 +191,42 @@ public class EnemyController : MonoBehaviour
     /// <returns>最も近くにいる敵の位置</returns>
     private Vector3 GetNearEnemyPos()
     {
-        //TODO:Playerの位置と、EnemyGeneratorのリストを元に、最も近くにいる敵の位置を取得する処理
+        //アイテムがないか、Playerが存在していなかったら
+        if(enemyGenerator.generatedEnemyTranList.Count<=0||playerTran.gameObject==null)//nullエラー回避
+        {
+            //以降の処理を行わない
+            return Vector3.zero;
+        }
 
-        return Vector3.zero;//（仮）
+        //最も近くにいる敵の位置にPlayerの位置を仮に登録
+        Vector3 nearPos = playerTran.position;
+
+        //生成したEnemyの位置情報のリストの要素数だけ繰り返す
+        for (int i = 0; i < enemyGenerator.generatedEnemyTranList.Count; i++)
+        {
+            //繰り返し処理で取得した敵が死亡していたら
+            if (enemyGenerator.generatedEnemyTranList[i]==null)//nullエラー回避
+            {
+                //そのEnemyをリストから取り除く
+                enemyGenerator.generatedEnemyTranList.RemoveAt(i);
+
+                //次の繰り返し処理に移る
+                continue;
+            }
+
+            //リストのi番の要素の座標をposに登録
+            Vector3 pos = enemyGenerator.generatedEnemyTranList[i].position;
+
+            //仮登録した要素と、for文で得た要素の、myPosとの距離を比較
+            if (Vector3.Scale((pos - transform.position), new Vector3(1, 0, 1)).magnitude < Vector3.Scale((nearPos - transform.position), new Vector3(1, 0, 1)).magnitude)
+            {
+                //nearPosを再登録
+                nearPos = pos;
+            }
+        }
+
+        //nearPosを返す
+        return nearPos;
     }
 
     /// <summary>
@@ -281,7 +350,7 @@ public class EnemyController : MonoBehaviour
         usedItemData=GameData.instance.generatedItemDataList[nearItemNo];
 
         //取得したアイテムを配置
-        Instantiate(GameData.instance.generatedItemDataList[nearItemNo].prefab, enemyWeaponTran);
+        usedItemObj= Instantiate(GameData.instance.generatedItemDataList[nearItemNo].prefab, enemyWeaponTran);
 
         //アイテムを拾う
         GameData.instance.GetItem(nearItemNo, false);
@@ -315,13 +384,6 @@ public class EnemyController : MonoBehaviour
     {
         //経過時間が連射間隔より小さいなら
         if (timer < itemData.interval)
-        {
-            //以降の処理を行わない
-            return;
-        }
-
-        //間違ったアイテムを取得してしまった場合のnullエラーを回避
-        if(itemData.bulletPrefab==null)
         {
             //以降の処理を行わない
             return;
@@ -398,6 +460,13 @@ public class EnemyController : MonoBehaviour
     /// <param name="destoryFlag">衝突相手を消すかどうか</param>
     private void UpdateEnemyHp(float updateValue, Collision collision,bool destoryFlag)
     {
+        //自分が撃った弾を被弾したなら
+        if(collision.transform.parent==transform)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
         //攻撃してきた相手がPlayerかどうか
         bool isPlayer = false;
 

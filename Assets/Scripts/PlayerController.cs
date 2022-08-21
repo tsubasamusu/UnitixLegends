@@ -100,6 +100,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Update()
 	{
+		if(GameData.instance==null)
+        {
+			return;
+        }
+
 		//”ò‚Ñ~‚è‚éƒL[‚ğ‰Ÿ‚³‚ê‚½‚ç
 		if (Input.GetKeyDown(fallKey))
 		{
