@@ -20,7 +20,10 @@ public class CinemachineManager : MonoBehaviour
     [SerializeField]
     private Transform playerCharacterTran;//Playerのキャラクターの位置
 
-    private float angle;//Playerのキャラクターと視点が被る角度
+    [SerializeField]
+    private GameObject playerCharacterbody;//Playerのキャラクターの体
+
+    private float angle;//Playerのキャラクターが視点を遮る角度
 
     /// <summary>
     /// ゲーム開始直後に呼び出される
@@ -52,7 +55,7 @@ public class CinemachineManager : MonoBehaviour
         if (mainCameraTran.eulerAngles.y >= angle - 20f && mainCameraTran.eulerAngles.y <= angle + 20f)
         {
             //Playerのキャラクターを無効化
-            playerCharacterTran.gameObject.SetActive(false);
+            playerCharacterbody.SetActive(false);
 
             //以降の処理を行わない
             return;
@@ -61,14 +64,14 @@ public class CinemachineManager : MonoBehaviour
         else if (mainCameraTran.eulerAngles.y >= (angle + 180f) - 20f && mainCameraTran.eulerAngles.y <= (angle + 180f) + 20f)
         {
             //Playerのキャラクターを無効化
-            playerCharacterTran.gameObject.SetActive(false);
+            playerCharacterbody.SetActive(false);
 
             //以降の処理を行わない
             return;
         }
 
         //Playerのキャラクターを有効化
-        playerCharacterTran.gameObject.SetActive(true);
+        playerCharacterbody.SetActive(true);
     }
 
     /// <summary>

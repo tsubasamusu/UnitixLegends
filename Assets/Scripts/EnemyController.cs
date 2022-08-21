@@ -201,8 +201,6 @@ public class EnemyController : MonoBehaviour
         //最も近くにいる敵の位置にPlayerの位置を仮に登録
         Vector3 nearPos = playerTran.position;
 
-        return nearPos;
-
         //生成したEnemyの位置情報のリストの要素数だけ繰り返す
         for (int i = 0; i < enemyGenerator.generatedEnemyTranList.Count; i++)
         {
