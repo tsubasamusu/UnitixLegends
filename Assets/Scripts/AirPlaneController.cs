@@ -28,6 +28,8 @@ public class AirplaneController : MonoBehaviour
 
     private bool fellFromAirplane;//飛行機から落下したかどうか
 
+    private bool endFight;//飛行機の飛行が終わったかどうか
+
     [SerializeField]
     private float rotSpeed;//プロペラの回転速度
 
@@ -67,21 +69,37 @@ public class AirplaneController : MonoBehaviour
         //Playerを常に飛行機の真下に設置
         playerTran.position=aiplanePlayerTran.position;
 
+        //飛行が終ったら
+        if(endFight)
+        {
+            //飛行機から飛び降りる
+            FallFromAirplane();
+        }
+
         //飛行機から飛び降りるキーが押されたら
         if (Input.GetKeyDown(fallKey))
         {
-            //メッセージのテキストを空にする
-            uiManager.SetMessageText("", Color.black);
-
-            //PlayerControllerを有効化
-            playerController.enabled=true;
-
-            //Playerカメラに切り替え
-            cinemachineManager.SetAirplaneCameraPriority(9);
-
-            //飛行機から飛び降りた状態に変更
-            fellFromAirplane = true;
+            //飛行機から飛び降りる
+            FallFromAirplane();
         }
+    }
+
+    /// <summary>
+    /// 飛行機から飛び降りる
+    /// </summary>
+    private void FallFromAirplane()
+    {
+        //メッセージのテキストを空にする
+        uiManager.SetMessageText("", Color.black);
+
+        //PlayerControllerを有効化
+        playerController.enabled = true;
+
+        //Playerカメラに切り替え
+        cinemachineManager.SetAirplaneCameraPriority(9);
+
+        //飛行機から飛び降りた状態に変更
+        fellFromAirplane = true;
     }
 
     /// <summary>
@@ -149,6 +167,9 @@ public class AirplaneController : MonoBehaviour
             //1秒待つ
             yield return new WaitForSeconds(1f);
         }
+
+        //飛行が終わった状態に切り替える
+        endFight = true;
 
         //ステージ外へ飛んでいく
         transform.DOMoveX(transform.position.x+100f, 10f);

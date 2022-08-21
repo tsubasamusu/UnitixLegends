@@ -145,6 +145,16 @@ public class EnemyController : MonoBehaviour
         //まだアイテムを取得していないなら
         if(!gotItem)
         {
+            //生成したアイテムのリストの要素が0なら
+            if (GameData.instance.generatedItemTranList.Count <= 0)//nullエラー回避
+            {
+                //問題を報告
+                Debug.Log("アイテムが見当たりません");
+
+                //以降の処理を行わない
+                return;
+            }
+
             //最も近くにある使用可能アイテムの番号を設定
             SetNearItemNo();
 
@@ -181,6 +191,16 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        //EnemyかPlayerが存在していなかったら
+        if (enemyGenerator.generatedEnemyTranList.Count <= 0 || playerTran.gameObject == null)//nullエラー回避
+        {
+            //問題を報告
+            Debug.Log("敵が見当たりません");
+
+            //以降の処理を行わない
+            return;
+        }
+
         //敵の位置を目標地点に設定
         SetTargetPosition(GetNearEnemyPos());
 
@@ -198,13 +218,6 @@ public class EnemyController : MonoBehaviour
     /// <returns>最も近くにいる敵の位置</returns>
     private Vector3 GetNearEnemyPos()
     {
-        //EnemyかPlayerが存在していなかったら
-        if(enemyGenerator.generatedEnemyTranList.Count<=0||playerTran.gameObject==null)//nullエラー回避
-        {
-            //以降の処理を行わない
-            return Vector3.zero;
-        }
-
         //最も近くにいる敵の位置にPlayerの位置を仮に登録
         Vector3 nearPos = playerTran.position;
 
@@ -241,13 +254,6 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private void SetNearItemNo()
     {
-        //nullエラー回避
-        if (GameData.instance.generatedItemTranList.Count <= 0)
-        {
-            //以降の処理を行わない
-            return;
-        }
-
         //アイテムの番号
         int itemNo = 0;
 

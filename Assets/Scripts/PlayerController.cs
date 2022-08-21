@@ -128,6 +128,13 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     private void FixedUpdate()
     {
+		//GameData‚Ìinstance‚ªnull‚È‚ç
+		if(GameData.instance==null)
+        {
+			//–â‘è‚ğ•ñ
+			Debug.Log("GameData.instance‚ªnull‚Å‚·");
+        }
+
 		//Player‚ªÚ’n‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç
 		if(!CheckGrounded())
         {
