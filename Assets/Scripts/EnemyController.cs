@@ -15,9 +15,6 @@ public class EnemyController : MonoBehaviour
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
-    private UIManager uiManager;//UIManager
-
-    [SerializeField]
     private float fallSpeed;//落下速度
 
     [SerializeField, Header("射程距離")]
@@ -28,9 +25,6 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private Transform enemyWeaponTran;//Enemyが武器を構える位置
-
-    [SerializeField]
-    private Transform shotBulletTran;//弾を生成する位置
 
     private bool didPostLandingProcessing;//着地直後の処理を行ったかどうか
 
@@ -46,6 +40,10 @@ public class EnemyController : MonoBehaviour
 
     private ItemDataSO.ItemData usedItemData;//使用しているアイテムのデータ
 
+    private UIManager uiManager;//UIManager
+
+    private Transform shotBulletTran;//弾を生成する位置
+
     private int nearItemNo;//最も近くにある使用可能アイテムの番号
 
     /// <summary>
@@ -58,6 +56,15 @@ public class EnemyController : MonoBehaviour
 
         //経過時間を計測
         StartCoroutine(MeasureTime());
+
+        //UIManagerを取得
+        if (!GameObject.Find("UIManager").TryGetComponent<UIManager>(out uiManager))
+        {
+            //問題を報告
+            Debug.Log("UIManagerの取得に失敗");
+        }
+
+        shotBulletTran = transform.GetChild(3).transform;
     }
 
     /// <summary>
@@ -313,8 +320,18 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        //間違ったアイテムを取得してしまった場合のnullエラーを回避
+        if(itemData.bulletPrefab==null)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
         //弾を生成
         Rigidbody bulletRb = Instantiate(itemData.bulletPrefab, shotBulletTran.position,Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0));
+
+        //生成した弾の親を自身に設定
+        bulletRb.transform.parent = transform;
 
         //弾を発射
         bulletRb.AddForce(enemyWeaponTran.forward * itemData.shotSpeed);
@@ -336,33 +353,33 @@ public class EnemyController : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             //手榴弾なら
-            case ("Grenade"):
+            case "Grenade":
                 UpdateEnemyHp(-itemDataSO.itemDataList[1].attackPower, collision,false);
                 break;
 
             //催涙弾なら
-            case ("TearGasGrenade"):
+            case "TearGasGrenade":
                 UpdateEnemyHp(-itemDataSO.itemDataList[2].attackPower, collision,false);
                 StartCoroutine(AttackedByTearGasGrenade());
                 break;
 
             //ナイフなら
-            case ("Knife"):
+            case "Knife":
                 UpdateEnemyHp(-itemDataSO.itemDataList[3].attackPower,collision,false);
                 break;
 
             //バットなら
-            case ("Bat"):
+            case "Bat":
                 UpdateEnemyHp(-itemDataSO.itemDataList[4].attackPower,collision,false);
                 break;
 
             //アサルトなら
-            case ("Assault"):
+            case "Assault":
                 UpdateEnemyHp(-itemDataSO.itemDataList[5].attackPower, collision, true);
                 break;
 
             //ショットガンなら
-            case ("Shotgun"):
+            case "Shotgun":
                 UpdateEnemyHp(-itemDataSO.itemDataList[6].attackPower, collision, true);
                 break;
 
