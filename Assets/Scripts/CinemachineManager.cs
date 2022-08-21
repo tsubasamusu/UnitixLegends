@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
+using Cinemachine;//CinemachineFreeLook‚ðŽg—p
 
 public class CinemachineManager : MonoBehaviour
 {

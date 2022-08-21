@@ -55,9 +55,14 @@ public class PlayerController : MonoBehaviour
 	private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
 
 	[SerializeField]
-	private Transform mainCamera;//メインカメラ
+	private Transform mainCameraTran;//メインカメラの位置
+
+	[SerializeField]
+	private Transform playerCharacterTran;//Playerのキャラクターの位置
 
 	private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
+
+	private Vector3 desiredMove=Vector3.zero;//移動ベクトル
 
 	private Vector3 firstPos;//初期位置
 
@@ -121,6 +126,15 @@ public class PlayerController : MonoBehaviour
 
 		//アイテムを制御
 		ControlItem();
+	}
+
+	/// <summary>
+	/// 一定時間ごとに呼び出される
+	/// </summary>
+    private void FixedUpdate()
+    {
+		//移動する
+		playerRb.MovePosition(transform.position + (desiredMove *Time.fixedDeltaTime));
 	}
 
     /// <summary>
@@ -190,14 +204,18 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	private PlayerCondition MovePlayer()
 	{
-		//Playerの向きをカメラの向きに合わせる
-		transform.eulerAngles = new Vector3(transform.eulerAngles.x, mainCamera.eulerAngles.y, transform.eulerAngles.z);
+		//Playerのキャラクターの向きをカメラの向きに合わせる
+		playerCharacterTran.eulerAngles = new Vector3(0f, mainCameraTran.eulerAngles.y, 0f);
 
 		//移動方向をPlayerの向きに合わせる
-		Vector3 desiredMove = (transform.forward * moveDirection.z)+(transform.right*moveDirection.x);
-
-		//移動する
-		playerRb.MovePosition(transform.position+desiredMove*Time.deltaTime);
+		desiredMove = (mainCameraTran.forward * moveDirection.z)+(mainCameraTran.right*moveDirection.x);
+		
+		//移動ベクトルの大きさが1.0より小さいなら
+		if(desiredMove.magnitude<1f)
+        {
+			//移動ベクトルに0を代入
+			desiredMove = Vector3.zero;//バグ防止
+        }
 
 		//Wを押されている間
 		if (Input.GetAxis("Vertical") > 0.0f)
