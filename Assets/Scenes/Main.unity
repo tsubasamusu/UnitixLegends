@@ -1667,7 +1667,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304549872}
-  m_LocalRotation: {x: 0.31092963, y: 0.17293017, z: -0.05764338, w: 0.9327889}
+  m_LocalRotation: {x: 0.31092963, y: 0.17293015, z: -0.05764339, w: 0.9327889}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4894,7 +4894,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.2984081, y: 0.17368671, z: -0.055322014, w: 0.9368698}
+  m_LocalRotation: {x: 0.2984081, y: 0.17368667, z: -0.05532199, w: 0.93686986}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -23686,7 +23686,6 @@ MonoBehaviour:
   normalZoomFOV: 20
   ScopeZoomFOV: 5
   getItemLength: 1
-  fallKey: 32
   stoopKey: 101
   getItemKey: 113
   discardKey: 120
@@ -23723,7 +23722,7 @@ Rigidbody:
   m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
@@ -27513,6 +27512,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propellerTran: {fileID: 7253046155250110838}
+  playerTran: {fileID: 4889205611965899502}
+  aiplanePlayerTran: {fileID: 1674009620}
+  playerController: {fileID: 4889205611976788818}
+  cinemachineManager: {fileID: 1402935072}
+  uiManager: {fileID: 1027788433}
+  fallKey: 32
   rotSpeed: 100
 --- !u!1 &7253046155250339150
 GameObject:

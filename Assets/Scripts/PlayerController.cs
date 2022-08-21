@@ -28,9 +28,6 @@ public class PlayerController : MonoBehaviour
 	private float getItemLength;//アイテムを取得できる距離
 
 	[SerializeField]
-	private KeyCode fallKey;//飛び降りるキー
-
-	[SerializeField]
 	private KeyCode stoopKey;//かがむキー
 
 	[SerializeField]
@@ -113,13 +110,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Update()
 	{
-		//飛び降りるキーを押されたら
-		if (Input.GetKeyDown(fallKey))
-		{
-			//飛行機から飛び降りる
-			FallFromAirplane();
-		}
-
 		//Playerが裏世界に行ってしまったら
 		if(transform.position.y <= -1f)
         {
@@ -146,26 +136,16 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     private void FixedUpdate()
     {
+		//Playerが接地していなかったら
+		if(!CheckGrounded())
+        {
+			//落下する
+			transform.Translate(0, -fallSpeed, 0);
+		}
+
 		//移動する
 		playerRb.MovePosition(transform.position + (desiredMove *Time.fixedDeltaTime));
 	}
-
-    /// <summary>
-    /// 飛行機から飛び降りる
-    /// </summary>
-    /// <returns>待ち時間</returns>
-    private IEnumerator FallFromAirplane()
-    {
-		//接地していない間、繰り返される
-		while(!CheckGrounded())
-        {
-			//落下する
-			transform.Translate(0,-fallSpeed,0);
-
-			//待ち時間を返す（実質、FixedUpdateと同じ）
-			yield return new WaitForSeconds(Time.fixedDeltaTime);
-        }
-    }
 
 	/// <summary>
 	/// 受け取ったPlayerの状態を元に、アニメーションの再生を行う

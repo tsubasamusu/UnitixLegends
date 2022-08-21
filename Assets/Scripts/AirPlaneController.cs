@@ -9,6 +9,26 @@ public class AirplaneController : MonoBehaviour
     private Transform propellerTran;//プロペラの位置情報
 
     [SerializeField]
+    private Transform playerTran;//Playerの位置
+
+    [SerializeField]
+    private Transform aiplanePlayerTran;//飛行機でのPlayerの位置
+
+    [SerializeField]
+    private PlayerController playerController;//PlayerController
+
+    [SerializeField]
+    private CinemachineManager cinemachineManager;//CinemachineManager
+
+    [SerializeField]
+    private UIManager uiManager;//UIManager
+
+    [SerializeField]
+    private KeyCode fallKey;//飛行機から飛び降りるキー
+
+    private bool fellFromAirplane;//飛行機から落下したかどうか
+
+    [SerializeField]
     private float rotSpeed;//プロペラの回転速度
 
     /// <summary>
@@ -16,6 +36,9 @@ public class AirplaneController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        //PlayerControllerを無効化
+        playerController.enabled = false;
+
         //飛行機を初期位置に配置
         transform.position = new Vector3(120f, 100f, -120f);
 
@@ -24,6 +47,41 @@ public class AirplaneController : MonoBehaviour
 
         //飛行機の操縦を開始
         StartCoroutine(NavigateAirplane());
+
+        //メッセージを表示
+        uiManager.SetMessageText("Tap\n'Space'\nTo Fall",Color.blue);
+    }
+
+    /// <summary>
+    /// 毎フレーム呼び出される
+    /// </summary>
+    private void Update()
+    {
+        //既に飛行機から飛び降りたのなら
+        if (fellFromAirplane)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
+        //Playerを常に飛行機の真下に設置
+        playerTran.position=aiplanePlayerTran.position;
+
+        //飛行機から飛び降りるキーが押されたら
+        if (Input.GetKeyDown(fallKey))
+        {
+            //メッセージのテキストを空にする
+            uiManager.SetMessageText("", Color.black);
+
+            //PlayerControllerを有効化
+            playerController.enabled=true;
+
+            //Playerカメラに切り替え
+            cinemachineManager.SetAirplaneCameraPriority(9);
+
+            //飛行機から飛び降りた状態に変更
+            fellFromAirplane = true;
+        }
     }
 
     /// <summary>

@@ -67,9 +67,6 @@ public class EnemyGenerator : MonoBehaviour
                 //¶¬‚µ‚½Enemy‚ÌêŠ‚ğ’²®
                 enemyTran.position = transform.position;
 
-                //¶¬‚µ‚½Enemy‚Ì‘å‚«‚³‚ğ’²®
-                enemyTran.localScale = new Vector3(2f, 2f, 2f);
-
                 //¶¬‚µ‚½Enemy‚ÌˆÊ’uî•ñ‚ğƒŠƒXƒg‚É‰Á‚¦‚é
                 generatedEnemyTranList.Add(enemyTran);
 
