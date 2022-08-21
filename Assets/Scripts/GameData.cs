@@ -119,14 +119,36 @@ public class GameData : MonoBehaviour
         //アイテムの位置情報をまとめたフォルダーの子オブジェクトの数から1引いた数だけ繰り返す
         for (int i = 1; i < itemTrans.childCount; i++)
         {
-            //ランダムな整数を取得
-            int px = Random.Range(1, 14);
+            //0から2までのランダムな整数を取得
+            int px = Random.Range(0, 3);
+
+            //取得した整数が0ではないなら（2/3の確率でEnemyが使える武器を出現させる）
+            if(px != 0)
+            {
+                //5から7までのランダムな整数を取得
+                int py = Random.Range(5, 8);
+
+                //指定した位置にランダムなアイテムを生成し、アニメーションを開始
+                StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[py].prefab, generatedItemTranList[i])));
+
+                //生成したアイテムのデータをリストに追加
+                generatedItemDataList.Add(itemDataSO.itemDataList[py]);
+
+                //次の繰り返し処理へ移る
+                continue;
+            }
+
+            //Enemyが使用できないアイテムの番号
+            int[] randomNumbers={1,2,3,4,8,9,10,11,12,13};
+
+            //上記の配列からランダムな要素を取得
+            int pz = randomNumbers[Random.Range(0, 10)];
 
             //指定した位置にランダムなアイテムを生成し、アニメーションを開始
-            StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[px].prefab, generatedItemTranList[i])));
+            StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[pz].prefab, generatedItemTranList[i])));
 
             //生成したアイテムのデータをリストに追加
-            generatedItemDataList.Add(itemDataSO.itemDataList[px]);
+            generatedItemDataList.Add(itemDataSO.itemDataList[pz]);
         }
     }
 

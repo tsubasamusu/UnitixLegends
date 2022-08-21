@@ -74,7 +74,7 @@ public class CinemachineManager : MonoBehaviour
     /// <summary>
     /// 飛行機視点カメラの優先順位を設定
     /// </summary>
-    /// <param name="airplaneCameraPriority"></param>
+    /// <param name="airplaneCameraPriority">優先順位</param>
     public void SetAirplaneCameraPriority(int airplaneCameraPriority)
     {
         //引数を元に、飛行機視点カメラの優先順位を設定
