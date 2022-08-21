@@ -130,6 +130,9 @@ public class EnemyController : MonoBehaviour
             //以降の処理を行わない
             return;
         }
+
+        //鏑の位置を目標地点に設定
+        SetTargetPosition(GetNearEnemyPos());
         
         //射線上に敵がいたら
         if (CheckEnemy()) 
@@ -137,6 +140,17 @@ public class EnemyController : MonoBehaviour
             //射撃する
             ShotBullet(usedItemData);
         }
+    }
+
+    /// <summary>
+    /// 最も近くにいる敵の位置を取得する
+    /// </summary>
+    /// <returns>最も近くにいる敵の位置</returns>
+    private Vector3 GetNearEnemyPos()
+    {
+        //TODO:Playerの位置と、EnemyGeneratorのリストを元に、最も近くにいる敵の位置を取得する処理
+
+        return Vector3.zero;//（仮）
     }
 
     /// <summary>
@@ -405,9 +419,10 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 催涙弾を受けた際の処理
-    /// </summary>
+   /// <summary>
+   /// 催涙弾を受けた際の処理
+   /// </summary>
+   /// <returns>待ち時間</returns>
     private IEnumerator AttackedByTearGasGrenade()
     {
         //停止状態にする
