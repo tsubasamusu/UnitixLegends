@@ -40,6 +40,14 @@ public class GameData : MonoBehaviour
     [HideInInspector]
     public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
 
+    [SerializeField]
+    private float fallSpeed;//落下速度
+
+    public float FallSpeed//fallSpeed変数用のプロパティ
+    {
+        get { return fallSpeed; }//外部からは取得処理のみを可能に
+    }
+
     private bool isFull;//Playerの所有物が許容オーバーかどうか
 
     public bool IsFull//isFull変数用のプロパティ

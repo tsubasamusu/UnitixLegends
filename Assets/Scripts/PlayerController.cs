@@ -15,9 +15,6 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private float speedX;//左右移動速度
 
-	[SerializeField]
-	private float fallSpeed;//落下速度
-
 	[SerializeField, Range(1.0f, 30.0f)]
 	private float normalZoomFOV;//通常のズーム時の視野角
 
@@ -140,7 +137,7 @@ public class PlayerController : MonoBehaviour
 		if(!CheckGrounded())
         {
 			//落下する
-			transform.Translate(0, -fallSpeed, 0);
+			transform.Translate(0, -GameData.instance.FallSpeed, 0);
 		}
 
 		//移動する

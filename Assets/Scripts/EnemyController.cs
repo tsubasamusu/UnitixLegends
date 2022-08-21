@@ -14,9 +14,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
-    [SerializeField]
-    private float fallSpeed;//—Ž‰º‘¬“x
-
     [SerializeField, Header("ŽË’ö‹——£")]
     private float range;//ŽË’ö‹——£
 
@@ -96,7 +93,7 @@ public class EnemyController : MonoBehaviour
         if (!CheckGrounded())
         {
             //—Ž‰º‚·‚é
-            transform.Translate(0, -fallSpeed, 0);
+            transform.Translate(0, -GameData.instance.FallSpeed, 0);
         }
     }
 
