@@ -304,7 +304,7 @@ public class PlayerController : MonoBehaviour
 		var ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
 
 		//rayの探索距離（長さ）を設定
-		var tolerance = 0.3f;
+		var tolerance = 0.2f;
 
 		//rayのヒット判定（bool型）を返す
 		return Physics.Raycast(ray, tolerance);

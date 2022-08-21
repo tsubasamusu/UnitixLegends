@@ -101,6 +101,13 @@ public class GameData : MonoBehaviour
     {
         //Player‚ÌÅ‚à‹ß‚­‚É‚ ‚éƒAƒCƒeƒ€‚Ìî•ñ‚ğæ“¾
         GetInformationOfNearItem(playerTran.position);
+
+        //instance‚ªnull‚È‚ç
+        if(instance==null)
+        {
+            //–â‘è‚ğ•ñ
+            Debug.Log("GameData.instance‚ªnull");
+        }
     }
 
     /// <summary>
