@@ -151,7 +151,7 @@ public class EnemyController : MonoBehaviour
                 gotItem = GetItem(nearItemNo);
 
                 //停止距離を設定
-                agent.stoppingDistance = 30f;
+                agent.stoppingDistance = 10f;
             }
 
             //以降の処理を行わない
@@ -191,7 +191,7 @@ public class EnemyController : MonoBehaviour
     /// <returns>最も近くにいる敵の位置</returns>
     private Vector3 GetNearEnemyPos()
     {
-        //アイテムがないか、Playerが存在していなかったら
+        //EnemyかPlayerが存在していなかったら
         if(enemyGenerator.generatedEnemyTranList.Count<=0||playerTran.gameObject==null)//nullエラー回避
         {
             //以降の処理を行わない
@@ -200,6 +200,8 @@ public class EnemyController : MonoBehaviour
 
         //最も近くにいる敵の位置にPlayerの位置を仮に登録
         Vector3 nearPos = playerTran.position;
+
+        return nearPos;
 
         //生成したEnemyの位置情報のリストの要素数だけ繰り返す
         for (int i = 0; i < enemyGenerator.generatedEnemyTranList.Count; i++)
