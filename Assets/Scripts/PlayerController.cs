@@ -61,8 +61,6 @@ public class PlayerController : MonoBehaviour
 
 	private Vector3 desiredMove=Vector3.zero;//移動ベクトル
 
-	private Vector3 firstPos;//初期位置
-
 	private Vector3 firstColliderCenter;//コライダーのセンターの初期値
 
 	private Vector3 firstColliderSize;//コライダーの大きさの初期値
@@ -97,9 +95,6 @@ public class PlayerController : MonoBehaviour
 
 		//コライダーの大きさの初期値を取得
 		firstColliderSize = boxCollider.size;
-
-		//初期位置を設定
-        firstPos = transform.position;
     }
 
     /// <summary>
@@ -110,8 +105,8 @@ public class PlayerController : MonoBehaviour
 		//Playerが裏世界に行ってしまったら
 		if(transform.position.y <= -1f)
         {
-			//自身の座標を初期位置に設定
-			transform.position = firstPos;
+			//自身の座標を(0,0,0)に設定
+			transform.position = Vector3.zero;
         }
 
 		//接地していなかったら
