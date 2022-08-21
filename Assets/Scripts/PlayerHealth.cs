@@ -42,19 +42,19 @@ public class PlayerHealth : MonoBehaviour
     /// 他のコライダーに触れた際に呼び出される
     /// </summary>
     /// <param name="hit">触れた相手</param>
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnCollisionEnter(Collision hit)
     {
         //触れたゲームオブジェクトのタグに応じて処理を変更
-        switch(hit.gameObject.tag)
+        switch (hit.gameObject.tag)
         {
             //手榴弾なら
             case "Grenade":
-                UpdatePlayerHp(-itemDataSO.itemDataList[1].attackPower,hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[1].attackPower, hit.gameObject);
                 break;
 
             //催涙弾なら
             case "TearGasGrenade":
-                UpdatePlayerHp(-itemDataSO.itemDataList[2].attackPower,hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[2].attackPower, hit.gameObject);
                 AttackedByTearGasGrenade();
                 break;
 
@@ -70,17 +70,17 @@ public class PlayerHealth : MonoBehaviour
 
             //アサルトなら
             case "Assault":
-                UpdatePlayerHp(-itemDataSO.itemDataList[5].attackPower,hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[5].attackPower, hit.gameObject);
                 break;
 
             //ショットガンなら
             case "Shotgun":
-                UpdatePlayerHp(-itemDataSO.itemDataList[6].attackPower, hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[6].attackPower, hit.gameObject);
                 break;
 
             //スナイパーなら
             case "Sniper":
-                UpdatePlayerHp(-itemDataSO.itemDataList[7].attackPower,hit);
+                UpdatePlayerHp(-itemDataSO.itemDataList[7].attackPower, hit.gameObject);
                 break;
         }
     }
@@ -89,8 +89,8 @@ public class PlayerHealth : MonoBehaviour
     /// PlayerのHpを更新
     /// </summary>
     /// <param name="updateValue">Hpの更新量</param>
-    /// <param name="hit">触れた相手</param>
-    public void UpdatePlayerHp(float updateValue, ControllerColliderHit hit = null)
+    /// <param name="gameObject">触れた相手</param>
+    public void UpdatePlayerHp(float updateValue, GameObject gameObject=null)
     {
         //攻撃を受けた際の処理なら
         if(updateValue<0.0f)
@@ -106,10 +106,10 @@ public class PlayerHealth : MonoBehaviour
         playerHp = Mathf.Clamp(playerHp + updateValue, 0, 100);
 
         //nullエラー回避
-        if (hit != null)
+        if (gameObject != null)
         {
             //引数で受け取ったゲームオブジェクトを消す
-            Destroy(hit.gameObject);
+            Destroy(gameObject);
         }
 
         //Playerの体力が0になったら

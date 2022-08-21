@@ -7,9 +7,6 @@ using Cinemachine;//Cinemachineを使用
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField]
-	private float gravity;//重力
-
-	[SerializeField]
 	private float previousSpeed;//前進速度
 
 	[SerializeField]
@@ -43,7 +40,7 @@ public class PlayerController : MonoBehaviour
 	private KeyCode discardKey;//アイテム破棄キー
 
 	[SerializeField]
-	private CharacterController controller;//CharacterController
+	private Rigidbody playerRb;//Rigidbody
 
 	[SerializeField]
 	private Animator anim;//Animator
@@ -108,14 +105,8 @@ public class PlayerController : MonoBehaviour
 		//Playerが裏世界に行ってしまったら
 		if(transform.position.y <= -1f)
         {
-			//CharacterControllerを無効化
-			controller.enabled = false;
-
 			//自身の座標を初期位置に設定
 			transform.position = firstPos;
-
-			//CharacterControllerを有効化
-			controller.enabled = true;
         }
 
 		//接地していなかったら
@@ -132,11 +123,11 @@ public class PlayerController : MonoBehaviour
 		ControlItem();
 	}
 
-	/// <summary>
-	/// 飛行機から飛び降りる
-	/// </summary>
-	/// <returns>待ち時間</returns>
-	private IEnumerator FallFromAirplane()
+    /// <summary>
+    /// 飛行機から飛び降りる
+    /// </summary>
+    /// <returns>待ち時間</returns>
+    private IEnumerator FallFromAirplane()
     {
 		//接地していない間、繰り返される
 		while(!CheckGrounded())
@@ -202,11 +193,11 @@ public class PlayerController : MonoBehaviour
 		//Playerの向きをカメラの向きに合わせる
 		transform.eulerAngles = new Vector3(transform.eulerAngles.x, mainCamera.eulerAngles.y, transform.eulerAngles.z);
 
-		//重力を生成
-		moveDirection.y -= gravity * Time.deltaTime;
+		//移動方向をPlayerの向きに合わせる
+		Vector3 desiredMove = (transform.forward * moveDirection.z)+(transform.right*moveDirection.x);
 
-		//ローカル空間からワールド空間へdirectionを変換し、その向きと大きさに移動
-		controller.Move(transform.TransformDirection(moveDirection) * Time.deltaTime);
+		//移動する
+		playerRb.MovePosition(transform.position + desiredMove*Time.deltaTime);
 
 		//Wを押されている間
 		if (Input.GetAxis("Vertical") > 0.0f)
@@ -249,8 +240,6 @@ public class PlayerController : MonoBehaviour
 		//かがむキーが押されている間
 		if (Input.GetKey(stoopKey))
 		{
-			//TODO:かがむ処理を追加
-
 			//Playerの状態を返す
 			return PlayerCondition.Stooping;
 		}
