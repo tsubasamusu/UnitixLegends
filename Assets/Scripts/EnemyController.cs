@@ -102,6 +102,13 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //裏世界に行ってしまったら
+        if (transform.position.y <= -1f)
+        {
+            //自身の座標を(0,0,0)に設定
+            transform.position = Vector3.zero;
+        }
+
         //接地していないなら
         if (!CheckGrounded())
         {
