@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
 		Vector3 desiredMove = (transform.forward * moveDirection.z)+(transform.right*moveDirection.x);
 
 		//ˆÚ“®‚·‚é
-		playerRb.MovePosition(transform.position + desiredMove*Time.deltaTime);
+		playerRb.MovePosition(transform.position+desiredMove*Time.deltaTime);
 
 		//W‚ð‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ
 		if (Input.GetAxis("Vertical") > 0.0f)
