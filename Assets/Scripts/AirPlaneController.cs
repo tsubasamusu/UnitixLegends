@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;//DOTweenを使用
 
-public class AirPlaneController : MonoBehaviour
+public class AirplaneController : MonoBehaviour
 {
     [SerializeField]
     private Transform propellerTran;//プロペラの位置情報
 
     [SerializeField]
     private float rotSpeed;//プロペラの回転速度
-
-    [SerializeField]
-    private float moveSpeed;//移動速度
 
     /// <summary>
     /// ゲーム開始直後に呼び出される

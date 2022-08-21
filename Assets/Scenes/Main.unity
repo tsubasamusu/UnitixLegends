@@ -2911,6 +2911,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 1428101982797960645, guid: 06adddbf103068144b908be479f5d62d, type: 3}
   maxGenerateCount: 29
   flightTime: 43
+  enemiesTran: {fileID: 1802484447}
   generatedEnemyTranList: []
 --- !u!1 &515340287
 GameObject:
@@ -4893,7 +4894,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.2984081, y: 0.17368667, z: -0.05532199, w: 0.93686986}
+  m_LocalRotation: {x: 0.2984081, y: 0.17368671, z: -0.055322014, w: 0.9368698}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7690,7 +7691,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170332041}
-  m_LocalRotation: {x: 0.2858511, y: 0.17441104, z: -0.052994058, w: 0.9407771}
+  m_LocalRotation: {x: 0.2858511, y: 0.17441109, z: -0.052994072, w: 0.9407771}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11612,6 +11613,37 @@ Transform:
   m_Father: {fileID: 417949319}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1674009619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1674009620}
+  m_Layer: 0
+  m_Name: AirplanePlayerTran
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1674009620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674009619}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7253046155250110828}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1704880689
 GameObject:
   m_ObjectHideFlags: 0
@@ -12603,6 +12635,37 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 455720683}
+--- !u!1 &1802484446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1802484447}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1802484447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802484446}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1806701461
 GameObject:
   m_ObjectHideFlags: 0
@@ -27245,6 +27308,7 @@ Transform:
   - {fileID: 7253046155250110838}
   - {fileID: 570688347}
   - {fileID: 511870281}
+  - {fileID: 1674009620}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27449,8 +27513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propellerTran: {fileID: 7253046155250110838}
-  rotSpeed: 1000
-  moveSpeed: 0
+  rotSpeed: 100
 --- !u!1 &7253046155250339150
 GameObject:
   m_ObjectHideFlags: 0

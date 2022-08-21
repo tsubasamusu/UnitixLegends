@@ -13,6 +13,9 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField]
     private float flightTime;//飛行機の飛行時間
 
+    [SerializeField]
+    private Transform enemiesTran;//Enemyの親オブジェクト
+
     [HideInInspector]
     public List<Transform> generatedEnemyTranList=new List<Transform>();//生成したEnemyの位置情報のリスト
 
@@ -58,8 +61,8 @@ public class EnemyGenerator : MonoBehaviour
             //経過時間が生成時間以上になったら
             if (timer >= generateTimeList[i])
             {
-                //Enemyを生成
-                Transform enemyTran = Instantiate(enemyPrefab, transform);
+                //Enemyを生成し、親を設定
+                Transform enemyTran = Instantiate(enemyPrefab, enemiesTran);
 
                 //生成したEnemyの場所を調整
                 enemyTran.position = transform.position;
