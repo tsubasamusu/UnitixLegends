@@ -39,7 +39,9 @@ public class EnemyController : MonoBehaviour
 
     private float enemyhp = 100f;//Enemyの体力
 
-    private float timer;//経過時間
+    private float timer;//武器用の経過時間
+
+    private float stormTimer;//ストームの中にいる間の経過時間
 
     private Vector3 firstPos;//初期位置
 
@@ -50,6 +52,8 @@ public class EnemyController : MonoBehaviour
     private EnemyGenerator enemyGenerator;//EnemyGenerator
 
     private StormController stormController;//StormController
+
+    private PlayerHealth playerHealth;//PlayerHealth
 
     private Transform shotBulletTran;//弾を生成する位置
 
@@ -91,6 +95,13 @@ public class EnemyController : MonoBehaviour
         {
             //問題を報告
             Debug.Log("StormControllerの取得に失敗");
+        }
+
+        //PlayerHealthを取得
+        if (!GameObject.Find("Player").TryGetComponent(out playerHealth))
+        {
+            //問題を報告
+            Debug.Log("PlayerHealthの取得に失敗");
         }
 
         //Playerの位置情報を取得
@@ -178,6 +189,17 @@ public class EnemyController : MonoBehaviour
         //安置外にいるなら
         if (!stormController.CheckEnshrine(transform.position))
         {
+            //ストームにいる間の経過時間を計測
+            stormTimer+=Time.deltaTime;
+
+            //経過時間が一定時間を超えたら
+            if(stormTimer>=(100f/playerHealth.StormDamage))
+            {
+                //死ぬ
+                KillMe();
+            }
+
+
             //一定時間、安置への移動指示出す
             StartCoroutine(GoToEnshrine());
 
@@ -579,9 +601,21 @@ public class EnemyController : MonoBehaviour
                 GameData.instance.KillCount++;
             }
 
-            //自身を消す
-            Destroy(gameObject);
+            //死ぬ
+            KillMe();
         }
+    }
+
+    /// <summary>
+    /// 死ぬ際の処理
+    /// </summary>
+    private void KillMe()
+    {
+        //リストから自身を消す
+        enemyGenerator.generatedEnemyList.RemoveAt(myNo);
+
+        //自身をゲームオブジェクトごと消す
+        Destroy(gameObject);
     }
 
    /// <summary>
