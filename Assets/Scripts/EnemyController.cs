@@ -77,7 +77,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //StormController‚ğæ“¾
-        if (!GameObject.Find("StormController").TryGetComponent(out stormController))
+        if (!GameObject.Find("Storm").TryGetComponent(out stormController))
         {
             //–â‘è‚ğ•ñ
             Debug.Log("StormController‚Ìæ“¾‚É¸”s");
