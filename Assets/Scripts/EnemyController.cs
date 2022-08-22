@@ -41,6 +41,8 @@ public class EnemyController : MonoBehaviour
 
     private EnemyGenerator enemyGenerator;//EnemyGenerator
 
+    private StormController stormController;//StormController
+
     private Transform shotBulletTran;//’e‚ğ¶¬‚·‚éˆÊ’u
 
     private Transform playerTran;//Player‚ÌˆÊ’u
@@ -74,9 +76,17 @@ public class EnemyController : MonoBehaviour
             Debug.Log("EnemyGenerator‚Ìæ“¾‚É¸”s");
         }
 
-        //Player‚ÌˆÊ’uî•ñ‚ğæ“¾
-        if(!GameObject.Find("Player").TryGetComponent(out playerTran))
+        //StormController‚ğæ“¾
+        if (!GameObject.Find("StormController").TryGetComponent(out stormController))
         {
+            //–â‘è‚ğ•ñ
+            Debug.Log("StormController‚Ìæ“¾‚É¸”s");
+        }
+
+        //Player‚ÌˆÊ’uî•ñ‚ğæ“¾
+        if (!GameObject.Find("Player").TryGetComponent(out playerTran))
+        {
+            //–â‘è‚ğ•ñ
             Debug.Log("Player‚ÌˆÊ’uî•ñ‚Ìæ“¾‚É¸”s");
         }
 
@@ -138,6 +148,16 @@ public class EnemyController : MonoBehaviour
         //’â~ó‘Ô‚È‚ç
         if(stopFlag)
         {
+            //ˆÈ~‚Ìˆ—‚ğs‚í‚È‚¢
+            return;
+        }
+
+        //ˆÀ’uŠO‚É‚¢‚é‚È‚ç
+        if(!stormController.CheckEnshrine(transform.position))
+        {
+            //’†‰›‚ÖŒü‚©‚¤
+            SetTargetPosition(Vector3.zero);
+
             //ˆÈ~‚Ìˆ—‚ğs‚í‚È‚¢
             return;
         }
