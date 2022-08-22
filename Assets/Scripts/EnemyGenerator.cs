@@ -81,7 +81,7 @@ public class EnemyGenerator : MonoBehaviour
                 }
 
                 //Enemyの数を更新
-                uIManager.UpdateTxtOtherCount(generateCount);
+                uIManager.UpdateTxtOtherCount(enemiesTran.childCount);
 
                 //Enemyを生成する時間のリストからその要素を排除
                 generateTimeList.RemoveAt(i);
