@@ -26,6 +26,9 @@ public class UIManager : MonoBehaviour
     private Text txtItemCount;//残弾数テキスト
 
     [SerializeField]
+    private Text txtOtherCount;//他の数のテキスト
+
+    [SerializeField]
     private Text txtFps;//FPSのテキスト
 
     [SerializeField]
@@ -54,6 +57,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Transform canvasTran;//Canvasのtransform
+
+    [SerializeField]
+    private Transform enemies;//全てのEnemyの親
 
     [SerializeField]
     private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
@@ -89,6 +95,15 @@ public class UIManager : MonoBehaviour
 
         //残弾数の表示を更新する
         UpdateTxtBulletCount();
+    }
+
+    /// <summary>
+    /// 他の数の表示を更新
+    /// </summary>
+    /// <param name="enemyNumber">Enemyの数</param>
+    public void UpdateTxtOtherCount(int enemyNumber)
+    {
+        txtOtherCount.text = (enemyNumber+1).ToString()+"Players\n"+GameData.instance.KillCount.ToString()+"Kills";
     }
 
     /// <summary>

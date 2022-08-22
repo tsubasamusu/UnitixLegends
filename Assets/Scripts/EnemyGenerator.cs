@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     [SerializeField]
+    private UIManager uIManager;//UIManager
+
+    [SerializeField]
     private Transform enemyPrefab;//Enemyのプレファブ
 
     [SerializeField]
@@ -43,15 +46,6 @@ public class EnemyGenerator : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        //TODO:飛行機が動き始めたら以降の処理を行う
-
-        //全てのEnemyを生成し終わったら
-        if(generateCount==maxGenerateCount)
-        {
-            //以降の処理を行わない
-            return;
-        }
-
         //経過時間を計測
         timer+=Time.deltaTime;
 
@@ -72,6 +66,22 @@ public class EnemyGenerator : MonoBehaviour
 
                 //生成数に1を加える
                 generateCount++;
+
+                //生成したEnemyからEnemyControllerを取得
+                if(enemyTran.gameObject.TryGetComponent(out EnemyController enemyController))
+                {
+                    //生成したEnemyに番号を持たせる
+                    enemyController.MyNo = generateCount - 1;
+                }
+                //EnemyControllerの取得に失敗したら
+                else
+                {
+                    //問題を報告
+                    Debug.Log("EnemyControllerの取得に失敗");
+                }
+
+                //Enemyの数を更新
+                uIManager.UpdateTxtOtherCount(enemiesTran.childCount);
 
                 //Enemyを生成する時間のリストからその要素を排除
                 generateTimeList.RemoveAt(i);

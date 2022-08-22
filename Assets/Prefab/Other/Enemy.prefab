@@ -8558,7 +8558,7 @@ MonoBehaviour:
   animator: {fileID: 1428101982788451181}
   itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   range: 100
-  stoppingDistance: 0
+  stoppingDistance: 5
   getItemLength: 1
   instructionTime: 5
   enemyWeaponTran: {fileID: 1812235560}
