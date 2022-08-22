@@ -178,14 +178,30 @@ public class GameData : MonoBehaviour
             //生成したアイテムの生成位置の親を設定
             generateItemPosTran.SetParent(itemTrans);
 
-            //2回繰り返す
-            for (int j = 0; j < 2; j++)
-            {
-                //-120から120までのランダムな小数を取得
-                float px = Random.Range(-120f, 120f);
+            //0から3までのランダムな整数を取得
+            int px = Random.Range(0, 4);
 
-                //生成したアイテムの生成位置の座標を設定
-                generateItemPosTran.position = j == 0 ? new Vector3(px, 0, 0) : new Vector3(generateItemPosTran.position.x, 0f, px);
+            //-120から120までのランダムな小数を取得
+            float py = Random.Range(-120f, 120f);
+
+            //pxの値に応じて処理を変更
+            switch (px)
+            {
+                case 0:
+                    generateItemPosTran.localPosition = new Vector3(py, 0f, -120f);
+                    break;
+
+                case 1:
+                    generateItemPosTran.localPosition = new Vector3(120f, 0f, py);
+                    break;
+
+                case 2:
+                    generateItemPosTran.localPosition = new Vector3(py, 0f, 120f);
+                    break;
+
+                case 3:
+                    generateItemPosTran.localPosition = new Vector3(-120f, 0f, py);
+                    break;
             }
         }
     }
