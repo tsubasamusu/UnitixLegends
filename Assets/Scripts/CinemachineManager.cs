@@ -9,6 +9,9 @@ public class CinemachineManager : MonoBehaviour
     private CinemachineFreeLook airplaneCamera;//飛行機視点カメラ
 
     [SerializeField]
+    private PlayerController playerController;//PlayerController
+
+    [SerializeField]
     private Transform miniMapBackgroundTran;//ミニマップ背景の位置
 
     [SerializeField]
@@ -42,36 +45,41 @@ public class CinemachineManager : MonoBehaviour
         //ミニマップの背景の位置を常にPlayerの位置に合わせる
         miniMapBackgroundTran.position = new Vector3(playerTran.position.x, miniMapBackgroundTran.position.y, playerTran.position.z);
 
-        //Playerのキャラクターが射撃の邪魔にならないようにする
-        SetPlayerCharacter();
+        //PlayerControllerが無効なら
+        if(playerController.enabled==false)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
+        //Playerのキャラクターが視界を遮っているかどうか調べる
+        bool set =CheckIntercepted()?false:true;
+
+        //Playerのキャラクターの有効化無効化を切り替える
+        SetPlayerCharacterActive(set);
     }
 
     /// <summary>
-    /// カメラの角度に応じてPlayerのキャラクターの有効化、無効化を切り替える
+    /// Playerのキャラクターが視界を遮っているかどうか調べる
     /// </summary>
-    private void SetPlayerCharacter()
+    /// <returns>Playerのキャラクターが視界を遮っていたらtrue</returns>
+    private bool CheckIntercepted()
     {
         //カメラの角度が一定範囲内なら
         if (mainCameraTran.eulerAngles.y >= angle - 20f && mainCameraTran.eulerAngles.y <= angle + 20f)
         {
-            //Playerのキャラクターを無効化
-            playerCharacterbody.SetActive(false);
-
-            //以降の処理を行わない
-            return;
+            //trueを返す
+            return true;
         }
         //カメラの角度が一定範囲内なら
         else if (mainCameraTran.eulerAngles.y >= (angle + 180f) - 20f && mainCameraTran.eulerAngles.y <= (angle + 180f) + 20f)
         {
-            //Playerのキャラクターを無効化
-            playerCharacterbody.SetActive(false);
-
-            //以降の処理を行わない
-            return;
+            //trueを返す
+            return true;
         }
-
-        //Playerのキャラクターを有効化
-        playerCharacterbody.SetActive(true);
+        
+        //falseを返す
+        return false;
     }
 
     /// <summary>
@@ -82,5 +90,15 @@ public class CinemachineManager : MonoBehaviour
     {
         //引数を元に、飛行機視点カメラの優先順位を設定
         airplaneCamera.Priority= airplaneCameraPriority;
+    }
+
+    /// <summary>
+    /// Playerのキャラクターの有効化無効化を切り替える
+    /// </summary>
+    /// <param name="set">有効にするならtrue</param>
+    public void SetPlayerCharacterActive(bool set)
+    {
+        //引数を元に、Playerのキャラクターの有効化、無効化を切り替える
+        playerCharacterbody.SetActive(set);
     }
 }

@@ -52,6 +52,9 @@ public class AirplaneController : MonoBehaviour
 
         //メッセージを表示
         uiManager.SetMessageText("Tap\n'Space'\nTo Fall",Color.blue);
+
+        //Playerのキャラクターを無効化
+        cinemachineManager.SetPlayerCharacterActive(false);
     }
 
     /// <summary>
