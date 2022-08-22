@@ -8,7 +8,13 @@ public class PlayerHealth : MonoBehaviour
     private UIManager uiManager;//UIManager
 
     [SerializeField]
+    private StormController stormController;//StormController
+
+    [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
+
+    [SerializeField,Header("1秒あたりに受けるストームによるダメージ")]
+    private float stormDamage;//1秒あたりに受けるストームによるダメージ
 
     private float playerHp=100.0f;//Playerの体力
 
@@ -36,6 +42,15 @@ public class PlayerHealth : MonoBehaviour
     public int SyringeCount//syringeCount変数用のプロパティ
     {
         get { return syringeCount; }//外部からは取得処理のみ可能に
+    }
+
+    /// <summary>
+    /// ゲーム開始直後に呼び出される
+    /// </summary>
+    private void Start()
+    {
+        //ストームによるダメージを受けるかどうかの調査を開始
+        StartCoroutine(CheckStormDamage());
     }
 
     /// <summary>
@@ -86,6 +101,30 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
+    /// ストームによるダメージを受けるかどうか調べる
+    /// </summary>
+    /// <returns>待ち時間</returns>
+    private IEnumerator CheckStormDamage()
+    {
+        //無限ループ
+        while (true)
+        {
+            //Playerが安置内にいないなら繰り返される
+            while (!stormController.CheckEnshrine(transform.position))
+            {
+                //PlayerのHpを減少させる
+                UpdatePlayerHp(-stormDamage);
+
+                //1秒待つ
+                yield return new WaitForSeconds(1f);
+            }
+
+            //次のフレームへ飛ばす（実質、Updateメソッド）
+            yield return null;
+        }
+    }
+
+    /// <summary>
     /// PlayerのHpを更新
     /// </summary>
     /// <param name="updateValue">Hpの更新量</param>
@@ -115,7 +154,7 @@ public class PlayerHealth : MonoBehaviour
         //Playerの体力が0になったら
         if (playerHp == 0.0f)
         {
-            //TOD:GameManagerからゲームオーバーの処理を呼び出す
+            //TODO:GameManagerからゲームオーバーの処理を呼び出す
         }
     }
 
