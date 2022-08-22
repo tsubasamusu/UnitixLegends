@@ -125,9 +125,11 @@ public class EnemyController : MonoBehaviour
             Debug.Log("全てのEnemyの親の位置情報の取得に失敗");
         }
            
-
         //発射位置を取得
         shotBulletTran = transform.GetChild(3).transform;
+
+        //ストームによるダメージ処理の管理を開始
+        StartCoroutine(CheckStormDamage());
     }
 
     /// <summary>
@@ -182,7 +184,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //停止状態なら
-        if(stopFlag)
+        if (stopFlag)
         {
             //以降の処理を行わない
             return;
@@ -201,17 +203,6 @@ public class EnemyController : MonoBehaviour
         //安置外にいるなら
         if (!stormController.CheckEnshrine(transform.position))
         {
-            //ストームにいる間の経過時間を計測
-            stormTimer+=Time.deltaTime;
-
-            //経過時間が一定時間を超えたら
-            if(stormTimer>=(100f/playerHealth.StormDamage))
-            {
-                //死ぬ
-                KillMe();
-            }
-
-
             //一定時間、安置への移動指示出す
             StartCoroutine(GoToEnshrine());
 
@@ -220,7 +211,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //まだアイテムを取得していないなら
-        if(!gotItem)
+        if (!gotItem)
         {
             //生成したアイテムのリストの要素が0なら
             if (GameData.instance.generatedItemTranList.Count <= 0)//nullエラー回避
@@ -250,7 +241,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //使用できないアイテムを拾ってしまったら
-        if(!usedItemData.enemyCanUse)
+        if (!usedItemData.enemyCanUse)
         {
             //アイテムをまだ取得していない状態に切り替える
             gotItem = false;
@@ -282,10 +273,38 @@ public class EnemyController : MonoBehaviour
         SetTargetPosition(nearEnemyPos);
 
         //射線上に敵がいたら
-        if (CheckEnemy()) 
+        if (CheckEnemy())
         {
             //射撃する
             ShotBullet(usedItemData);
+        }
+    }
+
+    /// <summary>
+    /// ストームによるダメージ処理を管理
+    /// </summary>
+    /// <returns>待ち時間</returns>
+    private IEnumerator CheckStormDamage()
+    {
+        //無限に繰り返す
+        while(true)
+        {
+            //安置外にいるなら
+            if (!stormController.CheckEnshrine(transform.position))
+            {
+                //ストームにいる間の経過時間を計測
+                stormTimer += Time.deltaTime;
+
+                //経過時間が一定時間を超えたら
+                if (stormTimer >= (100f / playerHealth.StormDamage))
+                {
+                    //死ぬ
+                    KillMe();
+                }
+            }
+
+            //次のフレームへ飛ばす（実質、Updateメソッド）
+            yield return null;
         }
     }
 
