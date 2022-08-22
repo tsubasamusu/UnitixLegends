@@ -18,6 +18,9 @@ public class EnemyController : MonoBehaviour
     private float range;//Ë’ö‹——£
 
     [SerializeField]
+    private float stoppingDistance;//“G‚Æ‚Ì‹——£
+
+    [SerializeField]
     private float getItemLength;//ƒAƒCƒeƒ€‚ğæ“¾‚Å‚«‚é‹——£
 
     [SerializeField]
@@ -188,7 +191,7 @@ public class EnemyController : MonoBehaviour
                 gotItem = GetItem(nearItemNo);
 
                 //’â~‹——£‚ğİ’è
-                agent.stoppingDistance = 10f;
+                agent.stoppingDistance = stoppingDistance;
             }
 
             //ˆÈ~‚Ìˆ—‚ğs‚í‚È‚¢

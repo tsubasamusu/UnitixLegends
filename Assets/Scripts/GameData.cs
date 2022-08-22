@@ -26,6 +26,9 @@ public class GameData : MonoBehaviour
     private Transform itemTrans;//アイテムの位置情報をまとめたフォルダー
 
     [SerializeField]
+    private Transform generateItemPosPrefab;//アイテムの生成位置のプレファブ
+
+    [SerializeField]
     private Transform playerTran;//Playerの位置情報
 
     [SerializeField]
@@ -167,9 +170,23 @@ public class GameData : MonoBehaviour
     private void GenerateItemTran()
     {
         //生成するアイテムの生成位置の最大数だけ繰り返す
-        for (int i = 0; i < maxItemTranCount;i++)
+        for (int i = 0; i < maxItemTranCount; i++)
         {
-            //TODO:アイテムの生成位置を生成処理
+            //アイテムの生成位置を設定
+            Transform generateItemPosTran = Instantiate(generateItemPosPrefab);
+
+            //生成したアイテムの生成位置の親を設定
+            generateItemPosTran.SetParent(itemTrans);
+
+            //2回繰り返す
+            for (int j = 0; j < 2; j++)
+            {
+                //-120から120までのランダムな小数を取得
+                float px = Random.Range(-120f, 120f);
+
+                //生成したアイテムの生成位置の座標を設定
+                generateItemPosTran.position = j == 0 ? new Vector3(px, 0, 0) : new Vector3(generateItemPosTran.position.x, 0f, px);
+            }
         }
     }
 
