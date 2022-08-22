@@ -13,6 +13,15 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
+    [SerializeField]
+    private Skybox skybox;//Skybox
+
+    [SerializeField]
+    private Material normalSky;//通常時の空
+
+    [SerializeField]
+    private Material stormSky;//ストーム内の空
+
     [SerializeField,Header("1秒あたりに受けるストームによるダメージ")]
     private float stormDamage;//1秒あたりに受けるストームによるダメージ
 
@@ -106,17 +115,40 @@ public class PlayerHealth : MonoBehaviour
     /// <returns>待ち時間</returns>
     private IEnumerator CheckStormDamage()
     {
+        //空の判定
+        bool skyFlag = false;
+
         //無限ループ
         while (true)
         {
             //Playerが安置内にいないなら繰り返される
             while (!stormController.CheckEnshrine(transform.position))
             {
+                //空の判定がtrueなら
+                if (skyFlag)
+                {
+                    //悪天候に変更
+                    skybox.material = stormSky;
+
+                    //空の判定にfalseを入れる
+                    skyFlag = false;
+                }
+
                 //PlayerのHpを減少させる
                 UpdatePlayerHp(-stormDamage);
 
                 //1秒待つ
                 yield return new WaitForSeconds(1f);
+            }
+
+            //空の判定がfalseなら
+            if (!skyFlag)
+            {
+                //快晴に変更
+                skybox.material = normalSky;
+
+                //空の判定にtrueを入れる
+                skyFlag = true;
             }
 
             //次のフレームへ飛ばす（実質、Updateメソッド）

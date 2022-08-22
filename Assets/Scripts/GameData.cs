@@ -31,6 +31,9 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private float itemRotSpeed;//アイテムの回転速度
 
+    [SerializeField]
+    private int maxItemTranCount;//生成するアイテムの生成位置の最大数
+
     [HideInInspector]
     public List<ItemDataSO.ItemData> generatedItemDataList = new List<ItemDataSO.ItemData>();//生成したアイテムのデータのリスト
 
@@ -116,6 +119,9 @@ public class GameData : MonoBehaviour
     /// </summary>
     public void GenerateItem()
     {
+        //アイテムの生成位置を生成する
+        GenerateItemTran();
+
         //アイテムの生成位置のリストを作成
         CreateGeneratedItemTranList();
 
@@ -152,6 +158,18 @@ public class GameData : MonoBehaviour
 
             //生成したアイテムのデータをリストに追加
             generatedItemDataList.Add(itemDataSO.itemDataList[pz]);
+        }
+    }
+
+    /// <summary>
+    /// アイテムの生成位置を生成する
+    /// </summary>
+    private void GenerateItemTran()
+    {
+        //生成するアイテムの生成位置の最大数だけ繰り返す
+        for (int i = 0; i < maxItemTranCount;i++)
+        {
+            //TODO:アイテムの生成位置を生成処理
         }
     }
 
