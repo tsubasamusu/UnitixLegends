@@ -20,13 +20,14 @@ public class StormController : MonoBehaviour
         //ストームの大きさの初期値を設定
         firstStormScale = transform.localScale;
 
+        //ストームの縮小を開始する
         MakeStormSmaller();
     }
 
     /// <summary>
     /// ストームの縮小を開始する
     /// </summary>
-    public void MakeStormSmaller()
+    private void MakeStormSmaller()
     {
         //制限時間内に等速で「ストームの大きさの割合」を100%から0%にする
         DOTween.To(() => currentScaleRate,(x) => currentScaleRate = x,0f,timeLimit).SetEase(Ease.Linear);
