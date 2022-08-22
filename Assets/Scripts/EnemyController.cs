@@ -611,9 +611,6 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private void KillMe()
     {
-        //リストから自身を消す
-        enemyGenerator.generatedEnemyList.RemoveAt(myNo);
-
         //自身をゲームオブジェクトごと消す
         Destroy(gameObject);
     }

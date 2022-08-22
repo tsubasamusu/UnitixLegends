@@ -304,7 +304,7 @@ public class UIManager : MonoBehaviour
     private void UpdateFpsText()
     {
         //ï\é¶ÇçXêV
-        txtFps.text=(1f/Time.deltaTime).ToString("F0")+"fps";
+        txtFps.text=(1f/Time.deltaTime).ToString("F0");
     }
 
     /// <summary>
