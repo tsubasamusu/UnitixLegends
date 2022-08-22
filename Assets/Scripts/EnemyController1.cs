@@ -54,6 +54,8 @@ namespace yamap {
 
         private int nearItemNo;//最も近くにある使用可能アイテムの番号
 
+        private int myNo;//自分自身の番号
+
 
         /// <summary>
         /// ゲーム開始直後に呼び出される
@@ -183,30 +185,29 @@ namespace yamap {
         /// </summary>
         /// <returns>最も近くにいる敵の位置</returns>
         private Vector3 GetNearEnemyPos() {
-            //アイテムがないか、Playerが存在していなかったら
-            if (enemyGenerator.generatedEnemyTranList.Count <= 0 || playerTran.gameObject == null)//nullエラー回避
-            {
-                //以降の処理を行わない
-                return Vector3.zero;
-            }
-
             //最も近くにいる敵の位置にPlayerの位置を仮に登録
             Vector3 nearPos = playerTran.position;
 
             //生成したEnemyの位置情報のリストの要素数だけ繰り返す
-            for (int i = 0; i < enemyGenerator.generatedEnemyTranList.Count; i++) {
+            for (int i = 0; i < enemyGenerator.generatedEnemyList.Count; i++) {
+                //繰り返し処理で取得した敵が自分だったら
+                if (i == myNo) {
+                    //次の繰り返し処理に移る
+                    continue;
+                }
+
                 //繰り返し処理で取得した敵が死亡していたら
-                if (enemyGenerator.generatedEnemyTranList[i] == null)//nullエラー回避
+                if (enemyGenerator.generatedEnemyList[i] == null)//nullエラー回避
                 {
                     //そのEnemyをリストから取り除く
-                    enemyGenerator.generatedEnemyTranList.RemoveAt(i);
+                    enemyGenerator.generatedEnemyList.RemoveAt(i);
 
                     //次の繰り返し処理に移る
                     continue;
                 }
 
                 //リストのi番の要素の座標をposに登録
-                Vector3 pos = enemyGenerator.generatedEnemyTranList[i].position;
+                Vector3 pos = enemyGenerator.generatedEnemyList[i].transform.position;
 
                 //仮登録した要素と、for文で得た要素の、myPosとの距離を比較
                 if (Vector3.Scale((pos - transform.position), new Vector3(1, 0, 1)).magnitude < Vector3.Scale((nearPos - transform.position), new Vector3(1, 0, 1)).magnitude) {
