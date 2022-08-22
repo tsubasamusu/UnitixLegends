@@ -65,6 +65,11 @@ public class EnemyController : MonoBehaviour
 
     private int myNo;//自分自身の番号
 
+    public int MyNo//myNo変数用のプロパティ
+    {
+        set { myNo = value; }//外部からは設定処理のみを可能に
+    }
+
     /// <summary>
     /// ゲーム開始直後に呼び出される
     /// </summary>
@@ -110,9 +115,6 @@ public class EnemyController : MonoBehaviour
             //問題を報告
             Debug.Log("Playerの位置情報の取得に失敗");
         }
-
-        //自分の番号を取得
-        myNo = enemyGenerator.generatedEnemyList.Count - 1;
 
         //発射位置を取得
         shotBulletTran = transform.GetChild(3).transform;
@@ -259,9 +261,6 @@ public class EnemyController : MonoBehaviour
         //EnemyかPlayerが存在していなかったら
         if (enemyGenerator.generatedEnemyList.Count <= 0 || playerTran.gameObject == null)//nullエラー回避
         {
-            //問題を報告
-            Debug.Log("敵が見当たりません");
-
             //以降の処理を行わない
             return;
         }
@@ -315,9 +314,6 @@ public class EnemyController : MonoBehaviour
             //繰り返し処理で取得した敵が死亡していたら
             if (enemyGenerator.generatedEnemyList[i]==null)//nullエラー回避
             {
-                //そのEnemyをリストから取り除く
-                enemyGenerator.generatedEnemyList.RemoveAt(i);
-
                 //次の繰り返し処理に移る
                 continue;
             }
