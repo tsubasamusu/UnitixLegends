@@ -8557,9 +8557,10 @@ MonoBehaviour:
   agent: {fileID: 6725230617385302192}
   animator: {fileID: 1428101982788451181}
   itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
-  fallSpeed: 0.1
   range: 100
+  stoppingDistance: 10
   getItemLength: 1
+  instructionTime: 5
   enemyWeaponTran: {fileID: 1812235560}
 --- !u!195 &6725230617385302192
 NavMeshAgent:
@@ -8571,7 +8572,7 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 7
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

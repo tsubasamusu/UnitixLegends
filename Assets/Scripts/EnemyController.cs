@@ -23,6 +23,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float getItemLength;//アイテムを取得できる距離
 
+    [SerializeField,Header("安置への移動指示を出し続ける時間")]
+    private float instructionTime;//安置への移動指示を出し続ける時間
+
     [SerializeField]
     private Transform enemyWeaponTran;//Enemyが武器を構える位置
 
@@ -31,6 +34,8 @@ public class EnemyController : MonoBehaviour
     private bool gotItem;//アイテムを取得したかどうか
 
     private bool stopFlag;//動きを停止するかどうか
+
+    private bool goToEnshrine;//安置に移動するかどうか
 
     private float enemyhp = 100f;//Enemyの体力
 
@@ -53,6 +58,8 @@ public class EnemyController : MonoBehaviour
     private GameObject usedItemObj;//使用しているアイテムのオブジェクト
 
     private int nearItemNo;//最も近くにある使用可能アイテムの番号
+
+    private int myNo;//自分自身の番号
 
     /// <summary>
     /// ゲーム開始直後に呼び出される
@@ -92,6 +99,9 @@ public class EnemyController : MonoBehaviour
             //問題を報告
             Debug.Log("Playerの位置情報の取得に失敗");
         }
+
+        //自分の番号を取得
+        myNo = enemyGenerator.generatedEnemyList.Count - 1;
 
         //発射位置を取得
         shotBulletTran = transform.GetChild(3).transform;
@@ -155,11 +165,21 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-        //安置外にいるなら
-        if(!stormController.CheckEnshrine(transform.position))
+        //安置への移動指示が出ているなら
+        if (goToEnshrine)
         {
             //中央へ向かう
             SetTargetPosition(Vector3.zero);
+
+            //以降の処理を行わない
+            return;
+        }
+
+        //安置外にいるなら
+        if (!stormController.CheckEnshrine(transform.position))
+        {
+            //一定時間、安置への移動指示出す
+            StartCoroutine(GoToEnshrine());
 
             //以降の処理を行わない
             return;
@@ -215,7 +235,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //EnemyかPlayerが存在していなかったら
-        if (enemyGenerator.generatedEnemyTranList.Count <= 0 || playerTran.gameObject == null)//nullエラー回避
+        if (enemyGenerator.generatedEnemyList.Count <= 0 || playerTran.gameObject == null)//nullエラー回避
         {
             //問題を報告
             Debug.Log("敵が見当たりません");
@@ -236,29 +256,52 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
+    /// 一定時間、安置へ向かう
+    /// </summary>
+    /// <returns>待ち時間</returns>
+    private IEnumerator GoToEnshrine()
+    {
+        //安置に向かうよう指示を出す
+        goToEnshrine = true;
+
+        //一定時間、移動指示を出し続ける
+        yield return new WaitForSeconds(instructionTime);
+
+        //移動指示を解除
+        goToEnshrine = false;
+    }
+
+    /// <summary>
     /// 最も近くにいる敵の位置を取得する
     /// </summary>
     /// <returns>最も近くにいる敵の位置</returns>
     private Vector3 GetNearEnemyPos()
     {
         //最も近くにいる敵の位置にPlayerの位置を仮に登録
-        Vector3 nearPos = playerTran.position;
+        Vector3 nearPos = playerTran. position;
 
         //生成したEnemyの位置情報のリストの要素数だけ繰り返す
-        for (int i = 0; i < enemyGenerator.generatedEnemyTranList.Count; i++)
+        for (int i = 0; i < enemyGenerator.generatedEnemyList.Count; i++)
         {
+            //繰り返し処理で取得した敵が自分だったら
+            if (i==myNo)
+            {
+                //次の繰り返し処理に移る
+                continue;
+            }
+
             //繰り返し処理で取得した敵が死亡していたら
-            if (enemyGenerator.generatedEnemyTranList[i]==null)//nullエラー回避
+            if (enemyGenerator.generatedEnemyList[i]==null)//nullエラー回避
             {
                 //そのEnemyをリストから取り除く
-                enemyGenerator.generatedEnemyTranList.RemoveAt(i);
+                enemyGenerator.generatedEnemyList.RemoveAt(i);
 
                 //次の繰り返し処理に移る
                 continue;
             }
 
             //リストのi番の要素の座標をposに登録
-            Vector3 pos = enemyGenerator.generatedEnemyTranList[i].position;
+            Vector3 pos = enemyGenerator.generatedEnemyList[i].transform.position;
 
             //仮登録した要素と、for文で得た要素の、myPosとの距離を比較
             if (Vector3.Scale((pos - transform.position), new Vector3(1, 0, 1)).magnitude < Vector3.Scale((nearPos - transform.position), new Vector3(1, 0, 1)).magnitude)
