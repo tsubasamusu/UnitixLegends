@@ -243,9 +243,6 @@ public class EnemyController : MonoBehaviour
             {
                 //アイテムを取得し、アイテムを取得済みの状態に切り替える
                 gotItem = GetItem(nearItemNo);
-
-                //停止距離を設定
-                agent.stoppingDistance = stoppingDistance;
             }
 
             //以降の処理を行わない
@@ -275,8 +272,14 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        //近くの敵の位置を取得
+        Vector3 nearEnemyPos = GetNearEnemyPos();
+
+        //攻撃対象に応じて停止距離を変更
+        agent.stoppingDistance = nearEnemyPos == playerTran.position ? stoppingDistance : 0f;
+
         //敵の位置を目標地点に設定
-        SetTargetPosition(GetNearEnemyPos());
+        SetTargetPosition(nearEnemyPos);
 
         //射線上に敵がいたら
         if (CheckEnemy()) 
