@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     [SerializeField]
+    private UIManager uIManager;//UIManager
+
+    [SerializeField]
     private Transform enemyPrefab;//Enemyのプレファブ
 
     [SerializeField]
@@ -76,6 +79,9 @@ public class EnemyGenerator : MonoBehaviour
                     //問題を報告
                     Debug.Log("EnemyControllerの取得に失敗");
                 }
+
+                //Enemyの数を更新
+                uIManager.UpdateTxtOtherCount(generateCount);
 
                 //Enemyを生成する時間のリストからその要素を排除
                 generateTimeList.RemoveAt(i);

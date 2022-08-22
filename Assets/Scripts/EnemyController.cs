@@ -59,6 +59,8 @@ public class EnemyController : MonoBehaviour
 
     private Transform playerTran;//Playerの位置
 
+    private Transform enemiesTran;//全てのEnemyの親の位置情報
+
     private GameObject usedItemObj;//使用しているアイテムのオブジェクト
 
     private int nearItemNo;//最も近くにある使用可能アイテムの番号
@@ -115,6 +117,14 @@ public class EnemyController : MonoBehaviour
             //問題を報告
             Debug.Log("Playerの位置情報の取得に失敗");
         }
+
+        //全てのEnemyの親の位置情報を取得
+        if (!GameObject.Find("Enemies").TryGetComponent(out enemiesTran))
+        {
+            //問題を報告
+            Debug.Log("全てのEnemyの親の位置情報の取得に失敗");
+        }
+           
 
         //発射位置を取得
         shotBulletTran = transform.GetChild(3).transform;
@@ -607,6 +617,9 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private void KillMe()
     {
+        //敵の数を更新
+        uiManager.UpdateTxtOtherCount(enemiesTran.childCount-1);
+        
         //自身をゲームオブジェクトごと消す
         Destroy(gameObject);
     }
