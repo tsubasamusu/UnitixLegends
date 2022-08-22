@@ -22,8 +22,13 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private Material stormSky;//ストーム内の空
 
-    [SerializeField,Header("1秒あたりに受けるストームによるダメージ")]
+    [SerializeField, Header("1秒あたりに受けるストームによるダメージ")]
     private float stormDamage;//1秒あたりに受けるストームによるダメージ
+
+    public float StormDamage//stormDamage変数用のプロパティ
+    {
+        get { return stormDamage; }//外部からは取得処理のみ可能に
+    }
 
     private float playerHp=100.0f;//Playerの体力
 

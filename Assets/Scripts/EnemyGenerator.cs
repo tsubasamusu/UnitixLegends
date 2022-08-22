@@ -17,7 +17,7 @@ public class EnemyGenerator : MonoBehaviour
     private Transform enemiesTran;//Enemyの親オブジェクト
 
     [HideInInspector]
-    public List<Transform> generatedEnemyTranList=new List<Transform>();//生成したEnemyの位置情報のリスト
+    public List<GameObject> generatedEnemyList=new List<GameObject>();//生成したEnemyのリスト
 
     private List<float> generateTimeList=new List<float>();//Enemyを生成する時間のリスト
 
@@ -67,8 +67,8 @@ public class EnemyGenerator : MonoBehaviour
                 //生成したEnemyの場所を調整
                 enemyTran.position = transform.position;
 
-                //生成したEnemyの位置情報をリストに加える
-                generatedEnemyTranList.Add(enemyTran);
+                //生成したEnemyをリストに加える
+                generatedEnemyList.Add(enemyTran.gameObject);
 
                 //生成数に1を加える
                 generateCount++;
