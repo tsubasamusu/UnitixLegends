@@ -24,6 +24,9 @@ public class AirplaneController : MonoBehaviour
     private UIManager uiManager;//UIManager
 
     [SerializeField]
+    private EnemyGenerator enemyGenerator;//EnemyGenerator
+
+    [SerializeField]
     private KeyCode fallKey;//飛行機から飛び降りるキー
 
     private bool fellFromAirplane;//飛行機から落下したかどうか
@@ -34,9 +37,9 @@ public class AirplaneController : MonoBehaviour
     private float rotSpeed;//プロペラの回転速度
 
     /// <summary>
-    /// ゲーム開始直後に呼び出される
+    /// 飛行機に関する設定を行う
     /// </summary>
-    private void Start()
+    public void SetUpAirplane()
     {
         //PlayerControllerを無効化
         playerController.enabled = false;
@@ -51,39 +54,40 @@ public class AirplaneController : MonoBehaviour
         StartCoroutine(NavigateAirplane());
 
         //メッセージを表示
-        uiManager.SetMessageText("Tap\n'Space'\nTo Fall",Color.blue);
+        uiManager.SetMessageText("Tap\n'Space'\nTo Fall", Color.blue);
 
         //Playerのキャラクターを無効化
         cinemachineManager.SetPlayerCharacterActive(false);
     }
 
     /// <summary>
-    /// 毎フレーム呼び出される
+    /// Playerの行動を制御する
     /// </summary>
-    private void Update()
+    /// <returns>待ち時間</returns>
+    public IEnumerator ControlPlayerMovement()
     {
-        //既に飛行機から飛び降りたのなら
-        if (fellFromAirplane)
+        //まだ飛行機から飛び降りていないなら繰り返す
+        while(!fellFromAirplane)
         {
-            //以降の処理を行わない
-            return;
-        }
+            //Playerを常に飛行機の真下に設置
+            playerTran.position = aiplanePlayerTran.position;
 
-        //Playerを常に飛行機の真下に設置
-        playerTran.position=aiplanePlayerTran.position;
+            //飛行が終ったら
+            if (endFight)
+            {
+                //飛行機から飛び降りる
+                FallFromAirplane();
+            }
 
-        //飛行が終ったら
-        if(endFight)
-        {
-            //飛行機から飛び降りる
-            FallFromAirplane();
-        }
+            //飛行機から飛び降りるキーが押されたら
+            if (Input.GetKeyDown(fallKey))
+            {
+                //飛行機から飛び降りる
+                FallFromAirplane();
+            }
 
-        //飛行機から飛び降りるキーが押されたら
-        if (Input.GetKeyDown(fallKey))
-        {
-            //飛行機から飛び降りる
-            FallFromAirplane();
+            //次のフレームへ飛ばす（実質、Updateメソッド）
+            yield return null;
         }
     }
 
@@ -100,6 +104,12 @@ public class AirplaneController : MonoBehaviour
 
         //Playerカメラに切り替え
         cinemachineManager.SetAirplaneCameraPriority(9);
+
+        //CanvasGroupを表示
+        uiManager.SetCanvasGroup(true);
+
+        //テキストの表示の更新を開始
+        StartCoroutine(uiManager.UpdateText());
 
         //飛行機から飛び降りた状態に変更
         fellFromAirplane = true;
@@ -131,25 +141,8 @@ public class AirplaneController : MonoBehaviour
         //4回繰り返す
         for (int i = 0; i < 4; i++)
         {
-            //目標値
-            Vector3 pos = Vector3.zero;
-
-            //繰り返し回数に応じて目的地を変更
-            switch (i)
-            {
-                case 0:
-                    pos = new Vector3(120f, 100f, 120f);
-                    break;
-                case 1:
-                    pos = new Vector3(-120f, 100f, 120f);
-                    break;
-                case 2:
-                    pos = new Vector3(-120f, 100f, -120f);
-                    break;
-                case 3:
-                    pos = new Vector3(120f, 100f, -120f);
-                    break;
-            }
+            //目的地を設定
+            Vector3 pos = Vector3.Scale(transform.forward, new Vector3(240f, 0f, 240f))+transform.position;
 
             //10秒かけて前進
             transform.DOMove(pos, 10f).SetEase(Ease.Linear);

@@ -74,27 +74,35 @@ public class UIManager : MonoBehaviour
     public List<Image> imgItemSlotBackgroundList= new List<Image>();//アイテムスロットの背景のイメージのリスト
 
     /// <summary>
-    /// ゲーム開始直後に呼び出される
+    /// テキストの表示の更新を常に行う
     /// </summary>
-    private void Start()
+    /// <returns></returns>
+    public IEnumerator UpdateText()
+    {
+        //無限に繰り返す
+        while(true)
+        {
+            //フレームレートを計算し、表示を更新する
+            UpdateFpsText();
+
+            //残弾数の表示を更新する
+            UpdateTxtBulletCount();
+
+            //次のフレームへ飛ばす（実質、Updateメソッド）
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// アイテムスロットの設定等を行う
+    /// </summary>
+    public void SetUpItemSlots()
     {
         //アイテムスロットを生成
         GenerateItemSlots(5);
 
         //一番右のアイテムスロットの背景を設定
-        SetItemSlotBackgroundColor(1,Color.red);   
-    }
-
-    /// <summary>
-    /// 毎フレーム呼び出される
-    /// </summary>
-    private void Update()
-    {
-        //フレームレートを計算し、表示を更新する
-        UpdateFpsText();
-
-        //残弾数の表示を更新する
-        UpdateTxtBulletCount();
+        SetItemSlotBackgroundColor(1, Color.red);
     }
 
     /// <summary>
@@ -113,7 +121,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameStart()
     {
         //視界を白色に設定
-        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f,0.0f);
+        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f,1.0f);
 
         //ロゴをゲームスタートに設定
         logo.sprite = gameStart;
@@ -132,8 +140,6 @@ public class UIManager : MonoBehaviour
 
         //視界とロゴの演出が終わるまで待つ
         yield return new WaitForSeconds(1.0f);
-
-        //GameManagerからゲーム開始状態に切り替える
     }
 
     /// <summary>
@@ -326,7 +332,7 @@ public class UIManager : MonoBehaviour
     /// 指定された数だけアイテムスロットを生成する
     /// </summary>
     /// <param name="generateNumber">アイテムスロットの数</param>
-    public void GenerateItemSlots(int generateNumber)
+    private void GenerateItemSlots(int generateNumber)
     {
         //引数で指定された回数だけ生成処理を繰り返す
         for (int i = 0; i < generateNumber; i++)
