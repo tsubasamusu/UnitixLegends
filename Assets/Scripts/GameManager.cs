@@ -2,6 +2,7 @@ using System.Collections;//IEnumeratorを使用
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;//LoadSceneを使用
+using System.Linq;//Whereメソッドを使用
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;//UIManager
 
+    [SerializeField]
+    private SoundDataSO soundDataSO;//SoundDataSO
+
+    [SerializeField]
+    private AudioSource audioSource;//AudioSource
+
     private bool isGameOver;//ゲーム完了状態かどうか
 
     public bool IsGameOver//isGameOver変数用のプロパティ
@@ -30,6 +37,15 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     private IEnumerator Start()
     {
+        //PlayerのAudioSourceを無効化
+        audioSource.enabled = false;
+
+        //飛行機のAudioSourceを無効化
+        airplaneController.SetAirplaneAudioSource(false);
+
+        //ゲーム開始音を鳴らす
+        AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[17].audioClip, Camera.main.transform.position);
+
         //PlayerControolerを無効化
         playerController.enabled = false;
 
@@ -67,6 +83,9 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     public IEnumerator MakeGameClear()
     {
+        //ゲーム開始音を鳴らす
+        AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[19].audioClip, Camera.main.transform.position);
+
         //ゲームを終了するための準備を行う
         SetUpGameOver();
 
@@ -83,6 +102,9 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     public IEnumerator MakeGameOver()
     {
+        //ゲーム開始音を鳴らす
+        AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[18].audioClip, Camera.main.transform.position);
+
         //ゲームを終了するための準備を行う
         SetUpGameOver();
 

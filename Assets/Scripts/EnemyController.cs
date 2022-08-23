@@ -14,6 +14,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
+    [SerializeField]
+    private SoundDataSO soundDataSO;//SoundDataSO
+
     [SerializeField, Header("射程距離")]
     private float range;//射程距離
 
@@ -564,6 +567,41 @@ public class EnemyController : MonoBehaviour
 
         //発射した弾を3.0秒後に消す
         Destroy(bulletRb.gameObject, 3.0f);
+
+        AudioClip SE;//効果音
+
+        //使用するアイテムの名前に応じて処理を変更
+        switch (itemData.itemName)
+        {
+            //アサルトなら
+            case ItemDataSO.ItemName.Assault:
+                SE = soundDataSO.soundDataList[4].audioClip;
+                break;
+
+            //ショットガンなら
+            case ItemDataSO.ItemName.Shotgun:
+                SE = soundDataSO.soundDataList[5].audioClip;
+                break;
+
+            //スナイパーなら
+            case ItemDataSO.ItemName.Sniper:
+                SE = soundDataSO.soundDataList[6].audioClip;
+                break;
+
+            //上記以外なら
+            default:
+                SE = null;
+                ///問題を報告
+                Debug.Log("オーディオクリップがありません");
+                break;
+        }
+
+        //nullエラー回避
+        if (SE != null)
+        {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(SE, transform.position);
+        }
 
         //使用するアイテムのエフェクトがnullではないなら
         if (itemData.effect != null)

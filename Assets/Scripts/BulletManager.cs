@@ -15,6 +15,9 @@ public class BulletManager : MonoBehaviour
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
+    private SoundDataSO soundDataSO;//SoundDataSO
+
+    [SerializeField]
     private PlayerController playerController;//PlayerController
 
     [SerializeField]
@@ -173,6 +176,41 @@ public class BulletManager : MonoBehaviour
             Destroy(effect, 1f);
         }
 
+        AudioClip SE;//効果音
+
+        //使用するアイテムの名前に応じて処理を変更
+        switch (itemData.itemName)
+        {
+            //アサルトなら
+            case ItemDataSO.ItemName.Assault:
+                SE = soundDataSO.soundDataList[4].audioClip;
+                break;
+
+            //ショットガンなら
+            case ItemDataSO.ItemName.Shotgun:
+                SE = soundDataSO.soundDataList[5].audioClip;
+                break;
+
+            //スナイパーなら
+            case ItemDataSO.ItemName.Sniper:
+                SE = soundDataSO.soundDataList[6].audioClip;
+                break;
+
+            //上記以外なら
+            default:
+                SE = null;
+                ///問題を報告
+                Debug.Log("オーディオクリップがありません");
+                break;
+        }
+
+        //nullエラー回避
+        if (SE != null)
+        {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(SE, Camera.main.transform.position);
+        }
+
         //使用するアイテムが、手榴弾でも催涙弾でもないなら
         if (itemData.itemName != ItemDataSO.ItemName.Grenade && itemData.itemName != ItemDataSO.ItemName.TearGasGrenade)
         {
@@ -210,6 +248,36 @@ public class BulletManager : MonoBehaviour
 
             //生成したエフェクトを3秒後に消す
             Destroy(effect, 3f);
+        }
+
+        AudioClip SE2;//効果音
+
+        //使用するアイテムの名前に応じて処理を変更
+        switch (itemData.itemName)
+        {
+            //手榴弾なら
+            case ItemDataSO.ItemName.Grenade:
+                SE2 = soundDataSO.soundDataList[2].audioClip;
+                break;
+
+            //催涙弾なら
+            case ItemDataSO.ItemName.TearGasGrenade:
+                SE2 = soundDataSO.soundDataList[3].audioClip;
+                break;
+
+            //上記以外なら
+            default:
+                SE2 = null;
+                ///問題を報告
+                Debug.Log("オーディオクリップがありません");
+                break;
+        }
+
+        //nullエラー回避
+        if(SE2!=null)
+        {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(SE2, bulletRb.transform.position);
         }
 
         //発射した弾を消す
@@ -275,19 +343,12 @@ public class BulletManager : MonoBehaviour
         //重複処理を防ぐ
         stopFlag = true;
 
-        //生成したアイテムからBoxColliderの情報を取得できなかったら
-        if (!itemRb.TryGetComponent(out BoxCollider boxCollider))//nullエラー回避
-        {
-            //問題を報告
-            Debug.Log("BoxColliderの取得に失敗");
-
-            //以降の処理を行わない
-            yield break;
-        }
-
         //使用するアイテムがナイフなら
         if (itemData.itemName == ItemDataSO.ItemName.Knife)
         {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[0].audioClip, Camera.main.transform.position);
+
             //ナイフのアニメーションを開始（前後移動）
             itemRb.gameObject.transform.DOLocalMoveZ(2f,0.5f).SetLoops(2,LoopType.Yoyo);
 
@@ -303,6 +364,9 @@ public class BulletManager : MonoBehaviour
         //使用するアイテムがバットなら
         else if (itemData.itemName == ItemDataSO.ItemName.Bat)
         {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[1].audioClip, Camera.main.transform.position);
+
             //バットのアニメーションを開始（前後移動）
             itemRb.gameObject.transform.DOLocalMoveZ(2f, 0.5f).SetLoops(2, LoopType.Yoyo);
 

@@ -9,6 +9,9 @@ public class ItemManager : MonoBehaviour
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
+    private SoundDataSO soundDataSO;//SoundDataSO
+
+    [SerializeField]
     private UIManager uIManager;//UIManager
 
     [SerializeField]
@@ -335,6 +338,9 @@ public class ItemManager : MonoBehaviour
                 //i番目の要素が空なら
                 if (CheckTheElement(i))
                 {
+                    //効果音を再生
+                    AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[14].audioClip, Camera.main.transform.position);
+
                     //Playerが所持しているアイテムのリストの空いている要素に、アイテムの情報を代入
                     playerItemList[i] = generatedItemDataList[nearItemNo];
 
@@ -349,6 +355,9 @@ public class ItemManager : MonoBehaviour
         //取得するアイテムが弾のアイテムなら
         else
         {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[8].audioClip, Camera.main.transform.position);
+
             //許容オーバーかどうか調べる
             CheckIsFull();
         }
@@ -497,6 +506,9 @@ public class ItemManager : MonoBehaviour
         //使用するアイテムに回復効果があり、左クリックされたら
         else if (itemData.restorativeValue>0 && Input.GetKeyDown(KeyCode.Mouse0))
         {
+            //効果音を再生
+            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[7].audioClip,Camera.main.transform.position);
+
             //PlayerのHpを更新
             playerHealth.UpdatePlayerHp(itemData.restorativeValue);
 
