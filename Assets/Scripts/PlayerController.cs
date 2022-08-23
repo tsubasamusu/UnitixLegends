@@ -34,9 +34,6 @@ public class PlayerController : MonoBehaviour
 	private KeyCode discardKey;//アイテム破棄キー
 
 	[SerializeField]
-	private KeyCode recoverKey;//態勢を立て直すキー
-
-	[SerializeField]
 	private Rigidbody playerRb;//Rigidbody
 
 	[SerializeField]
@@ -111,36 +108,26 @@ public class PlayerController : MonoBehaviour
 		playerRb.isKinematic = true;
 	}
 
-    /// <summary>
-    /// 毎フレーム呼び出される
-    /// </summary>
-    void Update()
+	/// <summary>
+	/// 毎フレーム呼び出される
+	/// </summary>
+	void Update()
 	{
 		//Playerが裏世界に行ってしまったら
-		if(transform.position.y <= -1f)
-        {
+		if (transform.position.y <= -1f)
+		{
 			//自身の座標を(0,0,0)に設定
 			transform.position = Vector3.zero;
 
 			//以降の処理を行わない
 			return;
-        }
+		}
 
 		//Playerが転倒していたら
-		if(CheckToppled())
-        {
-			//メッセージを表示
-			uiManager.SetMessageText("Tap 'R'\nTo\nRecover", Color.red);
-
-			//態勢を立て直すキーが押されたら
-			if (Input.GetKeyDown(recoverKey))
-			{
-				//態勢を立て直す
-				transform.eulerAngles = new Vector3(0f,transform.eulerAngles.y,0f);
-			}
-
-			//以降の処理を行わない
-			return;
+		if (CheckToppled())
+		{
+			//態勢を立て直す
+			transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
 		}
 
 		//接地していなかったら
