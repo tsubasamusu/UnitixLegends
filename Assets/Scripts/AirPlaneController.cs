@@ -41,9 +41,6 @@ public class AirplaneController : MonoBehaviour
     /// </summary>
     public void SetUpAirplane()
     {
-        //PlayerControllerを無効化
-        playerController.enabled = false;
-
         //飛行機を初期位置に配置
         transform.position = new Vector3(120f, 100f, -120f);
 

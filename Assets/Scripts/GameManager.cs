@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     private AirplaneController airplaneController;//AirplaneController
 
     [SerializeField]
+    private PlayerController playerController;//PlayerControoler
+
+    [SerializeField]
     private UIManager uiManager;//UIManager
 
     private bool isGameOver;//ゲーム完了状態かどうか
@@ -27,11 +30,17 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     private IEnumerator Start()
     {
+        //PlayerControolerを無効化
+        playerController.enabled = false;
+
         //CanvasGroupを非表示にする
         uiManager.SetCanvasGroup(false);
 
         //メッセージを無効化
         uiManager.SetMessageActive(false);
+
+        //キル数を初期化
+        GameData.instance.KillCount = 0;
 
         //ゲームスタート演出を行う
         yield return StartCoroutine(uiManager.PlayGameStart());
