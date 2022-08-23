@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
     private PlayerHealth playerHealth;//PlayerHealth
 
     [SerializeField]
-    private Transform canvasTran;//Canvasのtransform
+    private Transform floatingMessagesTran;//フロート表示の親
 
     [SerializeField]
     private Transform enemies;//全てのEnemyの親
@@ -291,6 +291,15 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 全てのフロート表示を非表示にする
+    /// </summary>
+    public void SetFloatingMessagesNotActive()
+    {
+        //フロート表示の親を無効化
+        floatingMessagesTran.gameObject.SetActive(false);
+    }
+
+    /// <summary>
     /// フロート表示を生成する
     /// </summary>
     /// <param name="messageText">表示したいテキスト</param>
@@ -301,8 +310,8 @@ public class UIManager : MonoBehaviour
         //フロート表示を生成
         Text txtFloatingMessage = Instantiate(floatingMessagePrefab);
 
-        //生成したフロート表示の親をCanvasに設定
-        txtFloatingMessage.gameObject.transform.SetParent(canvasTran);
+        //生成したフロート表示の親を設定
+        txtFloatingMessage.gameObject.transform.SetParent(floatingMessagesTran);
 
         //引数を元に、フロート表示のテキストを設定
         txtFloatingMessage.text = messageText;

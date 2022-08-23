@@ -49,8 +49,39 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームクリア演出を行う
     /// </summary>
-    /// <returns></returns>
+    /// <returns>待ち時間</returns>
     public IEnumerator MakeGameClear()
+    {
+        //ゲームを終了するための準備を行う
+        SetUpGameOver();
+
+        //ゲームクリア演出を行う
+        yield return StartCoroutine(uiManager.PlayGameClear());
+
+        //Mainシーンを読み込む
+        SceneManager.LoadScene("Main");
+    }
+
+    /// <summary>
+    /// ゲームオーバー演出を行う
+    /// </summary>
+    /// <returns>待ち時間</returns>
+    public IEnumerator MakeGameOver()
+    {
+        //ゲームを終了するための準備を行う
+        SetUpGameOver();
+
+        //ゲームオーバー演出を行う
+        yield return StartCoroutine(uiManager.PlayGameOver());
+
+        //Mainシーンを読み込む
+        SceneManager.LoadScene("Main");
+    }
+
+    /// <summary>
+    /// ゲームを終了するための準備を行う
+    /// </summary>
+    private void SetUpGameOver()
     {
         //ゲーム終了状態に切り替える
         isGameOver = true;
@@ -58,9 +89,7 @@ public class GameManager : MonoBehaviour
         //CanvasGroupを非表示にする
         uiManager.SetCanvasGroup(false);
 
-        //ゲームクリア演出を行う
-        yield return StartCoroutine(uiManager.PlayGameClear());
-
-        SceneManager.LoadScene("Main");
+        //全てのフロート表示を非表示にする
+        uiManager.SetFloatingMessagesNotActive();
     }
 }

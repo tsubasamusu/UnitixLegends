@@ -159,6 +159,13 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //ゲーム終了状態なら
+        if(gameManager.IsGameOver)
+        {
+            //以降の処理を行わない
+            return;
+        }
+
         //裏世界に行ってしまったら
         if (transform.position.y <= -1f)
         {

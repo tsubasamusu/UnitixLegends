@@ -194,7 +194,8 @@ public class PlayerHealth : MonoBehaviour
         //Playerの体力が0になったら
         if (playerHp == 0.0f)
         {
-            //TODO:GameManagerからゲームオーバーの処理を呼び出す
+            //ゲームオーバー演出を行う
+            StartCoroutine(gameManager.MakeGameOver());
         }
     }
 
