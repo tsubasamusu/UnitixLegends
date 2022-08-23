@@ -564,6 +564,19 @@ public class EnemyController : MonoBehaviour
 
         //発射した弾を3.0秒後に消す
         Destroy(bulletRb.gameObject, 3.0f);
+
+        //使用するアイテムのエフェクトがnullではないなら
+        if (itemData.effect != null)
+        {
+            //エフェクトを生成し、親を自分に設定
+            GameObject effect = Instantiate(itemData.effect, transform);
+
+            //生成したエフェクトの位置を調整
+            effect.transform.position = shotBulletTran.position;
+
+            //生成したエフェクトを1秒後に消す
+            Destroy(effect, 1f);
+        }
     }
 
     /// <summary>

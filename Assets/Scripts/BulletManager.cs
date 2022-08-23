@@ -160,6 +160,19 @@ public class BulletManager : MonoBehaviour
         //経過時間を初期化
         timer = 0;
 
+        //使用するアイテムのエフェクトがnullではないなら
+        if (itemData.effect != null)
+        {
+            //エフェクトを生成し、親をShoBulletに設定
+            GameObject effect = Instantiate(itemData.effect, transform);
+
+            //生成したエフェクトの位置を調整
+            effect.transform.position = transform.position;
+
+            //生成したエフェクトを1秒後に消す
+            Destroy(effect, 1f);
+        }
+
         //使用するアイテムが、手榴弾でも催涙弾でもないなら
         if (itemData.itemName != ItemDataSO.ItemName.Grenade && itemData.itemName != ItemDataSO.ItemName.TearGasGrenade)
         {
@@ -186,11 +199,18 @@ public class BulletManager : MonoBehaviour
         //爆破時間まで待つ
         yield return new WaitForSeconds(itemData.timeToExplode);
 
-        //エフェクトを生成し、親をShoBulletに設定
-        GameObject effect = Instantiate(itemData.effect, transform);
+        //使用するアイテムのエフェクトがnullではないなら
+        if (itemData.effect != null)
+        {
+            //エフェクトを生成し、親をShoBulletに設定
+            GameObject effect = Instantiate(itemData.effect, transform);
 
-        //生成したエフェクトを3秒後に消す
-        Destroy(effect, 3f);
+            //生成したエフェクトの位置を調整
+            effect.transform.position = bulletRb.transform.position;
+
+            //生成したエフェクトを3秒後に消す
+            Destroy(effect, 3f);
+        }
 
         //発射した弾を消す
         Destroy(bulletRb.gameObject);

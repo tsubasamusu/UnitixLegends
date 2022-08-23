@@ -107,7 +107,7 @@ MonoBehaviour:
     isHandWeapon: 0
     sprite: {fileID: 21300000, guid: 1b07c51ade9d68443b2f66910bda4990, type: 3}
     prefab: {fileID: 313122353905581272, guid: 8afcbc212a76e2344a71ee064f9fab6b, type: 3}
-    effect: {fileID: 0}
+    effect: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
     bulletPrefab: {fileID: -2188171406369663995, guid: 003737ebc8a18b145868ce1344a9c36b, type: 3}
   - itemName: 6
     restorativeValue: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
     isHandWeapon: 0
     sprite: {fileID: 21300000, guid: bfae38439f14da14db710fbe0aee7d33, type: 3}
     prefab: {fileID: 8216595480013017426, guid: dc5765defa44e0c4daae785866edc10a, type: 3}
-    effect: {fileID: 0}
+    effect: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
     bulletPrefab: {fileID: -2395311647132578789, guid: 8109983f3e058b74a980d419344f1cb1, type: 3}
   - itemName: 7
     restorativeValue: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
     isHandWeapon: 0
     sprite: {fileID: 21300000, guid: d5da1e23ae2a5bb41b4fc1008894c983, type: 3}
     prefab: {fileID: 2622437530288346922, guid: d216797b1b74a484ab27039305e5c1df, type: 3}
-    effect: {fileID: 0}
+    effect: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
     bulletPrefab: {fileID: -1168256764871140899, guid: 9435d289f090eab4f977f800b02d0862, type: 3}
   - itemName: 8
     restorativeValue: 10
