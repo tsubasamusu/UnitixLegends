@@ -4323,7 +4323,7 @@ MonoBehaviour:
   generateItemPosPrefab: {fileID: 2885856152142634640, guid: f87dc097295f5c844abbfc6fecd98483, type: 3}
   playerTran: {fileID: 4889205611965899502}
   itemRotSpeed: 0.2
-  maxItemTranCount: 100
+  maxItemTranCount: 200
   generatedItemDataList: []
   generatedItemTranList: []
   playerItemList: []
@@ -4919,7 +4919,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.2985968, y: 0.17046006, z: -0.054294266, w: 0.9374623}
+  m_LocalRotation: {x: 0.2985968, y: 0.17046008, z: -0.054294266, w: 0.9374623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
