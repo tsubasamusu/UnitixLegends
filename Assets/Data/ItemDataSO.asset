@@ -34,7 +34,7 @@ MonoBehaviour:
     attackPower: 30
     shotSpeed: 100
     interval: 1
-    timeToExplode: 5
+    timeToExplode: 3
     bulletCount: 1
     maxBulletCount: 10
     enemyCanUse: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
     attackPower: 0
     shotSpeed: 100
     interval: 1
-    timeToExplode: 5
+    timeToExplode: 2
     bulletCount: 1
     maxBulletCount: 10
     enemyCanUse: 0
