@@ -191,8 +191,8 @@ public class UIManager : MonoBehaviour
         //視界が完全に暗転するまで待つ
         yield return new WaitForSeconds(1.0f);
 
-        //3.0秒かけて「GameOver」を表示
-        txtGameOver.DOText("GameOver",3.0f);
+        //3.0秒かけて等速で「GameOver」を表示
+        txtGameOver.DOText("GameOver",3.0f).SetEase(Ease.Linear);
 
         //「GameOverの表示が終ったあと、さらに1.0秒間待つ
         yield return new WaitForSeconds(4.0f);

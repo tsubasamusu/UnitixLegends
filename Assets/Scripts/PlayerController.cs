@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
 
 		//コライダーの大きさの初期値を取得
 		firstColliderSize = boxCollider.size;
+
+		//Rigidbodyによる重力を無効化
+		playerRb.useGravity = false;
     }
 
     /// <summary>
@@ -134,8 +137,17 @@ public class PlayerController : MonoBehaviour
 		//Playerが接地していなかったら
 		if(!CheckGrounded())
         {
+			//Rigidbodyによる重力を無効化
+			playerRb.useGravity = false;
+
 			//落下する
 			transform.Translate(0, -GameData.instance.FallSpeed, 0);
+		}
+		//Playerが接地していたら
+		else
+        {
+			//Rigidbodyによる重力を有効化
+			playerRb.useGravity = true;
 		}
 
 		//移動する
