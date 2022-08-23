@@ -126,6 +126,9 @@ public class PlayerController : MonoBehaviour
 		//Playerが転倒していたら
 		if (CheckToppled())
 		{
+			//メッセージを表示
+			uiManager.SetMessageText("I'm\nTrying To\nRecover",Color.red);
+
 			//態勢を立て直す
 			transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
 		}

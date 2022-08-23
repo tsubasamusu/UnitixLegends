@@ -404,6 +404,13 @@ public class EnemyController : MonoBehaviour
         //リストの要素数だけ繰り返す
         for (int i = 0; i < itemManager.generatedItemTranList.Count; i++)
         {
+            //繰り返し処理で得た要素がnullなら
+            if(itemManager.generatedItemTranList [i]==null)
+            {
+                //以降の処理は行わずに、次の繰り返しに移る
+                continue;
+            }
+
             //繰り返し処理で見つけたアイテムが使用不可だったら
             if (!itemManager.generatedItemDataList[i].enemyCanUse)
             {

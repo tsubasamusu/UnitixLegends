@@ -2897,7 +2897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIManager: {fileID: 1027788433}
   enemyPrefab: {fileID: 1428101982797960645, guid: 06adddbf103068144b908be479f5d62d, type: 3}
-  maxGenerateCount: 29
+  maxGenerateCount: 100
   flightTime: 43
   enemiesTran: {fileID: 1802484447}
   generatedEnemyList: []
@@ -4919,7 +4919,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.2985968, y: 0.17046008, z: -0.054294266, w: 0.9374623}
+  m_LocalRotation: {x: 0.2985968, y: 0.17046006, z: -0.054294266, w: 0.9374623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10671,7 +10671,7 @@ Transform:
   m_GameObject: {fileID: 1528018331}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 100, z: 0}
-  m_LocalScale: {x: 400, y: 100, z: 400}
+  m_LocalScale: {x: 500, y: 100, z: 500}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1589595843}
@@ -10689,7 +10689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2ecd13e9792d724488720300789873b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimit: 180
+  timeLimit: 300
 --- !u!1 &1545743223
 GameObject:
   m_ObjectHideFlags: 0
@@ -23827,7 +23827,6 @@ MonoBehaviour:
   stoopKey: 101
   getItemKey: 113
   discardKey: 120
-  recoverKey: 114
   playerRb: {fileID: 4889205611976788820}
   boxCollider: {fileID: 4889205611976788821}
   anim: {fileID: 4889205611973315950}

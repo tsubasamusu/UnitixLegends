@@ -207,6 +207,13 @@ public class ItemManager : MonoBehaviour
         //ƒŠƒXƒg‚Ì—v‘f”‚¾‚¯ŒJ‚è•Ô‚·
         for (int i = 0; i < generatedItemTranList.Count; i++)
         {
+            //ŒJ‚è•Ô‚µˆ—‚Å“¾‚½—v‘f‚ªnull‚È‚ç
+            if (generatedItemTranList[i]==null)
+            {
+                //Ÿ‚ÌŒJ‚è•Ô‚µˆ—‚ÉˆÚ‚é
+                continue;
+            }
+
             //ƒŠƒXƒg‚Ìi”Ô‚Ì—v‘f‚ÌÀ•W‚ğpos‚É“o˜^
             Vector3 pos = generatedItemTranList[i].position;
 
