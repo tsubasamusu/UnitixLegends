@@ -799,7 +799,7 @@ MonoBehaviour:
   temporaryObjectContainerTran: {fileID: 822695140}
   itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   playerController: {fileID: 4889205611976788818}
-  itemManager: {fileID: 0}
+  itemManager: {fileID: 686150032}
 --- !u!1 &197156985
 GameObject:
   m_ObjectHideFlags: 0
@@ -4919,7 +4919,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.2985968, y: 0.1704601, z: -0.054294277, w: 0.9374623}
+  m_LocalRotation: {x: 0.2985968, y: 0.17046006, z: -0.054294266, w: 0.9374623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

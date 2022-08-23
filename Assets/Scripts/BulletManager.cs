@@ -186,16 +186,11 @@ public class BulletManager : MonoBehaviour
         //爆破時間まで待つ
         yield return new WaitForSeconds(itemData.timeToExplode);
 
-        //使用するアイテムが手榴弾なら
-        if (itemData.itemName == ItemDataSO.ItemName.Grenade)
-        {
-            //TODO:爆発する処理
-        }
-        //使用するアイテムが催涙弾なら
-        else if (itemData.itemName == ItemDataSO.ItemName.TearGasGrenade)
-        {
-            //TODO:ガスを放出する処理
-        }
+        //エフェクトを生成し、親をShoBulletに設定
+        GameObject effect = Instantiate(itemData.effect, transform);
+
+        //生成したエフェクトを3秒後に消す
+        Destroy(effect, 3f);
 
         //発射した弾を消す
         Destroy(bulletRb.gameObject);
