@@ -48,6 +48,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
 	private UIManager uiManager;//UIManager
 
+    [SerializeField]
+	private ItemManager itemManager;//ItemManager
+
 	[SerializeField]
 	private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
 
@@ -128,13 +131,6 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     private void FixedUpdate()
     {
-		//GameDataのinstanceがnullなら
-		if(GameData.instance==null)
-        {
-			//問題を報告
-			Debug.Log("GameData.instanceがnullです");
-        }
-
 		//Playerが接地していなかったら
 		if(!CheckGrounded())
         {
@@ -301,19 +297,19 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetKeyDown(discardKey))
 		{
 			//アイテムを破棄する
-			GameData.instance.DiscardItem(SelectedItemNo-1);
+			itemManager.DiscardItem(SelectedItemNo-1);
 		}
 		//左クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse0))
 		{
 			//アイテムを使用する
-			GameData.instance.UseItem(GameData.instance.GetSelectedItemData());
+			itemManager.UseItem(itemManager.GetSelectedItemData());
 		}
 		//右クリックされている間
 		else if (Input.GetKey(KeyCode.Mouse1))
 		{
 			//選択しているアイテムがスナイパーではないなら
-			if (GameData.instance.GetSelectedItemData().itemName != ItemDataSO.ItemName.Sniper)
+			if (itemManager.GetSelectedItemData().itemName != ItemDataSO.ItemName.Sniper)
 			{
 				//ズームする
 				followZoom.m_MaxFOV = normalZoomFOV;
@@ -342,7 +338,7 @@ public class PlayerController : MonoBehaviour
         }
 
 		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
-		if(GameData.instance.LengthToNearItem>getItemLength||GameData.instance.generatedItemDataList.Count==0)
+		if(itemManager.LengthToNearItem>getItemLength||itemManager.generatedItemDataList.Count==0)
         {
 			//メッセージを空にする
 			uiManager.SetMessageText("",Color.black);
@@ -352,10 +348,10 @@ public class PlayerController : MonoBehaviour
         }
 
 		//許容オーバーかどうか調べる
-		GameData.instance.CheckIsFull();
+		itemManager.CheckIsFull();
 
 		//許容オーバーかつ、取得しようとしているアイテムが弾ではなかったら
-		if (GameData.instance.IsFull &&GameData.instance.generatedItemDataList[GameData.instance.NearItemNo].isNotBullet)
+		if (itemManager.IsFull &&itemManager.generatedItemDataList[itemManager.NearItemNo].isNotBullet)
 		{
 			//メッセージを表示
 			uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item",Color.red);
@@ -371,7 +367,7 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetKeyDown(getItemKey))
 		{
 			//アイテムを取得する
-			GameData.instance.GetItem(GameData.instance.NearItemNo,true);
+			itemManager.GetItem(itemManager.NearItemNo,true);
 		}
 	}
 

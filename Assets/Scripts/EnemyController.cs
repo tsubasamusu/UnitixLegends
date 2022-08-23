@@ -55,6 +55,8 @@ public class EnemyController : MonoBehaviour
 
     private PlayerHealth playerHealth;//PlayerHealth
 
+    private ItemManager itemManager;//ItemManager
+
     private GameManager gameManager;//GameManager
 
     private Transform shotBulletTran;//弾を生成する位置
@@ -93,7 +95,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //EnemyGeneratorを取得
-        if(!GameObject.Find("EnemyGenerator").TryGetComponent(out enemyGenerator))
+        if (!GameObject.Find("EnemyGenerator").TryGetComponent(out enemyGenerator))
         {
             //問題を報告
             Debug.Log("EnemyGeneratorの取得に失敗");
@@ -111,6 +113,13 @@ public class EnemyController : MonoBehaviour
         {
             //問題を報告
             Debug.Log("GameManagerの取得に失敗");
+        }
+
+        //ItemManagerを取得
+        if (!GameObject.Find("ItemManager").TryGetComponent(out itemManager))
+        {
+            //問題を報告
+            Debug.Log("ItemManagerの取得に失敗");
         }
 
         //PlayerHealthを取得
@@ -133,7 +142,7 @@ public class EnemyController : MonoBehaviour
             //問題を報告
             Debug.Log("全てのEnemyの親の位置情報の取得に失敗");
         }
-           
+
         //発射位置を取得
         shotBulletTran = transform.GetChild(3).transform;
 
@@ -230,7 +239,7 @@ public class EnemyController : MonoBehaviour
         if (!gotItem)
         {
             //生成したアイテムのリストの要素が0なら
-            if (GameData.instance.generatedItemTranList.Count <= 0)//nullエラー回避
+            if (itemManager.generatedItemTranList.Count <= 0)//nullエラー回避
             {
                 //問題を報告
                 Debug.Log("アイテムが見当たりません");
@@ -243,7 +252,7 @@ public class EnemyController : MonoBehaviour
             SetNearItemNo();
 
             //目標地点を設定
-            SetTargetPosition(GameData.instance.generatedItemTranList[nearItemNo].position);
+            SetTargetPosition(itemManager.generatedItemTranList[nearItemNo].position);
 
             //アイテムを取得できる距離まで近づいたら
             if (GetLengthToNearItem(nearItemNo) <= getItemLength)
@@ -390,20 +399,20 @@ public class EnemyController : MonoBehaviour
         int itemNo = 0;
 
         //リストの0番の要素の座標をnearPosに仮に登録
-        Vector3 nearPos = GameData.instance.generatedItemTranList[0].position;
+        Vector3 nearPos = itemManager.generatedItemTranList[0].position;
 
         //リストの要素数だけ繰り返す
-        for (int i = 0; i < GameData.instance.generatedItemTranList.Count; i++)
+        for (int i = 0; i < itemManager.generatedItemTranList.Count; i++)
         {
             //繰り返し処理で見つけたアイテムが使用不可だったら
-            if (!GameData.instance.generatedItemDataList[i].enemyCanUse)
+            if (!itemManager.generatedItemDataList[i].enemyCanUse)
             {
                 //以降の処理は行わずに、次の繰り返しに移る
                 continue;
             }
 
             //リストのi番の要素の座標をposに登録
-            Vector3 pos = GameData.instance.generatedItemTranList[i].position;
+            Vector3 pos = itemManager.generatedItemTranList[i].position;
 
             //仮登録した要素と、for文で得た要素の、myPosとの距離を比較
             if (Vector3.Scale((pos - transform.position), new Vector3(1, 0, 1)).magnitude < Vector3.Scale((nearPos - transform.position), new Vector3(1, 0, 1)).magnitude)
@@ -428,7 +437,7 @@ public class EnemyController : MonoBehaviour
     private float GetLengthToNearItem(int nearItemNo)
     {
         //最も近くにある使用可能アイテムとの距離を返す
-        return Vector3.Scale((GameData.instance.generatedItemTranList[nearItemNo].position - transform.position), new Vector3(1, 0, 1)).magnitude;
+        return Vector3.Scale((itemManager.generatedItemTranList[nearItemNo].position - transform.position), new Vector3(1, 0, 1)).magnitude;
     }
 
     /// <summary>
@@ -492,13 +501,13 @@ public class EnemyController : MonoBehaviour
     public bool GetItem(int nearItemNo)
     {
         //使用するアイテムのデータを設定
-        usedItemData=GameData.instance.generatedItemDataList[nearItemNo];
+        usedItemData=itemManager.generatedItemDataList[nearItemNo];
 
         //取得したアイテムを配置
-        usedItemObj= Instantiate(GameData.instance.generatedItemDataList[nearItemNo].prefab, enemyWeaponTran);
+        usedItemObj= Instantiate(itemManager.generatedItemDataList[nearItemNo].prefab, enemyWeaponTran);
 
         //アイテムを拾う
-        GameData.instance.GetItem(nearItemNo, false);
+        itemManager.GetItem(nearItemNo, false);
 
         //trueを返す
         return true;

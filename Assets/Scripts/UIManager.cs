@@ -53,6 +53,9 @@ public class UIManager : MonoBehaviour
     private BulletManager bulletManager;//BulletManager
 
     [SerializeField]
+    private ItemManager itemManager;//ItemManager
+
+    [SerializeField]
     private PlayerHealth playerHealth;//PlayerHealth
 
     [SerializeField]
@@ -271,16 +274,16 @@ public class UIManager : MonoBehaviour
     private void UpdateTxtBulletCount()
     {
         //選択しているアイテムが飛び道具なら
-        if (GameData.instance.GetSelectedItemData().isMissile)
+        if (itemManager.GetSelectedItemData().isMissile)
         {
             //選択されている飛び道具の残弾数をテキストに設定
-            txtItemCount.text = bulletManager.GetBulletCount(GameData.instance.GetSelectedItemData().itemName).ToString();
+            txtItemCount.text = bulletManager.GetBulletCount(itemManager.GetSelectedItemData().itemName).ToString();
         }
         //選択しているアイテムに回復効果があるなら
-        else if(GameData.instance.GetSelectedItemData().restorativeValue>0)
+        else if(itemManager.GetSelectedItemData().restorativeValue>0)
         {
             //選択されている回復アイテムの所持数をテキストに設定
-            txtItemCount.text = playerHealth.GetRecoveryItemCount(GameData.instance.GetSelectedItemData().itemName).ToString();
+            txtItemCount.text = playerHealth.GetRecoveryItemCount(itemManager.GetSelectedItemData().itemName).ToString();
         }
         //選択しているアイテムが、飛び道具でも回復アイテムでもないなら
         else
@@ -389,7 +392,7 @@ public class UIManager : MonoBehaviour
             }
 
             //Playerが所持しているアイテムのリストの要素を、アイテムスロットの数だけ作る
-            GameData.instance.playerItemList.Add(itemDataSO.itemDataList[0]);
+            itemManager.playerItemList.Add(itemDataSO.itemDataList[0]);
         }
 
         //アイテムスロット全体の大きさを2倍にする

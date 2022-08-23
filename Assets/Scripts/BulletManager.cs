@@ -17,6 +17,9 @@ public class BulletManager : MonoBehaviour
     [SerializeField]
     private PlayerController playerController;//PlayerController
 
+    [SerializeField]
+    private ItemManager itemManager;//ItemManager
+
     private float timer;//経過時間
 
     private bool stopFlag;//重複処理を防ぐ
@@ -168,16 +171,16 @@ public class BulletManager : MonoBehaviour
         }
 
         //手榴弾の残りの数が0かつ、選択しているアイテムが手榴弾なら
-        if (grenadeBulletCount == 0&&GameData.instance.GetSelectedItemData().itemName==ItemDataSO.ItemName.Grenade)
+        if (grenadeBulletCount == 0&&itemManager.GetSelectedItemData().itemName==ItemDataSO.ItemName.Grenade)
         {
             //選択しているアイテムを破棄する
-            GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
+            itemManager.DiscardItem(playerController.SelectedItemNo - 1);
         }
         //催涙弾の残りの数が0かつ、選択しているアイテムが催涙弾なら
-        else if (tearGasGrenadeBulletCount==0&& GameData.instance.GetSelectedItemData().itemName == ItemDataSO.ItemName.TearGasGrenade)
+        else if (tearGasGrenadeBulletCount==0&& itemManager.GetSelectedItemData().itemName == ItemDataSO.ItemName.TearGasGrenade)
         {
             //選択しているアイテムを破棄する
-            GameData.instance.DiscardItem(playerController.SelectedItemNo - 1);
+            itemManager.DiscardItem(playerController.SelectedItemNo - 1);
         }
 
         //爆破時間まで待つ
