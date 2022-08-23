@@ -430,6 +430,20 @@ public class UIManager : MonoBehaviour
         txtMessage.color=color;
     }
 
+   
+    /// <summary>
+    /// メッセージの表示、非表示を切り替える
+    /// </summary>
+    /// <param name="isSetting">表示するならtrue</param>
+    public void SetMessageActive(bool isSetting)
+    {
+        //引数を元に、メッセージの透明度を取得
+        float value = isSetting ? 1f : 0f;
+
+        //取得した透明度をメッセージに反映する
+        txtMessage.DOFade(value, 0f);
+    }
+
    /// <summary>
    /// 指定されたアイテムスロットの背景色を設定する
    /// </summary>

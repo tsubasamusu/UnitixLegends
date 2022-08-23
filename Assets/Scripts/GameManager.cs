@@ -30,8 +30,14 @@ public class GameManager : MonoBehaviour
         //CanvasGroupを非表示にする
         uiManager.SetCanvasGroup(false);
 
+        //メッセージを無効化
+        uiManager.SetMessageActive(false);
+
         //ゲームスタート演出を行う
         yield return StartCoroutine(uiManager.PlayGameStart());
+
+        //メッセージを有効化
+        uiManager.SetMessageActive(true);
 
         //飛行機に関する設定を行う
         airplaneController.SetUpAirplane();
@@ -91,5 +97,8 @@ public class GameManager : MonoBehaviour
 
         //全てのフロート表示を非表示にする
         uiManager.SetFloatingMessagesNotActive();
+
+        //メッセージを無効化
+        uiManager.SetMessageActive(false);
     }
 }

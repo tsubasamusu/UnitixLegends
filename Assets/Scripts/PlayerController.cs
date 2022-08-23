@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
 	private KeyCode discardKey;//アイテム破棄キー
 
 	[SerializeField]
+	private KeyCode recoverKey;//態勢を立て直すキー
+
+	[SerializeField]
 	private Rigidbody playerRb;//Rigidbody
 
 	[SerializeField]
@@ -68,6 +71,8 @@ public class PlayerController : MonoBehaviour
 
 	private Vector3 firstColliderSize;//コライダーの大きさの初期値
 
+	private bool landed;//飛行機から飛び降りて着地したかどうか
+
 	private int selectedItemNo=1;//使用しているアイテムの番号
 
 	public int SelectedItemNo//useItemNo変数用のプロパティ
@@ -93,15 +98,18 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     private void Start()
     {
+		//Rigidbodyによる重力を無効化
+		playerRb.useGravity = false;
+
 		//コライダーのセンターの初期値を取得
 		firstColliderCenter = boxCollider.center;
 
 		//コライダーの大きさの初期値を取得
 		firstColliderSize = boxCollider.size;
 
-		//Rigidbodyによる重力を無効化
-		playerRb.useGravity = false;
-    }
+		//物理演算を無効化
+		playerRb.isKinematic = true;
+	}
 
     /// <summary>
     /// 毎フレーム呼び出される
@@ -113,7 +121,27 @@ public class PlayerController : MonoBehaviour
         {
 			//自身の座標を(0,0,0)に設定
 			transform.position = Vector3.zero;
+
+			//以降の処理を行わない
+			return;
         }
+
+		//Playerが転倒していたら
+		if(CheckToppled())
+        {
+			//メッセージを表示
+			uiManager.SetMessageText("Tap 'R'\nTo\nRecover", Color.red);
+
+			//態勢を立て直すキーが押されたら
+			if (Input.GetKeyDown(recoverKey))
+			{
+				//態勢を立て直す
+				transform.eulerAngles = new Vector3(0f,transform.eulerAngles.y,0f);
+			}
+
+			//以降の処理を行わない
+			return;
+		}
 
 		//接地していなかったら
 		if (!CheckGrounded())
@@ -134,25 +162,64 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
     private void FixedUpdate()
     {
-		//Playerが接地していなかったら
-		if(!CheckGrounded())
-        {
-			//Rigidbodyによる重力を無効化
-			playerRb.useGravity = false;
+		//移動する
+		playerRb.MovePosition(transform.position + (desiredMove * Time.fixedDeltaTime));
 
+		//飛行機から飛び降りて、既に着地したのなら
+		if (landed)
+        {
+			//以降の処理を行わない
+			return;
+        }
+
+		//Playerが接地していなかったら
+		if (!CheckGrounded())
+        {
 			//落下する
 			transform.Translate(0, -GameData.instance.FallSpeed, 0);
 		}
-		//Playerが接地していたら
+		//Playerが接地したら
 		else
         {
+			//着地が完了した状態に切り替える
+			landed = true;
+
+			//物理演算を有効化
+			playerRb.isKinematic = false;
+
 			//Rigidbodyによる重力を有効化
 			playerRb.useGravity = true;
+        }
+	}
+
+	/// <summary>
+	/// Playerが転倒しているかどうか調べる
+	/// </summary>
+	/// <returns>Playerが転倒していたらtrue</returns>
+	private bool CheckToppled()
+    {
+		//角度が正常ならfalseを返す
+		if(transform.eulerAngles.x<40f&&transform.eulerAngles.x>=0f)
+        {
+			return false;
+        }
+		else if(transform.eulerAngles.x<=360&&transform.eulerAngles.x>320f)
+        {
+			return false;
+        }
+
+		if (transform.eulerAngles.z < 40f && transform.eulerAngles.z >= 0f)
+		{
+			return false;
+		}
+		else if (transform.eulerAngles.z <= 360 && transform.eulerAngles.z > 320f)
+		{
+			return false;
 		}
 
-		//移動する
-		playerRb.MovePosition(transform.position + (desiredMove *Time.fixedDeltaTime));
-	}
+		//trueを返す
+		return true;
+    }
 
 	/// <summary>
 	/// 受け取ったPlayerの状態を元に、アニメーションの再生を行う
@@ -282,10 +349,10 @@ public class PlayerController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Playerが接地していたらtrueを返す
+	/// Playerが接地しているか調べる
 	/// </summary>
-	/// <returns></returns>
-	public bool CheckGrounded()
+	/// <returns>接地していたらtrue</returns>
+	private bool CheckGrounded()
 	{
 		//rayの初期位置と向き（姿勢）を設定
 		var ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
