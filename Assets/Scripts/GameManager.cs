@@ -14,6 +14,17 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;//UIManager
 
+    private bool isGameOver;//ゲーム完了状態かどうか
+
+    public bool IsGameOver//isGameOver変数用のプロパティ
+    {
+        get { return isGameOver; }//外部からは取得処理のみを可能に
+    }
+
+    /// <summary>
+    /// ゲーム開始直後に呼び出される
+    /// </summary>
+    /// <returns>待ち時間</returns>
     private IEnumerator Start()
     {
         //CanvasGroupを非表示にする
@@ -33,5 +44,23 @@ public class GameManager : MonoBehaviour
 
         //アイテムスロットの設定等を行う
         uiManager.SetUpItemSlots();
+    }
+
+    /// <summary>
+    /// ゲームクリア演出を行う
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator MakeGameClear()
+    {
+        //ゲーム終了状態に切り替える
+        isGameOver = true;
+
+        //CanvasGroupを非表示にする
+        uiManager.SetCanvasGroup(false);
+
+        //ゲームクリア演出を行う
+        yield return StartCoroutine(uiManager.PlayGameClear());
+
+        SceneManager.LoadScene("Main");
     }
 }

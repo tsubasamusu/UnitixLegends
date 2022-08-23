@@ -3,7 +3,7 @@ using System.Collections.Generic;//リストを使用
 using UnityEngine;
 using UnityEngine.UI;//UIを使用
 using DG.Tweening;//DOTweenを使用
-using UnityEngine.SceneManagement;//シーンのロードを使用
+using UnityEngine.SceneManagement;//LOadScenを使用
 
 public class UIManager : MonoBehaviour
 {
@@ -121,7 +121,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameStart()
     {
         //視界を白色に設定
-        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f,1.0f);
+        SetEventHorizonColor(Color.white);
+
+        //視界の色をハッキリと表示
+        eventHorizon.DOFade(1f, 0f);
 
         //ロゴをゲームスタートに設定
         logo.sprite = gameStart;
@@ -149,7 +152,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameClear()
     {
         //視界を白色に設定
-        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f, 0.0f);
+        SetEventHorizonColor(Color.white);
+
+        //視界の色をハッキリと表示
+        eventHorizon.DOFade(1f, 0f);
 
         //ロゴをゲームクリアに設定
         logo.sprite = gameClear;
@@ -165,9 +171,6 @@ public class UIManager : MonoBehaviour
 
         //視界とロゴの演出が終わるまで待つ
         yield return new WaitForSeconds(1.0f);
-
-        //Mainシーンを読み込む
-        SceneManager.LoadScene("Main");
     }
 
     /// <summary>
@@ -177,7 +180,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameOver()
     {
         //視界を黒色に設定
-        eventHorizon.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+        SetEventHorizonColor(Color.black);
 
         //1.0秒かけて視界を完全に暗くする
         eventHorizon.DOFade(1.0f, 1.0f);
@@ -190,9 +193,6 @@ public class UIManager : MonoBehaviour
 
         //「GameOverの表示が終ったあと、さらに1.0秒間待つ
         yield return new WaitForSeconds(4.0f);
-
-        //Mainシーンを読み込む
-        SceneManager.LoadScene("Main");
     }
 
     /// <summary>
@@ -203,7 +203,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator SetEventHorizonBlack(float time)
     {
         //視界を黒色に設定
-        eventHorizon.color = new Color(0.0f, 0.0f, 0.0f,0.0f);
+        SetEventHorizonColor(Color.black);
 
         //1.0秒かけて視界を完全に暗くする
         eventHorizon.DOFade(1.0f, 1.0f);
@@ -216,13 +216,23 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 視界の色を設定する
+    /// </summary>
+    /// <param name="color">視界の色</param>
+    public void SetEventHorizonColor(Color color)
+    {
+        //引数を元に、視界の色を設定
+        eventHorizon.color=color;
+    }
+
+    /// <summary>
     /// 被弾した際の視界の処理
     /// </summary>
     /// <returns>待ち時間</returns>
     public IEnumerator AttackEventHorizon()
     {
         //視界を赤色に設定
-        eventHorizon.color = new Color(255.0f, 0.0f, 0.0f, 0.0f);
+        SetEventHorizonColor(Color.red);
 
         //0.25秒かけて視界を少し赤くする
         eventHorizon.DOFade(0.5f, 0.25f);
@@ -431,8 +441,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void PeekIntoTheScope()
     {
-        //キャンバスグループを無効に
-        canvasGroup.gameObject.SetActive(false);
+        //CanvasGroupを非表示にする
+        SetCanvasGroup(false);
 
         //スコープを有効に
         scope.gameObject.SetActive(true);
@@ -443,8 +453,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void NotPeekIntoTheScope()
     {
-        //キャンバスグループを有効に
-        canvasGroup.gameObject.SetActive(true);
+        //CanvasGroupを表示する
+        SetCanvasGroup(true);
 
         //スコープを無効に
         scope.gameObject.SetActive(false);

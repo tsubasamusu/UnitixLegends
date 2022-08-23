@@ -55,6 +55,8 @@ public class EnemyController : MonoBehaviour
 
     private PlayerHealth playerHealth;//PlayerHealth
 
+    private GameManager gameManager;//GameManager
+
     private Transform shotBulletTran;//弾を生成する位置
 
     private Transform playerTran;//Playerの位置
@@ -102,6 +104,13 @@ public class EnemyController : MonoBehaviour
         {
             //問題を報告
             Debug.Log("StormControllerの取得に失敗");
+        }
+
+        //GameManagerを取得
+        if (!GameObject.Find("GameManager").TryGetComponent(out gameManager))
+        {
+            //問題を報告
+            Debug.Log("GameManagerの取得に失敗");
         }
 
         //PlayerHealthを取得
@@ -641,6 +650,16 @@ public class EnemyController : MonoBehaviour
     {
         //敵の数を更新
         uiManager.UpdateTxtOtherCount(enemiesTran.childCount-1);
+
+        //自分以外のEnemyがいなかったら
+        if(enemiesTran.childCount==1)
+        {
+            //ゲームクリア演出を行う
+            StartCoroutine(gameManager.MakeGameClear());
+
+            //以降の処理を行わない
+            return;
+        }
         
         //自身をゲームオブジェクトごと消す
         Destroy(gameObject);
