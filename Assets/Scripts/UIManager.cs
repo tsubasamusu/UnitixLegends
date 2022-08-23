@@ -185,6 +185,9 @@ public class UIManager : MonoBehaviour
         //‹ŠE‚ğ•F‚Éİ’è
         SetEventHorizonColor(Color.black);
 
+        //‹ŠE‚ğ“§–¾‚É‚·‚é
+        eventHorizon.DOFade(0f, 0f);
+
         //1.0•b‚©‚¯‚Ä‹ŠE‚ğŠ®‘S‚ÉˆÃ‚­‚·‚é
         eventHorizon.DOFade(1.0f, 1.0f);
 
