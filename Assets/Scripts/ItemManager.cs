@@ -8,7 +8,7 @@ public class ItemManager : MonoBehaviour {
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
-    private SoundDataSO soundDataSO;//SoundDataSO
+    private SoundManager soundManager;//SoundManager
 
     [SerializeField]
     private UIManager uIManager;//UIManager
@@ -310,7 +310,7 @@ public class ItemManager : MonoBehaviour {
                 //i番目の要素が空なら
                 if (CheckTheElement(i)) {
                     //効果音を再生
-                    AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[14].audioClip, Camera.main.transform.position);
+                    soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GetItemSE));
 
                     //Playerが所持しているアイテムのリストの空いている要素に、アイテムの情報を代入
                     playerItemList[i] = generatedItemDataList[nearItemNo];
@@ -326,7 +326,7 @@ public class ItemManager : MonoBehaviour {
         //取得するアイテムが弾のアイテムなら
         else {
             //効果音を再生
-            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[8].audioClip, Camera.main.transform.position);
+            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.BulletSE));
 
             //許容オーバーかどうか調べる
             CheckIsFull();
@@ -461,7 +461,11 @@ public class ItemManager : MonoBehaviour {
         //使用するアイテムに回復効果があり、左クリックされたら
         else if (itemData.restorativeValue > 0 && Input.GetKeyDown(KeyCode.Mouse0)) {
             //効果音を再生
+<<<<<<< HEAD
             AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[7].audioClip, Camera.main.transform.position);
+=======
+            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.RecoverySE));
+>>>>>>> 0847f8cb658c0f779da05110276a4895946480de
 
             //PlayerのHpを更新
             playerHealth.UpdatePlayerHp(itemData.restorativeValue);

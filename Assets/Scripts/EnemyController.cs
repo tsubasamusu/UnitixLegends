@@ -14,9 +14,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
-    [SerializeField]
-    private SoundDataSO soundDataSO;//SoundDataSO
-
     [SerializeField, Header("射程距離")]
     private float range;//射程距離
 
@@ -59,6 +56,8 @@ public class EnemyController : MonoBehaviour
     private PlayerHealth playerHealth;//PlayerHealth
 
     private ItemManager itemManager;//ItemManager
+
+    private SoundManager soundManager;//SoundManager
 
     private GameManager gameManager;//GameManager
 
@@ -116,6 +115,13 @@ public class EnemyController : MonoBehaviour
         {
             //問題を報告
             Debug.Log("GameManagerの取得に失敗");
+        }
+
+        //SoundManagerを取得
+        if (!GameObject.Find("SoundManager").TryGetComponent(out soundManager))
+        {
+            //問題を報告
+            Debug.Log("SoundManagerの取得に失敗");
         }
 
         //ItemManagerを取得
@@ -575,17 +581,17 @@ public class EnemyController : MonoBehaviour
         {
             //アサルトなら
             case ItemDataSO.ItemName.Assault:
-                SE = soundDataSO.soundDataList[4].audioClip;
+                SE = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.AssaultSE).audioClip;
                 break;
 
             //ショットガンなら
             case ItemDataSO.ItemName.Shotgun:
-                SE = soundDataSO.soundDataList[5].audioClip;
+                SE = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.ShotgunSE).audioClip;
                 break;
 
             //スナイパーなら
             case ItemDataSO.ItemName.Sniper:
-                SE = soundDataSO.soundDataList[6].audioClip;
+                SE = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.SniperSE).audioClip;
                 break;
 
             //上記以外なら

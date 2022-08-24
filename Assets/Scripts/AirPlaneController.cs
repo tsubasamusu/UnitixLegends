@@ -27,20 +27,17 @@ public class AirplaneController : MonoBehaviour
     private EnemyGenerator enemyGenerator;//EnemyGenerator
 
     [SerializeField]
-    private AudioSource audioSource;//AudioSource
-
-    [SerializeField]
-    private SoundDataSO soundDataSO;//SoundDataSO
+    private SoundManager soundManager;//SoundManager
 
     [SerializeField]
     private KeyCode fallKey;//飛行機から飛び降りるキー
 
+    [SerializeField]
+    private float rotSpeed;//プロペラの回転速度
+
     private bool fellFromAirplane;//飛行機から落下したかどうか
 
     private bool endFight;//飛行機の飛行が終わったかどうか
-
-    [SerializeField]
-    private float rotSpeed;//プロペラの回転速度
 
     /// <summary>
     /// 飛行機に関する設定を行う
@@ -62,18 +59,8 @@ public class AirplaneController : MonoBehaviour
         //Playerのキャラクターを無効化
         cinemachineManager.SetPlayerCharacterActive(false);
 
-        //AudioSourceを有効化
-        SetAirplaneAudioSource(true);
-    }
-
-    /// <summary>
-    /// 飛行機のAudioSourceの有効化、無効化を切り替える
-    /// </summary>
-    /// <param name="isSetting">有効化するならtrue</param>
-    public void SetAirplaneAudioSource(bool isSetting)
-    {
-        //引数を元に、AudioSourceの有効化、無効化を切り替える
-        audioSource.enabled = isSetting;
+        //飛行機の音を再生
+        soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.AirplaneSE),true);
     }
 
     /// <summary>
@@ -112,11 +99,8 @@ public class AirplaneController : MonoBehaviour
     /// </summary>
     private void FallFromAirplane()
     {
-        //効果音を再生
-        audioSource.PlayOneShot(soundDataSO.soundDataList[10].audioClip);
-
-        //飛行機の音をフェードアウトさせる
-        audioSource.DOFade(0f, 10f);
+        //飛行機から飛び降りる音を再生
+        soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.FallSE));
 
         //メッセージのテキストを空にする
         uiManager.SetMessageText("", Color.black);

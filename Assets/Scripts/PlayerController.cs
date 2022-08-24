@@ -51,11 +51,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private ItemManager itemManager;//ItemManager
 
-	[SerializeField]
-	private SoundDataSO soundDataSO;//SoundDataSO
-
-	[SerializeField]
-	private AudioSource audioSource;//AudioSource
+    [SerializeField]
+	private SoundManager soundManager;//SoundManager
 
 	[SerializeField]
 	private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
@@ -112,9 +109,6 @@ public class PlayerController : MonoBehaviour
 
 		//物理演算を無効化
 		playerRb.isKinematic = true;
-
-		//AudioSouceを無効化
-		audioSource.enabled = false;
 	}
 
 	/// <summary>
@@ -181,7 +175,7 @@ public class PlayerController : MonoBehaviour
 		else
 		{
 			//効果音を再生
-			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[11].audioClip, Camera.main.transform.position);
+			soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.LandingSE));
 
 			//着地が完了した状態に切り替える
 			landed = true;
@@ -289,9 +283,6 @@ public class PlayerController : MonoBehaviour
 		//Wを押されている間
 		if (Input.GetAxis("Vertical") > 0.0f)
 		{
-			//AudioSourceを有効化
-			audioSource.enabled = true;
-
 			//進行方向ベクトルを設定
 			moveDirection.z = Input.GetAxis("Vertical") * previousSpeed;
 
@@ -301,22 +292,13 @@ public class PlayerController : MonoBehaviour
 		//Sを押されている間
 		else if (Input.GetAxis("Vertical") < 0.0f)
 		{
-			//AudioSouceを無効化
-			audioSource.enabled = false;
-
 			//進行方向ベクトルを設定
 			moveDirection.z = Input.GetAxis("Vertical") * backSpeed;
 
 			//Playerの状態を返す
 			return PlayerCondition.MoveBack;
 		}
-		//WもSも押されていないなら
-		else
-		{
-			//AudioSouceを無効化
-			audioSource.enabled = false;
-		}
-
+		
 		//Dを押されている間
 		if (Input.GetAxis("Horizontal") > 0.0f)
 		{
@@ -390,7 +372,7 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetKeyDown(discardKey))
 		{
 			//効果音を再生
-			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[15].audioClip, Camera.main.transform.position);
+			soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.DiscardItemSE));
 
 			//アイテムを破棄する
 			itemManager.DiscardItem(SelectedItemNo - 1);
@@ -444,7 +426,7 @@ public class PlayerController : MonoBehaviour
 			}
 
 			//効果音を再生
-			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[13].audioClip, Camera.main.transform.position);
+			soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.BePreparedSE));
 		}
 
 		//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
@@ -551,13 +533,13 @@ public class PlayerController : MonoBehaviour
 		if (itemManager.GetSelectedItemData().itemName == ItemDataSO.ItemName.None)
 		{
 			//効果音を再生
-			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[20].audioClip, Camera.main.transform.position);
+			soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.NoneItemSE));
 		}
 		//選択したアイテムがNoneではなかったら
 		else
 		{
 			//効果音を再生
-			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[16].audioClip, Camera.main.transform.position);
+			soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.SelectItemSE));
 		}
 	}
 }

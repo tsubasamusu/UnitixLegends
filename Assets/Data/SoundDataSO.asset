@@ -97,3 +97,7 @@ MonoBehaviour:
     soundEffectName: 21
     backgroundMusicName: 0
     audioClip: {fileID: 8300000, guid: c810e92587e8eb74f98ce7d4fa82440d, type: 3}
+  - soundType: 0
+    soundEffectName: 0
+    backgroundMusicName: 0
+    audioClip: {fileID: 0}

@@ -15,7 +15,7 @@ public class BulletManager : MonoBehaviour
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
-    private SoundDataSO soundDataSO;//SoundDataSO
+    private SoundManager soundManager;//SoundManager
 
     [SerializeField]
     private PlayerController playerController;//PlayerController
@@ -176,39 +176,39 @@ public class BulletManager : MonoBehaviour
             Destroy(effect, 1f);
         }
 
-        AudioClip SE;//効果音
+        SoundDataSO.SoundData soundData;//効果音のデータ
 
         //使用するアイテムの名前に応じて処理を変更
         switch (itemData.itemName)
         {
             //アサルトなら
             case ItemDataSO.ItemName.Assault:
-                SE = soundDataSO.soundDataList[4].audioClip;
+                soundData = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.AssaultSE);
                 break;
 
             //ショットガンなら
             case ItemDataSO.ItemName.Shotgun:
-                SE = soundDataSO.soundDataList[5].audioClip;
+                soundData = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.ShotgunSE);
                 break;
 
             //スナイパーなら
             case ItemDataSO.ItemName.Sniper:
-                SE = soundDataSO.soundDataList[6].audioClip;
+                soundData = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.SniperSE);
                 break;
 
             //上記以外なら
             default:
-                SE = null;
+                soundData = null;
                 ///問題を報告
                 Debug.Log("オーディオクリップがありません");
                 break;
         }
 
         //nullエラー回避
-        if (SE != null)
+        if (soundData != null)
         {
             //効果音を再生
-            AudioSource.PlayClipAtPoint(SE, Camera.main.transform.position);
+            soundManager.PlaySoundEffectByAudioSource(soundData);
         }
 
         //使用するアイテムが、手榴弾でも催涙弾でもないなら
@@ -250,34 +250,34 @@ public class BulletManager : MonoBehaviour
             Destroy(effect, 3f);
         }
 
-        AudioClip SE2;//効果音
+        SoundDataSO.SoundData soundData2;//効果音
 
         //使用するアイテムの名前に応じて処理を変更
         switch (itemData.itemName)
         {
             //手榴弾なら
             case ItemDataSO.ItemName.Grenade:
-                SE2 = soundDataSO.soundDataList[2].audioClip;
+                soundData2 = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.ExplosionSE);
                 break;
 
             //催涙弾なら
             case ItemDataSO.ItemName.TearGasGrenade:
-                SE2 = soundDataSO.soundDataList[3].audioClip;
+                soundData2 = soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GasSE);
                 break;
 
             //上記以外なら
             default:
-                SE2 = null;
+                soundData2 = null;
                 ///問題を報告
                 Debug.Log("オーディオクリップがありません");
                 break;
         }
 
         //nullエラー回避
-        if(SE2!=null)
+        if(soundData2!=null)
         {
             //効果音を再生
-            AudioSource.PlayClipAtPoint(SE2, bulletRb.transform.position);
+            AudioSource.PlayClipAtPoint(soundData2.audioClip, bulletRb.transform.position);
         }
 
         //発射した弾を消す
@@ -347,7 +347,7 @@ public class BulletManager : MonoBehaviour
         if (itemData.itemName == ItemDataSO.ItemName.Knife)
         {
             //効果音を再生
-            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[0].audioClip, Camera.main.transform.position);
+            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.KnifeSE));
 
             //ナイフのアニメーションを開始（前後移動）
             itemRb.gameObject.transform.DOLocalMoveZ(2f,0.5f).SetLoops(2,LoopType.Yoyo);
@@ -365,7 +365,7 @@ public class BulletManager : MonoBehaviour
         else if (itemData.itemName == ItemDataSO.ItemName.Bat)
         {
             //効果音を再生
-            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[1].audioClip, Camera.main.transform.position);
+            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.BatSE));
 
             //バットのアニメーションを開始（前後移動）
             itemRb.gameObject.transform.DOLocalMoveZ(2f, 0.5f).SetLoops(2, LoopType.Yoyo);
