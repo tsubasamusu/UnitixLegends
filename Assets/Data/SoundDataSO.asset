@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4cb6ca30da5a1043ba107c944eeb67f, type: 3}
+  m_Name: SoundDataSO
+  m_EditorClassIdentifier: 
+  soundDataList:
+  - soundType: 0
+    soundEffectName: 1
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 66adf6001c3312c48a378edb9be28323, type: 3}
+  - soundType: 0
+    soundEffectName: 2
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: c786d484bff74f64492cb13be30a57c0, type: 3}
+  - soundType: 0
+    soundEffectName: 3
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 260569a1a868db549a5d26429e2e40c6, type: 3}
+  - soundType: 0
+    soundEffectName: 4
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 91e42c59be65f7d4abacc63a27e4d080, type: 3}
+  - soundType: 0
+    soundEffectName: 5
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 93cf0e9a89f4d5b489a85ef0fba55e38, type: 3}
+  - soundType: 0
+    soundEffectName: 6
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: eaafb9c06951ba94e9253584441addf1, type: 3}
+  - soundType: 0
+    soundEffectName: 7
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 88f5b01b32ca3184baba8ef7e7b8ec9a, type: 3}
+  - soundType: 0
+    soundEffectName: 8
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: f914fbe7e4cdbd54883eee5eabca4fc6, type: 3}
+  - soundType: 0
+    soundEffectName: 9
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: e97499d99a9db774bbf6147fbac03446, type: 3}
+  - soundType: 0
+    soundEffectName: 10
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 3231b5b09a6bfb149a11aa2249e3df46, type: 3}
+  - soundType: 0
+    soundEffectName: 11
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: a09d57dd6ee39d643bd61cf8462a4733, type: 3}
+  - soundType: 0
+    soundEffectName: 12
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: e627db72ba8d7a34da3bccbfa312bb02, type: 3}
+  - soundType: 0
+    soundEffectName: 13
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 9e0655820194bb34789670b65d66c3d8, type: 3}
+  - soundType: 0
+    soundEffectName: 14
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 7f7666bc275e30447b0eea15987d94fb, type: 3}
+  - soundType: 0
+    soundEffectName: 15
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 2510a6d5a90d6a947becdd5e59f41b68, type: 3}
+  - soundType: 0
+    soundEffectName: 16
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: d996043937c61fc4dbbed6bb366f0920, type: 3}
+  - soundType: 0
+    soundEffectName: 17
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 1763546167a5d7347aa12364fd83872a, type: 3}
+  - soundType: 0
+    soundEffectName: 18
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: e67ed55c353057545a9e1c58f355e9c8, type: 3}
+  - soundType: 0
+    soundEffectName: 19
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: 82ff8daa85a2c4b46b1de48e5fa5eb47, type: 3}
+  - soundType: 0
+    soundEffectName: 20
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: b65f0b3183f820745bff7bbdad27134a, type: 3}
+  - soundType: 0
+    soundEffectName: 21
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: c810e92587e8eb74f98ce7d4fa82440d, type: 3}

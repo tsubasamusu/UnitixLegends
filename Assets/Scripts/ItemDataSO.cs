@@ -50,6 +50,7 @@ public class ItemDataSO : ScriptableObject
         public bool isHandWeapon;//近接武器かどうか
         public Sprite sprite;//Sprite
         public GameObject prefab;//プレファブ
+        public GameObject effect;//エフェクト
         public Rigidbody bulletPrefab;//弾のプレファブ
     }
 

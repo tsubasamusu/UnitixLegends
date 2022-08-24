@@ -27,6 +27,12 @@ public class AirplaneController : MonoBehaviour
     private EnemyGenerator enemyGenerator;//EnemyGenerator
 
     [SerializeField]
+    private AudioSource audioSource;//AudioSource
+
+    [SerializeField]
+    private SoundDataSO soundDataSO;//SoundDataSO
+
+    [SerializeField]
     private KeyCode fallKey;//飛行機から飛び降りるキー
 
     private bool fellFromAirplane;//飛行機から落下したかどうか
@@ -41,9 +47,6 @@ public class AirplaneController : MonoBehaviour
     /// </summary>
     public void SetUpAirplane()
     {
-        //PlayerControllerを無効化
-        playerController.enabled = false;
-
         //飛行機を初期位置に配置
         transform.position = new Vector3(120f, 100f, -120f);
 
@@ -58,6 +61,19 @@ public class AirplaneController : MonoBehaviour
 
         //Playerのキャラクターを無効化
         cinemachineManager.SetPlayerCharacterActive(false);
+
+        //AudioSourceを有効化
+        SetAirplaneAudioSource(true);
+    }
+
+    /// <summary>
+    /// 飛行機のAudioSourceの有効化、無効化を切り替える
+    /// </summary>
+    /// <param name="isSetting">有効化するならtrue</param>
+    public void SetAirplaneAudioSource(bool isSetting)
+    {
+        //引数を元に、AudioSourceの有効化、無効化を切り替える
+        audioSource.enabled = isSetting;
     }
 
     /// <summary>
@@ -96,6 +112,12 @@ public class AirplaneController : MonoBehaviour
     /// </summary>
     private void FallFromAirplane()
     {
+        //効果音を再生
+        audioSource.PlayOneShot(soundDataSO.soundDataList[10].audioClip);
+
+        //飛行機の音をフェードアウトさせる
+        audioSource.DOFade(0f, 10f);
+
         //メッセージのテキストを空にする
         uiManager.SetMessageText("", Color.black);
 

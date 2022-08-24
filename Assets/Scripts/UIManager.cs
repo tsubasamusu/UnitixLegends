@@ -3,7 +3,7 @@ using System.Collections.Generic;//リストを使用
 using UnityEngine;
 using UnityEngine.UI;//UIを使用
 using DG.Tweening;//DOTweenを使用
-using UnityEngine.SceneManagement;//シーンのロードを使用
+using UnityEngine.SceneManagement;//LOadScenを使用
 
 public class UIManager : MonoBehaviour
 {
@@ -53,10 +53,13 @@ public class UIManager : MonoBehaviour
     private BulletManager bulletManager;//BulletManager
 
     [SerializeField]
+    private ItemManager itemManager;//ItemManager
+
+    [SerializeField]
     private PlayerHealth playerHealth;//PlayerHealth
 
     [SerializeField]
-    private Transform canvasTran;//Canvasのtransform
+    private Transform floatingMessagesTran;//フロート表示の親
 
     [SerializeField]
     private Transform enemies;//全てのEnemyの親
@@ -121,7 +124,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameStart()
     {
         //視界を白色に設定
-        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f,1.0f);
+        SetEventHorizonColor(Color.white);
+
+        //視界の色をハッキリと表示
+        eventHorizon.DOFade(1f, 0f);
 
         //ロゴをゲームスタートに設定
         logo.sprite = gameStart;
@@ -149,7 +155,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameClear()
     {
         //視界を白色に設定
-        eventHorizon.color = new Color(255.0f, 255.0f, 255.0f, 0.0f);
+        SetEventHorizonColor(Color.white);
+
+        //視界の色をハッキリと表示
+        eventHorizon.DOFade(1f, 0f);
 
         //ロゴをゲームクリアに設定
         logo.sprite = gameClear;
@@ -165,9 +174,6 @@ public class UIManager : MonoBehaviour
 
         //視界とロゴの演出が終わるまで待つ
         yield return new WaitForSeconds(1.0f);
-
-        //Mainシーンを読み込む
-        SceneManager.LoadScene("Main");
     }
 
     /// <summary>
@@ -177,7 +183,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator PlayGameOver()
     {
         //視界を黒色に設定
-        eventHorizon.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+        SetEventHorizonColor(Color.black);
+
+        //視界を透明にする
+        eventHorizon.DOFade(0f, 0f);
 
         //1.0秒かけて視界を完全に暗くする
         eventHorizon.DOFade(1.0f, 1.0f);
@@ -185,14 +194,11 @@ public class UIManager : MonoBehaviour
         //視界が完全に暗転するまで待つ
         yield return new WaitForSeconds(1.0f);
 
-        //3.0秒かけて「GameOver」を表示
-        txtGameOver.DOText("GameOver",3.0f);
+        //3.0秒かけて等速で「GameOver」を表示
+        txtGameOver.DOText("GameOver",3.0f).SetEase(Ease.Linear);
 
         //「GameOverの表示が終ったあと、さらに1.0秒間待つ
         yield return new WaitForSeconds(4.0f);
-
-        //Mainシーンを読み込む
-        SceneManager.LoadScene("Main");
     }
 
     /// <summary>
@@ -203,7 +209,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator SetEventHorizonBlack(float time)
     {
         //視界を黒色に設定
-        eventHorizon.color = new Color(0.0f, 0.0f, 0.0f,0.0f);
+        SetEventHorizonColor(Color.black);
 
         //1.0秒かけて視界を完全に暗くする
         eventHorizon.DOFade(1.0f, 1.0f);
@@ -216,13 +222,23 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 視界の色を設定する
+    /// </summary>
+    /// <param name="color">視界の色</param>
+    public void SetEventHorizonColor(Color color)
+    {
+        //引数を元に、視界の色を設定
+        eventHorizon.color=color;
+    }
+
+    /// <summary>
     /// 被弾した際の視界の処理
     /// </summary>
     /// <returns>待ち時間</returns>
     public IEnumerator AttackEventHorizon()
     {
         //視界を赤色に設定
-        eventHorizon.color = new Color(255.0f, 0.0f, 0.0f, 0.0f);
+        SetEventHorizonColor(Color.red);
 
         //0.25秒かけて視界を少し赤くする
         eventHorizon.DOFade(0.5f, 0.25f);
@@ -261,16 +277,16 @@ public class UIManager : MonoBehaviour
     private void UpdateTxtBulletCount()
     {
         //選択しているアイテムが飛び道具なら
-        if (GameData.instance.GetSelectedItemData().isMissile)
+        if (itemManager.GetSelectedItemData().isMissile)
         {
             //選択されている飛び道具の残弾数をテキストに設定
-            txtItemCount.text = bulletManager.GetBulletCount(GameData.instance.GetSelectedItemData().itemName).ToString();
+            txtItemCount.text = bulletManager.GetBulletCount(itemManager.GetSelectedItemData().itemName).ToString();
         }
         //選択しているアイテムに回復効果があるなら
-        else if(GameData.instance.GetSelectedItemData().restorativeValue>0)
+        else if(itemManager.GetSelectedItemData().restorativeValue>0)
         {
             //選択されている回復アイテムの所持数をテキストに設定
-            txtItemCount.text = playerHealth.GetRecoveryItemCount(GameData.instance.GetSelectedItemData().itemName).ToString();
+            txtItemCount.text = playerHealth.GetRecoveryItemCount(itemManager.GetSelectedItemData().itemName).ToString();
         }
         //選択しているアイテムが、飛び道具でも回復アイテムでもないなら
         else
@@ -278,6 +294,15 @@ public class UIManager : MonoBehaviour
             //テキストを空にする
             txtItemCount.text = "";
         }
+    }
+
+    /// <summary>
+    /// 全てのフロート表示を非表示にする
+    /// </summary>
+    public void SetFloatingMessagesNotActive()
+    {
+        //フロート表示の親を無効化
+        floatingMessagesTran.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -291,8 +316,8 @@ public class UIManager : MonoBehaviour
         //フロート表示を生成
         Text txtFloatingMessage = Instantiate(floatingMessagePrefab);
 
-        //生成したフロート表示の親をCanvasに設定
-        txtFloatingMessage.gameObject.transform.SetParent(canvasTran);
+        //生成したフロート表示の親を設定
+        txtFloatingMessage.gameObject.transform.SetParent(floatingMessagesTran);
 
         //引数を元に、フロート表示のテキストを設定
         txtFloatingMessage.text = messageText;
@@ -370,7 +395,7 @@ public class UIManager : MonoBehaviour
             }
 
             //Playerが所持しているアイテムのリストの要素を、アイテムスロットの数だけ作る
-            GameData.instance.playerItemList.Add(itemDataSO.itemDataList[0]);
+            itemManager.playerItemList.Add(itemDataSO.itemDataList[0]);
         }
 
         //アイテムスロット全体の大きさを2倍にする
@@ -408,6 +433,20 @@ public class UIManager : MonoBehaviour
         txtMessage.color=color;
     }
 
+   
+    /// <summary>
+    /// メッセージの表示、非表示を切り替える
+    /// </summary>
+    /// <param name="isSetting">表示するならtrue</param>
+    public void SetMessageActive(bool isSetting)
+    {
+        //引数を元に、メッセージの透明度を取得
+        float value = isSetting ? 1f : 0f;
+
+        //取得した透明度をメッセージに反映する
+        txtMessage.DOFade(value, 0f);
+    }
+
    /// <summary>
    /// 指定されたアイテムスロットの背景色を設定する
    /// </summary>
@@ -431,8 +470,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void PeekIntoTheScope()
     {
-        //キャンバスグループを無効に
-        canvasGroup.gameObject.SetActive(false);
+        //CanvasGroupを非表示にする
+        SetCanvasGroup(false);
 
         //スコープを有効に
         scope.gameObject.SetActive(true);
@@ -443,8 +482,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void NotPeekIntoTheScope()
     {
-        //キャンバスグループを有効に
-        canvasGroup.gameObject.SetActive(true);
+        //CanvasGroupを表示する
+        SetCanvasGroup(true);
 
         //スコープを無効に
         scope.gameObject.SetActive(false);

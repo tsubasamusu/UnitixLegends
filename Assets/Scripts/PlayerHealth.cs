@@ -11,6 +11,9 @@ public class PlayerHealth : MonoBehaviour
     private StormController stormController;//StormController
 
     [SerializeField]
+    private GameManager gameManager;//GameManager
+
+    [SerializeField]
     private ItemDataSO itemDataSO;//ItemDataSO
 
     [SerializeField]
@@ -123,11 +126,11 @@ public class PlayerHealth : MonoBehaviour
         //空の判定
         bool skyFlag = false;
 
-        //無限ループ
+        //無限に繰り返す
         while (true)
         {
-            //Playerが安置内にいないなら繰り返される
-            while (!stormController.CheckEnshrine(transform.position))
+            //Playerが安置内におらず、ゲーム終了状態ではないなら、繰り返される
+            while (!stormController.CheckEnshrine(transform.position)&&!gameManager.IsGameOver)
             {
                 //空の判定がtrueなら
                 if (skyFlag)
@@ -191,7 +194,8 @@ public class PlayerHealth : MonoBehaviour
         //Playerの体力が0になったら
         if (playerHp == 0.0f)
         {
-            //TODO:GameManagerからゲームオーバーの処理を呼び出す
+            //ゲームオーバー演出を行う
+            StartCoroutine(gameManager.MakeGameOver());
         }
     }
 
