@@ -19,10 +19,7 @@ public class GameManager : MonoBehaviour
     private UIManager uiManager;//UIManager
 
     [SerializeField]
-    private SoundDataSO soundDataSO;//SoundDataSO
-
-    [SerializeField]
-    private AudioSource audioSource;//AudioSource
+    private SoundManager soundManager;//SoundManager
 
     private bool isGameOver;//ゲーム完了状態かどうか
 
@@ -37,14 +34,8 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     private IEnumerator Start()
     {
-        //PlayerのAudioSourceを無効化
-        audioSource.enabled = false;
-
-        //飛行機のAudioSourceを無効化
-        airplaneController.SetAirplaneAudioSource(false);
-
-        //ゲーム開始音を鳴らす
-        AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[17].audioClip, Camera.main.transform.position);
+        //ゲーム開始音を再生
+        soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GameStartSE));
 
         //PlayerControolerを無効化
         playerController.enabled = false;
@@ -83,8 +74,8 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     public IEnumerator MakeGameClear()
     {
-        //ゲーム開始音を鳴らす
-        AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[19].audioClip, Camera.main.transform.position);
+        //ゲームクリア音を再生
+        soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GameClearSE));
 
         //ゲームを終了するための準備を行う
         SetUpGameOver();
@@ -102,8 +93,8 @@ public class GameManager : MonoBehaviour
     /// <returns>待ち時間</returns>
     public IEnumerator MakeGameOver()
     {
-        //ゲーム開始音を鳴らす
-        AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[18].audioClip, Camera.main.transform.position);
+        //ゲームオーバー音を再生
+        soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GameOverSE));
 
         //ゲームを終了するための準備を行う
         SetUpGameOver();
