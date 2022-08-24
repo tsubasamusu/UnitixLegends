@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     private GameManager gameManager;//GameManager
 
     [SerializeField]
-    private ItemDataSO itemDataSO;//ItemDataSO
+    private ItemManager itemManager;//ItemManager
 
     [SerializeField]
     private Skybox skybox;//Skybox
@@ -81,38 +81,38 @@ public class PlayerHealth : MonoBehaviour
         {
             //手榴弾なら
             case "Grenade":
-                UpdatePlayerHp(-itemDataSO.itemDataList[1].attackPower, hit.gameObject);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.Grenade).attackPower, hit.gameObject);
                 break;
 
             //催涙弾なら
             case "TearGasGrenade":
-                UpdatePlayerHp(-itemDataSO.itemDataList[2].attackPower, hit.gameObject);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.TearGasGrenade).attackPower, hit.gameObject);
                 AttackedByTearGasGrenade();
                 break;
 
             //ナイフなら
             case "Knife":
-                UpdatePlayerHp(-itemDataSO.itemDataList[3].attackPower);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.Knife).attackPower);
                 break;
 
             //バットなら
             case "Bat":
-                UpdatePlayerHp(-itemDataSO.itemDataList[4].attackPower);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.Bat).attackPower);
                 break;
 
             //アサルトなら
             case "Assault":
-                UpdatePlayerHp(-itemDataSO.itemDataList[5].attackPower, hit.gameObject);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.Assault).attackPower, hit.gameObject);
                 break;
 
             //ショットガンなら
             case "Shotgun":
-                UpdatePlayerHp(-itemDataSO.itemDataList[6].attackPower, hit.gameObject);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.Shotgun).attackPower, hit.gameObject);
                 break;
 
             //スナイパーなら
             case "Sniper":
-                UpdatePlayerHp(-itemDataSO.itemDataList[7].attackPower, hit.gameObject);
+                UpdatePlayerHp(-itemManager.GetItemData(ItemDataSO.ItemName.Sniper).attackPower, hit.gameObject);
                 break;
         }
     }
@@ -220,17 +220,17 @@ public class PlayerHealth : MonoBehaviour
         {
             //包帯なら
             case ItemDataSO.ItemName.Bandage:
-                bandageCount = Mathf.Clamp(bandageCount + updateValue, 0, itemDataSO.itemDataList[8].maxBulletCount);
+                bandageCount = Mathf.Clamp(bandageCount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.Bandage).maxBulletCount);
                 break;
 
             //薬草なら
             case ItemDataSO.ItemName.MedicinalPlants:
-                medicinalPlantscount=Mathf.Clamp(medicinalPlantscount + updateValue, 0,itemDataSO.itemDataList[9].maxBulletCount);
+                medicinalPlantscount=Mathf.Clamp(medicinalPlantscount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.MedicinalPlants).maxBulletCount);
                 break;
 
             //注射器なら
             case ItemDataSO.ItemName.Syringe:
-                syringeCount=Mathf.Clamp(syringeCount+updateValue, 0, itemDataSO.itemDataList[10].maxBulletCount);
+                syringeCount=Mathf.Clamp(syringeCount+updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.Syringe).maxBulletCount);
                 break;
         }
     }

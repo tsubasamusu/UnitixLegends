@@ -87,6 +87,28 @@ public class ItemManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 指定したアイテムのデータを取得する
+    /// </summary>
+    /// <param name="itemName">アイテムの名前</param>
+    /// <returns>アイテムのデータ</returns>
+    public ItemDataSO.ItemData GetItemData(ItemDataSO.ItemName itemName)
+    {
+        //アイテムのデータのリストから要素を1つずつ取り出す
+        foreach (ItemDataSO.ItemData itemData in itemDataSO.itemDataList)
+        {
+            //取り出した要素の名前が引数と同じだったら
+            if (itemData.itemName == itemName)
+            {
+                //取り出した要素を返す
+                return itemData;
+            }
+        }
+
+        //nullを返す
+        return null;
+    }
+
+    /// <summary>
     /// アイテムを生成する
     /// </summary>
     public void GenerateItem()
