@@ -483,11 +483,7 @@ public class ItemManager : MonoBehaviour {
         //使用するアイテムに回復効果があり、左クリックされたら
         else if (itemData.restorativeValue > 0 && Input.GetKeyDown(KeyCode.Mouse0)) {
             //効果音を再生
-<<<<<<< HEAD
-            AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[7].audioClip, Camera.main.transform.position);
-=======
             soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.RecoverySE));
->>>>>>> 0847f8cb658c0f779da05110276a4895946480de
 
             //PlayerのHpを更新
             playerHealth.UpdatePlayerHp(itemData.restorativeValue);
