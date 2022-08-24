@@ -122,5 +122,8 @@ public class GameManager : MonoBehaviour
 
         //メッセージを無効化
         uiManager.SetMessageActive(false);
+
+        //PlayerControolerを無効化
+        playerController.enabled = false;
     }
 }
