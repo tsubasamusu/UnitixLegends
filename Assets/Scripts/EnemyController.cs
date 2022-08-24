@@ -697,6 +697,9 @@ public class EnemyController : MonoBehaviour
             //攻撃してきた相手をPlayerに設定
             isPlayer = true;
 
+            //効果音を再生
+            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.InflictDamageSE));
+
             //フロート表示を生成
             StartCoroutine(uiManager.GenerateFloatingMessage(Mathf.Abs(updateValue).ToString("F0"), Color.yellow));
         }

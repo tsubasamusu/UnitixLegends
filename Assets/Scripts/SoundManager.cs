@@ -32,28 +32,46 @@ public class SoundManager : MonoBehaviour
         return null;
     }
 
-    /// <summary>
-    /// 効果音をAudioSourceを使って再生する
-    /// </summary>
-    /// <param name="soundData">効果音のデータ</param>
-    /// <param name="loop">効果音を繰り返すかどうか</param>
-    /// <param name="volume">効果音の大きさ</param>
-    /// <returns>使用したAudioSorce</returns>
+   /// <summary>
+   /// 効果音をAudioSourceを使って再生する
+   /// </summary>
+   /// <param name="soundData">効果音のデータ</param>
+   /// <param name="loop">効果音を繰り返すかどうか</param>
+   /// <param name="volume">効果音の大きさ</param>
+   /// <returns>使用したAudioSource</returns>
     public AudioSource PlaySoundEffectByAudioSource(SoundDataSO.SoundData soundData, bool loop = false, float volume = 1f)
     {
-        //オーディオクリップを設定
-        audioSource.clip = soundData.audioClip;
-
         //効果音を繰り返すかどうかを設定
         audioSource.loop = loop;
 
         //効果音音の大きさを設定
         audioSource.volume = volume;
 
-        //効果音を再生
-        audioSource.Play();
+        if(loop)
+        {
+            //オーディオクリップを設定
+            audioSource.clip = soundData.audioClip;
 
-        //AudioSorceを返す
-        return audioSource;
+            //効果音を再生
+            audioSource.Play();
+
+            //AudioSourceを返す
+            return audioSource;
+        }
+
+        //効果音を再生
+        audioSource.PlayOneShot(soundData.audioClip);
+
+        //nullを返す
+        return null;
+    }
+
+    /// <summary>
+    /// AudioSourceを空の状態にする
+    /// </summary>
+    public void ClearAudioSource()
+    {
+        //clipにnullを入れる
+        audioSource.clip = null;
     }
 }

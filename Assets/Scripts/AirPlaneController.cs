@@ -39,6 +39,8 @@ public class AirplaneController : MonoBehaviour
 
     private bool endFight;//飛行機の飛行が終わったかどうか
 
+    private AudioSource audioSource;//AudioSource
+
     /// <summary>
     /// 飛行機に関する設定を行う
     /// </summary>
@@ -60,7 +62,7 @@ public class AirplaneController : MonoBehaviour
         cinemachineManager.SetPlayerCharacterActive(false);
 
         //飛行機の音を再生
-        soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.AirplaneSE),true);
+        audioSource=soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.AirplaneSE),true);
     }
 
     /// <summary>
@@ -79,14 +81,14 @@ public class AirplaneController : MonoBehaviour
             if (endFight)
             {
                 //飛行機から飛び降りる
-                FallFromAirplane();
+                StartCoroutine( FallFromAirplane());
             }
 
             //飛行機から飛び降りるキーが押されたら
             if (Input.GetKeyDown(fallKey))
             {
                 //飛行機から飛び降りる
-                FallFromAirplane();
+                StartCoroutine( FallFromAirplane());
             }
 
             //次のフレームへ飛ばす（実質、Updateメソッド）
@@ -97,8 +99,12 @@ public class AirplaneController : MonoBehaviour
     /// <summary>
     /// 飛行機から飛び降りる
     /// </summary>
-    private void FallFromAirplane()
+    /// <returns>待ち時間</returns>
+    private IEnumerator FallFromAirplane()
     {
+        //飛行機の音をフェードアウトさせる
+        audioSource.DOFade(0f, 5f);
+
         //飛行機から飛び降りる音を再生
         soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.FallSE));
 
@@ -119,6 +125,12 @@ public class AirplaneController : MonoBehaviour
 
         //飛行機から飛び降りた状態に変更
         fellFromAirplane = true;
+
+        //5秒待つ
+        yield return new WaitForSeconds(5f);
+
+        //AudioSourceを空にする
+        soundManager.ClearAudioSource();
     }
 
     /// <summary>

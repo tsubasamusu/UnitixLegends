@@ -12,9 +12,6 @@ public class BulletManager : MonoBehaviour
     private Transform temporaryObjectContainerTran;//一時的にゲームオブジェクトを収容するTransform
 
     [SerializeField]
-    private ItemDataSO itemDataSO;//ItemDataSO
-
-    [SerializeField]
     private SoundManager soundManager;//SoundManager
 
     [SerializeField]
@@ -109,27 +106,27 @@ public class BulletManager : MonoBehaviour
         {
             //手榴弾なら
             case ItemDataSO.ItemName.Grenade:
-                grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[1].maxBulletCount);
+                grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.Grenade).maxBulletCount);
                 break;
 
             //催涙弾なら
             case ItemDataSO.ItemName.TearGasGrenade:
-                tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, itemDataSO.itemDataList[2].maxBulletCount);
+                tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.TearGasGrenade).maxBulletCount);
                 break;
 
             //アサルトなら
             case ItemDataSO.ItemName.Assault:
-                assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, itemDataSO.itemDataList[5].maxBulletCount);
+                assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.Assault).maxBulletCount);
                 break;
 
             //ショットガンなら
             case ItemDataSO.ItemName.Shotgun:
-                shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, itemDataSO.itemDataList[6].maxBulletCount);
+                shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.Shotgun).maxBulletCount);
                 break;
 
             //スナイパーなら
             case ItemDataSO.ItemName.Sniper:
-                sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, itemDataSO.itemDataList[7].maxBulletCount);
+                sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, itemManager.GetItemData(ItemDataSO.ItemName.Sniper).maxBulletCount);
                 break;
         }
     }
