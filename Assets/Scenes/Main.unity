@@ -800,6 +800,7 @@ MonoBehaviour:
   itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   soundManager: {fileID: 1904666692}
   playerController: {fileID: 4889205611976788818}
+  airplaneController: {fileID: 7253046155250339149}
   itemManager: {fileID: 686150032}
 --- !u!1 &197156985
 GameObject:

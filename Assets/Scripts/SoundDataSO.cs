@@ -43,6 +43,7 @@ public class SoundDataSO : ScriptableObject
         GameOverSE,//ゲームオーバー音
         GameClearSE,//ゲームクリア音
         NoneItemSE,//選択したアイテムがNoneの時の音
+        NextShotOkSE//発射完了音
     }
 
     /// <summary>
