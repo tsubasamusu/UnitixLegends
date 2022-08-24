@@ -160,19 +160,6 @@ public class BulletManager : MonoBehaviour
         //経過時間を初期化
         timer = 0;
 
-        //使用するアイテムのエフェクトがnullではないなら
-        if (itemData.effect != null)
-        {
-            //エフェクトを生成し、親をShoBulletに設定
-            GameObject effect = Instantiate(itemData.effect, transform);
-
-            //生成したエフェクトの位置を調整
-            effect.transform.position = transform.position;
-
-            //生成したエフェクトを1秒後に消す
-            Destroy(effect, 1f);
-        }
-
         SoundDataSO.SoundData soundData;//効果音のデータ
 
         //使用するアイテムの名前に応じて処理を変更
