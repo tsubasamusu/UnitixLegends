@@ -547,7 +547,17 @@ public class PlayerController : MonoBehaviour
 				return;
 		}
 
-		//効果音を再生
-		AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[16].audioClip, Camera.main.transform.position);
+		//選択したアイテムがNoneなら
+		if (itemManager.GetSelectedItemData().itemName == ItemDataSO.ItemName.None)
+		{
+			//効果音を再生
+			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[20].audioClip, Camera.main.transform.position);
+		}
+		//選択したアイテムがNoneではなかったら
+		else
+		{
+			//効果音を再生
+			AudioSource.PlayClipAtPoint(soundDataSO.soundDataList[16].audioClip, Camera.main.transform.position);
+		}
 	}
 }

@@ -84,7 +84,7 @@ MonoBehaviour:
   - soundType: 0
     soundEffectName: 18
     backgroundMusicName: 0
-    audioClip: {fileID: 8300000, guid: 58ee485794767024d9b9e489c53b86c4, type: 3}
+    audioClip: {fileID: 8300000, guid: e67ed55c353057545a9e1c58f355e9c8, type: 3}
   - soundType: 0
     soundEffectName: 19
     backgroundMusicName: 0
@@ -93,3 +93,7 @@ MonoBehaviour:
     soundEffectName: 20
     backgroundMusicName: 0
     audioClip: {fileID: 8300000, guid: b65f0b3183f820745bff7bbdad27134a, type: 3}
+  - soundType: 0
+    soundEffectName: 21
+    backgroundMusicName: 0
+    audioClip: {fileID: 8300000, guid: c810e92587e8eb74f98ce7d4fa82440d, type: 3}

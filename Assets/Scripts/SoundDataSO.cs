@@ -42,6 +42,7 @@ public class SoundDataSO : ScriptableObject
         GameStartSE,//ゲーム開始音
         GameOverSE,//ゲームオーバー音
         GameClearSE,//ゲームクリア音
+        NoneItemSE,//選択したアイテムがNoneの時の音
     }
 
     /// <summary>
