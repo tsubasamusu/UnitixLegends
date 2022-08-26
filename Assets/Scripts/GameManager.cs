@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private EnemyGenerator enemyGenerator;//EnemyGenerator
 
     [SerializeField]
-    private AirplaneController airplaneController;//AirplaneController
+    private AirPlaneController airplaneController;//AirplaneController
 
     [SerializeField]
     private PlayerController playerController;//PlayerControoler
@@ -114,6 +114,9 @@ public class GameManager : MonoBehaviour
         //ゲーム終了状態に切り替える
         isGameOver = true;
 
+        // UIManager に3回命令しているので、専用のメソッドを１つ、UIManager 側に作っては？
+        // そうすれば、こちらからの命令は1回で済む
+         
         //CanvasGroupを非表示にする
         uiManager.SetCanvasGroup(false);
 

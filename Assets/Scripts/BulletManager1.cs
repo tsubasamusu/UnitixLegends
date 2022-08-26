@@ -1,6 +1,4 @@
-using DG.Tweening;
 using System.Collections;//IEnumeratorを使用
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace yamap {
@@ -12,9 +10,6 @@ namespace yamap {
 
         [SerializeField]
         private Transform temporaryObjectContainerTran;//一時的にゲームオブジェクトを収容するTransform
-
-        [SerializeField]
-        private SoundManager soundManager;//SoundManager
 
         [SerializeField]
         private PlayerController playerController;//PlayerController
@@ -61,10 +56,7 @@ namespace yamap {
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
-        private void Start() {
-            // 弾の最大数をセット
-
-
+        private void Start() {　　// GameManager からSetUp した方が順番が出来てよいのでは？
             //経過時間の計測を開始
             StartCoroutine(MeasureTime());
         }
