@@ -28,7 +28,9 @@ namespace yamap {
             SniperBullet//スナイパー用弾
         }
 
-
+        /// <summary>
+        /// アイテムの種類
+        /// </summary>
         public enum ItemType {
             FireArms,
             HandWeapon,
@@ -60,8 +62,10 @@ namespace yamap {
             public Sprite sprite;//Sprite
             public GameObject prefab;//プレファブ
             public Rigidbody bulletPrefab;//弾のプレファブ
-            public ItemType itemType;
-            public BulletDetailBase bulletDetailPrefab;
+
+            public ItemType itemType;       　　　　　  // アイテムの種類
+            public WeaponBase weaponPrefab; 　　　　　  // 弾と近接武器のプレファブ
+            public SoundDataSO.SoundEffectName seName;  // SE の種類
 
             public int BulletCount
             {

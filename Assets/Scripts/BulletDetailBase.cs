@@ -1,60 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+namespace yamap {
 
-// インタフェース
-//https://naoyu.dev/%E3%80%90unity%E3%80%91%E3%82%AF%E3%83%A9%E3%82%B9%E8%A8%AD%E8%A8%88%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%AE%E5%BD%B9/
+    /// <summary>
+    /// バレットのプレファブにアタッチする、弾用の親クラス
+    /// </summary>
+    public class BulletDetailBase : WeaponBase {
 
+        protected float effectDuration;
 
+        /// <summary>
+        /// 弾の設定
+        /// </summary>
+        /// <param name="attackPower">弾の威力</param>
+        /// <param name="bulletOwnerType">弾の所有者</param>
+        /// <param name="direction">弾の飛ぶ方向</param>
+        /// <param name="seName">SE の種類</param>
+        /// <param name="duration">弾の持続時間</param>
+        /// <param name="effectPrefab">エフェクトのプレファブ</param>
+        public virtual void SetUpBulletDetail(float attackPower, BulletOwnerType bulletOwnerType, Vector3 direction, SoundDataSO.SoundEffectName seName, float duration = 3.0f, GameObject effectPrefab = null) {
+            this.attackPower = attackPower;
+            BulletOwnerType = bulletOwnerType;
 
-public enum BulletOwnerType {
-    Player,
-    Enemy
-}
+            // 弾の発射
+            TriggerBullet(direction, duration);
 
-/// <summary>
-/// バレットにアタッチする
-/// </summary>
-public class BulletDetailBase : MonoBehaviour
-{
-    private float attackPower;
+            // SE があるなら
+            if (seName != SoundDataSO.SoundEffectName.None) {
+                // SE 再生
+                PlaySE(seName);
+            }
 
-    [SerializeField]
-    Rigidbody rb;
+            // エフェクトがあるなら
+            if (effectPrefab != null) {
+                // エフェクト生成
+                GenerateEffect(effectPrefab);
+            }
+        }
 
-    // 弾の所有者
-    private BulletOwnerType bulletOwnerType;
+        /// <summary>
+        /// 弾の発射
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="soundType"></param>
+        /// <param name="duration"></param>
+        protected virtual void TriggerBullet(Vector3 direction, float duration) {
+            rb.AddForce(direction);
 
-    public BulletOwnerType BulletOwnerType { get => bulletOwnerType; set => bulletOwnerType = value; }
+            Destroy(gameObject, duration);
+        }
 
-    public virtual void SetUpBulletDetail(float attackPower, BulletOwnerType bulletOwnerType, Vector3 direction) {
-        this.attackPower = attackPower;
+        /// <summary>
+        /// エフェクト生成
+        /// </summary>
+        /// <param name="effect"></param>
+        protected virtual void GenerateEffect(GameObject effectPrefab) {
+            //エフェクトを生成し、親をShoBulletに設定
+            GameObject effect = Instantiate(effectPrefab, transform);
 
-        BulletOwnerType = bulletOwnerType;
+            //生成したエフェクトを指定時間後に消す
+            Destroy(effect, effectDuration);
+        }
 
-        // SE エフェクト再生 手りゅう弾とか
-
-
-        rb.AddForce(direction);
-    }
-
-
-    public virtual float GetAttackPower() {
-
-        return attackPower;
-    }
-
-
-
-    public virtual void TriggerBullet() {
-
-        // 取得時の処理
-
-
-        // SE エフェクト再生
-
-        // 破壊
-
+        public float GetAttackPower() {
+            return attackPower;
+        }
     }
 }
