@@ -366,22 +366,14 @@ namespace yamap {
             }
 
             //’e‚ğ¶¬
-            Rigidbody bulletRb = Instantiate(itemData.bulletPrefab, shotBulletTran.position, Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0));
-
-            BulletDetailBase bullet = Instantiate(itemData.bulletDetailPrefab, shotBulletTran.position, Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0));
-            bullet.SetUpBulletDetail(itemData.attackPower, BulletOwnerType.Enemy, enemyWeaponTran.forward);
+            BulletDetailBase bullet = Instantiate(itemData.weaponPrefab, shotBulletTran.position, Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0)).GetComponent<BulletDetailBase>();
+            bullet.SetUpBulletDetail(itemData.attackPower, BulletOwnerType.Enemy, enemyWeaponTran.forward, itemData.seName, itemData.interval, itemData.effectPrefab);
 
             //¶¬‚µ‚½’e‚Ìe‚ğ©g‚Éİ’è
-            bulletRb.transform.parent = transform;
-
-            //’e‚ğ”­Ë
-            bulletRb.AddForce(enemyWeaponTran.forward * itemData.shotSpeed);
+            bullet.transform.parent = transform;
 
             //Œo‰ßŠÔ‚ğ‰Šú‰»
             timer = 0;
-
-            //”­Ë‚µ‚½’e‚ğ3.0•bŒã‚ÉÁ‚·
-            Destroy(bulletRb.gameObject, 3.0f);
         }
 
         /// <summary>
@@ -389,6 +381,7 @@ namespace yamap {
         /// </summary>
         /// <param name="collision"></param>
         private void OnCollisionEnter(Collision collision) {
+
             //©•ª‚ªŒ‚‚Á‚½’e‚ğ”í’e‚µ‚½‚È‚ç
             if (collision.transform.parent == transform) {
                 //ˆÈ~‚Ìˆ—‚ğs‚í‚È‚¢

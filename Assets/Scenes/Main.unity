@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43667555, g: 0.48427182, b: 0.5645241, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -799,7 +799,7 @@ MonoBehaviour:
   temporaryObjectContainerTran: {fileID: 822695140}
   soundManager: {fileID: 1904666692}
   playerController: {fileID: 4889205611976788818}
-  itemManager: {fileID: 686150032}
+  itemManager: {fileID: 686150034}
 --- !u!1 &197156985
 GameObject:
   m_ObjectHideFlags: 0
@@ -4295,7 +4295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 686150033}
-  - component: {fileID: 686150032}
+  - component: {fileID: 686150034}
   m_Layer: 0
   m_Name: ItemManager
   m_TagString: Untagged
@@ -4303,32 +4303,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &686150032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686150031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16916448d73f5f742b5bf1fa6a13a83e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
-  soundManager: {fileID: 1904666692}
-  uIManager: {fileID: 1027788433}
-  bulletManager: {fileID: 112694188}
-  playerController: {fileID: 4889205611976788818}
-  playerHealth: {fileID: 4889205611976788819}
-  itemTrans: {fileID: 848463422}
-  generateItemPosPrefab: {fileID: 2885856152142634640, guid: f87dc097295f5c844abbfc6fecd98483, type: 3}
-  playerTran: {fileID: 4889205611965899502}
-  itemRotSpeed: 0.2
-  maxItemTranCount: 200
-  generatedItemDataList: []
-  generatedItemTranList: []
-  playerItemList: []
 --- !u!4 &686150033
 Transform:
   m_ObjectHideFlags: 0
@@ -4344,6 +4318,32 @@ Transform:
   m_Father: {fileID: 1049367795}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &686150034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686150031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 609fe38295f049e499e0666307090238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
+  soundManager: {fileID: 1904666692}
+  uIManager: {fileID: 1027788433}
+  bulletManager: {fileID: 112694188}
+  playerController: {fileID: 4889205611976788818}
+  playerHealth: {fileID: 4889205611976788819}
+  itemTrans: {fileID: 931892668}
+  generateItemPosPrefab: {fileID: 2885856152142634640, guid: f87dc097295f5c844abbfc6fecd98483, type: 3}
+  playerTran: {fileID: 4889205611965899502}
+  itemRotSpeed: 5
+  maxItemTranCount: 5
+  generatedItemDataList: []
+  generatedItemTranList: []
+  playerItemList: []
 --- !u!1 &698499242
 GameObject:
   m_ObjectHideFlags: 0
@@ -4921,7 +4921,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783262652}
-  m_LocalRotation: {x: 0.2985968, y: 0.1704601, z: -0.054294277, w: 0.9374623}
+  m_LocalRotation: {x: 0.2985968, y: 0.17046006, z: -0.054294266, w: 0.9374623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6909,7 +6909,7 @@ MonoBehaviour:
   itemSlot: {fileID: 931892668}
   itemDataSO: {fileID: 11400000, guid: 17c55b2c1e7d40840be6c2343875ab45, type: 2}
   bulletManager: {fileID: 112694188}
-  itemManager: {fileID: 686150032}
+  itemManager: {fileID: 686150034}
   playerHealth: {fileID: 4889205611976788819}
   floatingMessagesTran: {fileID: 1545743224}
   enemies: {fileID: 1802484447}
@@ -8019,7 +8019,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -23978,7 +23977,7 @@ MonoBehaviour:
   anim: {fileID: 4889205611973315950}
   bulletManager: {fileID: 112694188}
   uiManager: {fileID: 1027788433}
-  itemManager: {fileID: 686150032}
+  itemManager: {fileID: 686150034}
   soundManager: {fileID: 1904666692}
   followZoom: {fileID: 543694168}
   mainCameraTran: {fileID: 963194230}
@@ -23998,7 +23997,7 @@ MonoBehaviour:
   uiManager: {fileID: 1027788433}
   stormController: {fileID: 1528018336}
   gameManager: {fileID: 462930272}
-  itemManager: {fileID: 686150032}
+  itemManager: {fileID: 686150034}
   skybox: {fileID: 963194231}
   normalSky: {fileID: 2100000, guid: c051fe5a20f72814f9643eb10ebbd2fc, type: 2}
   stormSky: {fileID: 2100000, guid: 6eecb3bb77b3f7a43a504fceda3b0b5f, type: 2}
@@ -27690,8 +27689,8 @@ MonoBehaviour:
   uiManager: {fileID: 1027788433}
   enemyGenerator: {fileID: 511870282}
   soundManager: {fileID: 1904666692}
-  fallKey: 32
-  rotSpeed: 100
+  fallKey: 105
+  rotSpeed: 10
 --- !u!1 &7253046155250339150
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,11 +3,12 @@ using System.Collections.Generic;//リストを使用
 using UnityEngine;
 using UnityEngine.UI;//UIを使用
 using DG.Tweening;//DOTweenを使用
-using UnityEngine.SceneManagement;//シーンのロードを使用
+using UnityEngine.SceneManagement;//LOadScenを使用
 
 namespace yamap {
 
     public class UIManager : MonoBehaviour {
+
         [SerializeField]
         private Image eventHorizon;//視界
 
@@ -24,7 +25,10 @@ namespace yamap {
         private Text txtGameOver;//ゲームオーバーテキスト
 
         [SerializeField]
-        private Text txtBulletCount;//残弾数テキスト
+        private Text txtItemCount;//残弾数テキスト
+
+        [SerializeField]
+        private Text txtOtherCount;//他の数のテキスト
 
         [SerializeField]
         private Text txtFps;//FPSのテキスト
@@ -45,13 +49,16 @@ namespace yamap {
         private Transform itemSlot;//アイテムスロットの親
 
         [SerializeField]
-        private ItemDataSO itemDataSO;//ItemDataSO
-
-        [SerializeField]
         private BulletManager bulletManager;//BulletManager
 
         [SerializeField]
-        private Transform canvasTran;//Canvasのtransform
+        private PlayerHealth playerHealth;//PlayerHealth
+
+        [SerializeField]
+        private Transform floatingMessagesTran;//フロート表示の親
+
+        [SerializeField]
+        private Transform enemies;//全てのEnemyの親
 
         [SerializeField]
         private GameObject itemSlotSetPrefab;//アイテムスロットセットのプレファブ
@@ -66,12 +73,27 @@ namespace yamap {
         public List<Image> imgItemSlotBackgroundList = new List<Image>();//アイテムスロットの背景のイメージのリスト
 
         /// <summary>
-        /// ゲーム開始直後に呼び出される
+        /// テキストの表示の更新を常に行う
         /// </summary>
-        private void Start() {
+        /// <returns></returns>
+        public IEnumerator UpdateText() {
+            //無限に繰り返す
+            while (true) {
+                //フレームレートを計算し、表示を更新する
+                UpdateFpsText();
 
-            DOTween.Init();
+                //残弾数の表示を更新する
+                UpdateTxtBulletCount();
 
+                //次のフレームへ飛ばす（実質、Updateメソッド）
+                yield return null;
+            }
+        }
+
+        /// <summary>
+        /// アイテムスロットの設定等を行う
+        /// </summary>
+        public void SetUpItemSlots() {
             //アイテムスロットを生成
             GenerateItemSlots(5);
 
@@ -80,14 +102,11 @@ namespace yamap {
         }
 
         /// <summary>
-        /// 毎フレーム呼び出される
+        /// 他の数の表示を更新
         /// </summary>
-        private void Update() {
-            //フレームレートを計算し、表示を更新する
-            UpdateFpsText();
-
-            //残弾数の表示を更新する
-            UpdateTxtBulletCount();   // <- 更新のタイミングのみにした方がいい
+        /// <param name="enemyNumber">Enemyの数</param>
+        public void UpdateTxtOtherCount(int enemyNumber) {
+            txtOtherCount.text = (enemyNumber + 1).ToString() + "Players\n" + GameData.instance.KillCount.ToString() + "Kills";
         }
 
         /// <summary>
@@ -96,7 +115,10 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         public IEnumerator PlayGameStart() {
             //視界を白色に設定
-            eventHorizon.color = new Color(255.0f, 255.0f, 255.0f, 0.0f);
+            SetEventHorizonColor(Color.white);
+
+            //視界の色をハッキリと表示
+            eventHorizon.DOFade(1f, 0f);
 
             //ロゴをゲームスタートに設定
             logo.sprite = gameStart;
@@ -115,8 +137,6 @@ namespace yamap {
 
             //視界とロゴの演出が終わるまで待つ
             yield return new WaitForSeconds(1.0f);
-
-            //GameManagerからゲーム開始状態に切り替える
         }
 
         /// <summary>
@@ -125,7 +145,10 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         public IEnumerator PlayGameClear() {
             //視界を白色に設定
-            eventHorizon.color = new Color(255.0f, 255.0f, 255.0f, 0.0f);
+            SetEventHorizonColor(Color.white);
+
+            //視界の色をハッキリと表示
+            eventHorizon.DOFade(1f, 0f);
 
             //ロゴをゲームクリアに設定
             logo.sprite = gameClear;
@@ -141,9 +164,6 @@ namespace yamap {
 
             //視界とロゴの演出が終わるまで待つ
             yield return new WaitForSeconds(1.0f);
-
-            //Mainシーンを読み込む
-            SceneManager.LoadScene("Main");
         }
 
         /// <summary>
@@ -152,7 +172,10 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         public IEnumerator PlayGameOver() {
             //視界を黒色に設定
-            eventHorizon.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+            SetEventHorizonColor(Color.black);
+
+            //視界を透明にする
+            eventHorizon.DOFade(0f, 0f);
 
             //1.0秒かけて視界を完全に暗くする
             eventHorizon.DOFade(1.0f, 1.0f);
@@ -160,14 +183,11 @@ namespace yamap {
             //視界が完全に暗転するまで待つ
             yield return new WaitForSeconds(1.0f);
 
-            //3.0秒かけて「GameOver」を表示
-            txtGameOver.DOText("GameOver", 3.0f);
+            //3.0秒かけて等速で「GameOver」を表示
+            txtGameOver.DOText("GameOver", 3.0f).SetEase(Ease.Linear);
 
             //「GameOverの表示が終ったあと、さらに1.0秒間待つ
             yield return new WaitForSeconds(4.0f);
-
-            //Mainシーンを読み込む
-            SceneManager.LoadScene("Main");
         }
 
         /// <summary>
@@ -177,7 +197,7 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         public IEnumerator SetEventHorizonBlack(float time) {
             //視界を黒色に設定
-            eventHorizon.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+            SetEventHorizonColor(Color.black);
 
             //1.0秒かけて視界を完全に暗くする
             eventHorizon.DOFade(1.0f, 1.0f);
@@ -190,12 +210,21 @@ namespace yamap {
         }
 
         /// <summary>
+        /// 視界の色を設定する
+        /// </summary>
+        /// <param name="color">視界の色</param>
+        public void SetEventHorizonColor(Color color) {
+            //引数を元に、視界の色を設定
+            eventHorizon.color = color;
+        }
+
+        /// <summary>
         /// 被弾した際の視界の処理
         /// </summary>
         /// <returns>待ち時間</returns>
         public IEnumerator AttackEventHorizon() {
             //視界を赤色に設定
-            eventHorizon.color = new Color(255.0f, 0.0f, 0.0f, 0.0f);
+            SetEventHorizonColor(Color.red);
 
             //0.25秒かけて視界を少し赤くする
             eventHorizon.DOFade(0.5f, 0.25f);
@@ -227,26 +256,42 @@ namespace yamap {
         }
 
         /// <summary>
-        /// 残弾数の表示の更新を行う
+        /// アイテムの数の表示の更新を行う
         /// </summary>
         private void UpdateTxtBulletCount() {
-            //選択しているアイテムが銃火器ではないなら
-            if (!ItemManager.instance.playerItemList[ItemManager.instance.SelectedItemNo - 1].isFirearms) {
-                //テキストを空にする
-                txtBulletCount.text = "";
-
-                //以降の処理を行わない
-                return;
+            //選択しているアイテムが飛び道具なら
+            if (ItemManager.instance.GetSelectedItemData().itemType == ItemDataSO.ItemType.Missile) {
+                //選択されている飛び道具の残弾数をテキストに設定
+                txtItemCount.text = bulletManager.GetBulletCount(ItemManager.instance.GetSelectedItemData().itemName).ToString();
             }
-
-            //選択されているアイテムの残弾数をテキストに設定
-            txtBulletCount.text = bulletManager.GetBulletCount(ItemManager.instance.playerItemList[ItemManager.instance.SelectedItemNo - 1].itemName).ToString();
+            //選択しているアイテムに回復効果があるなら
+            else if (ItemManager.instance.GetSelectedItemData().restorativeValue > 0) {
+                //選択されている回復アイテムの所持数をテキストに設定
+                txtItemCount.text = playerHealth.GetRecoveryItemCount(ItemManager.instance.GetSelectedItemData().itemName).ToString();
+            }
+            //選択しているアイテムが、飛び道具でも回復アイテムでもないなら
+            else {
+                //テキストを空にする
+                txtItemCount.text = "";
+            }
         }
 
+        /// <summary>
+        /// 全てのフロート表示を非表示にする
+        /// </summary>
+        public void SetFloatingMessagesNotActive() {
+            //フロート表示の親を無効化
+            floatingMessagesTran.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// 外部からの実行用メソッド
+        /// </summary>
+        /// <param name="messageText"></param>
+        /// <param name="color"></param>
         public void PrepareGenerateFloatingMessage(string messageText, Color color) {
             StartCoroutine(GenerateFloatingMessage(messageText, color));
         }
-
 
         /// <summary>
         /// フロート表示を生成する
@@ -258,8 +303,8 @@ namespace yamap {
             //フロート表示を生成
             Text txtFloatingMessage = Instantiate(floatingMessagePrefab);
 
-            //生成したフロート表示の親をCanvasに設定
-            txtFloatingMessage.gameObject.transform.SetParent(canvasTran);
+            //生成したフロート表示の親を設定
+            txtFloatingMessage.gameObject.transform.SetParent(floatingMessagesTran);
 
             //引数を元に、フロート表示のテキストを設定
             txtFloatingMessage.text = messageText;
@@ -271,7 +316,7 @@ namespace yamap {
             txtFloatingMessage.gameObject.transform.localPosition = Vector3.zero;
 
             //フロート表示の大きさを初期化
-            txtFloatingMessage.gameObject.transform.localScale = Vector3.one;
+            txtFloatingMessage.gameObject.transform.localScale = new Vector3(3f, 3f, 3f);
 
             //生成したフロート表示を3.0秒後に消す
             Destroy(txtFloatingMessage.gameObject, 3.0f);
@@ -291,21 +336,19 @@ namespace yamap {
         /// </summary>
         private void UpdateFpsText() {
             //表示を更新
-            txtFps.text = (1f / Time.deltaTime).ToString("F0") + "fps";
+            txtFps.text = (1f / Time.deltaTime).ToString("F0");
         }
 
         /// <summary>
         /// 指定された数だけアイテムスロットを生成する
         /// </summary>
         /// <param name="generateNumber">アイテムスロットの数</param>
-        public void GenerateItemSlots(int generateNumber) {
+        private void GenerateItemSlots(int generateNumber) {
             //引数で指定された回数だけ生成処理を繰り返す
             for (int i = 0; i < generateNumber; i++) {
                 //アイテムスロットを生成
-                GameObject itemSlot = Instantiate(itemSlotSetPrefab);
-
                 //生成したアイテムスロットの親をitemSlotに設定
-                itemSlot.transform.SetParent(this.itemSlot);
+                GameObject itemSlot = Instantiate(itemSlotSetPrefab, this.itemSlot);
 
                 //生成したアイテムスロットの大きさを設定
                 itemSlot.transform.localScale = Vector3.one;
@@ -334,7 +377,7 @@ namespace yamap {
                 }
 
                 //Playerが所持しているアイテムのリストの要素を、アイテムスロットの数だけ作る
-                ItemManager.instance.playerItemList.Add(itemDataSO.itemDataList[0]);
+                //ItemManager.instance.playerItemList.Add(ItemManager.instance.ItemDataSO.itemDataList[0]);
             }
 
             //アイテムスロット全体の大きさを2倍にする
@@ -370,6 +413,19 @@ namespace yamap {
             txtMessage.color = color;
         }
 
+
+        /// <summary>
+        /// メッセージの表示、非表示を切り替える
+        /// </summary>
+        /// <param name="isSetting">表示するならtrue</param>
+        public void SetMessageActive(bool isSetting) {
+            //引数を元に、メッセージの透明度を取得
+            float value = isSetting ? 1f : 0f;
+
+            //取得した透明度をメッセージに反映する
+            txtMessage.DOFade(value, 0f);
+        }
+
         /// <summary>
         /// 指定されたアイテムスロットの背景色を設定する
         /// </summary>
@@ -390,8 +446,8 @@ namespace yamap {
         /// スコープを覗く
         /// </summary>
         public void PeekIntoTheScope() {
-            //キャンバスグループを無効に
-            canvasGroup.gameObject.SetActive(false);
+            //CanvasGroupを非表示にする
+            SetCanvasGroup(false);
 
             //スコープを有効に
             scope.gameObject.SetActive(true);
@@ -401,11 +457,23 @@ namespace yamap {
         /// スコープを覗くのをやめる
         /// </summary>
         public void NotPeekIntoTheScope() {
-            //キャンバスグループを有効に
-            canvasGroup.gameObject.SetActive(true);
+            //CanvasGroupを表示する
+            SetCanvasGroup(true);
 
             //スコープを無効に
             scope.gameObject.SetActive(false);
+        }
+
+        public void DisplayGameOver() {
+
+            //CanvasGroupを非表示にする
+            SetCanvasGroup(false);
+
+            //全てのフロート表示を非表示にする
+            SetFloatingMessagesNotActive();
+
+            //メッセージを無効化
+            SetMessageActive(false);
         }
     }
 }

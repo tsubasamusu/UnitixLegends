@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;//DOTweenを使用
 
-public class AirplaneController : MonoBehaviour
+public class AirPlaneController : MonoBehaviour
 {
     [SerializeField]
     private Transform propellerTran;//プロペラの位置情報

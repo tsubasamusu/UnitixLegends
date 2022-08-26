@@ -136,7 +136,7 @@ namespace yamap {
             BulletDetailBase bullet = Instantiate(itemData.weaponPrefab, transform.position, Quaternion.Euler(transform.parent.eulerAngles.x, transform.parent.eulerAngles.y, 0)).GetComponent<BulletDetailBase>();
 
             //’e‚ð”­ŽË
-            bullet.SetUpBulletDetail(itemData.attackPower, BulletOwnerType.Player, transform.forward * itemData.shotSpeed, itemData.seName);
+            bullet.SetUpBulletDetail(itemData.attackPower, BulletOwnerType.Player, transform.forward * itemData.shotSpeed, itemData.seName, itemData.interval, itemData.effectPrefab);
 
             //Player‚ÌŽ€Œã‚à”­ŽË‚µ‚½’e‚Íˆê’èŽžŠÔŽc‚é
             bullet.gameObject.transform.SetParent(temporaryObjectContainerTran);

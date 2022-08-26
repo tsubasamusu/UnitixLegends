@@ -32,9 +32,8 @@ namespace yamap {
         /// アイテムの種類
         /// </summary>
         public enum ItemType {
-            FireArms,
+            Missile,
             HandWeapon,
-            ThrowingWeapon,
             Bullet
         }
 
@@ -54,24 +53,16 @@ namespace yamap {
             public int bulletCount;//弾の数
             public int maxBulletCount;//一度に所持できる弾の最大数
             public bool enemyCanUse;//Enemyが使用できるかどうか
-            public bool isNotBullet;//弾のアイテムではないかどうか
-            public bool isFirearms;//銃火器かどうか
-            public bool isHandWeapon;//近接武器かどうか
-            public bool isThrowingWeapon;//投擲武器かどうか
-            public bool isMissile;
+            //public bool isNotBullet;//弾のアイテムではないかどうか
+            //public bool isMissile;//飛び道具かどうか
+            //public bool isHandWeapon;//近接武器かどうか
             public Sprite sprite;//Sprite
-            public GameObject prefab;//プレファブ
-            public Rigidbody bulletPrefab;//弾のプレファブ
+            public GameObject prefab;//落ちている方のプレファブ
 
             public ItemType itemType;       　　　　　  // アイテムの種類
             public WeaponBase weaponPrefab; 　　　　　  // 弾と近接武器のプレファブ
             public SoundDataSO.SoundEffectName seName;  // SE の種類
-
-            public int BulletCount
-            {
-                get => bulletCount;
-                set => bulletCount = Math.Clamp(bulletCount + value, 0, maxBulletCount);
-            }
+            public GameObject effectPrefab;
         }
 
         public List<ItemData> itemDataList = new List<ItemData>();//アイテムデータのリスト

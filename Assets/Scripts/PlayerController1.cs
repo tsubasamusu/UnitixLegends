@@ -8,67 +8,85 @@ namespace yamap {
 
 	public class PlayerController : MonoBehaviour {
 
-		[SerializeField]
-		private float gravity;//重力
+        [SerializeField]
+        private float previousSpeed;//前進速度
 
-		[SerializeField]
-		private float previousSpeed;//前進速度
+        [SerializeField]
+        private float backSpeed;//後進速度
 
-		[SerializeField]
-		private float backSpeed;//後進速度
+        [SerializeField]
+        private float speedX;//左右移動速度
 
-		[SerializeField]
-		private float speedX;//左右移動速度
+        [SerializeField, Range(1.0f, 30.0f)]
+        private float normalZoomFOV;//通常のズーム時の視野角
 
-		[SerializeField]
-		private float fallSpeed;//落下速度
+        [SerializeField, Range(1.0f, 30.0f)]
+        private float ScopeZoomFOV;//スコープによるズームの視野角
 
-		[SerializeField, Range(1.0f, 30.0f)]
-		private float normalZoomFOV;//通常のズーム時の視野角
+        [SerializeField]
+        private float getItemLength;//アイテムを取得できる距離
 
-		[SerializeField, Range(1.0f, 30.0f)]
-		private float ScopeZoomFOV;//スコープによるズームの視野角
+        [SerializeField]
+        private KeyCode stoopKey;//かがむキー
 
-		[SerializeField]
-		private float getItemLength;//アイテムを取得できる距離
+        [SerializeField]
+        private KeyCode getItemKey;//アイテム取得キー
 
-		[SerializeField]
-		private KeyCode fallKey;//飛び降りるキー
+        [SerializeField]
+        private KeyCode discardKey;//アイテム破棄キー
 
-		[SerializeField]
-		private KeyCode stoopKey;//かがむキー
+        [SerializeField]
+        private Rigidbody playerRb;//Rigidbody
 
-		[SerializeField]
-		private KeyCode getItemKey;//アイテム取得キー
+        [SerializeField]
+        private BoxCollider boxCollider;//BoxCollider
 
-		[SerializeField]
-		private KeyCode discardKey;//アイテム破棄キー
+        [SerializeField]
+        private Animator anim;//Animator
 
-		[SerializeField]
-		private CharacterController controller;//CharacterController
+        [SerializeField]
+        private BulletManager bulletManager;//BulletManager
 
-		[SerializeField]
-		private Animator anim;//Animator
+        [SerializeField]
+        private UIManager uiManager;//UIManager
 
-		[SerializeField]
-		private BulletManager bulletManager;//BulletManager
+        [SerializeField]
+        private ItemManager itemManager;//ItemManager
 
-		[SerializeField]
-		private UIManager uiManager;//UIManager
+        [SerializeField]
+        private SoundManager soundManager;//SoundManager
 
-		[SerializeField]
-		private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
+        [SerializeField]
+        private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
 
-		[SerializeField]
-		private Transform mainCamera;//メインカメラ
+        [SerializeField]
+        private Transform mainCameraTran;//メインカメラの位置
 
-		private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
+        [SerializeField]
+        private Transform playerCharacterTran;//Playerのキャラクターの位置
+
+        private Vector3 moveDirection = Vector3.zero;//進行方向ベクトル
+
+        private Vector3 desiredMove = Vector3.zero;//移動ベクトル
+
+        private Vector3 firstColliderCenter;//コライダーのセンターの初期値
+
+        private Vector3 firstColliderSize;//コライダーの大きさの初期値
+
+        private bool landed;//飛行機から飛び降りて着地したかどうか
+
+        private int selectedItemNo = 1;//使用しているアイテムの番号
+
+        public int SelectedItemNo//useItemNo変数用のプロパティ
+        {
+            get { return selectedItemNo; }//外部からは取得処理のみ可能に
+        }
 
 
-		/// <summary>
-		/// Playerの状態
-		/// </summary>
-		private enum PlayerCondition {
+        /// <summary>
+        /// Playerの状態
+        /// </summary>
+        private enum PlayerCondition {
 			Idle,//何もしていない
 			MoveBack,//後進している
 			MovePrevious,//前進している
@@ -77,146 +95,205 @@ namespace yamap {
 			Stooping//かがんでいる
 		}
 
-		/// <summary>
-		/// 毎フレーム呼び出される
-		/// </summary>
-		void Update() {
-			//飛び降りるキーを押されたら
-			if (Input.GetKeyDown(fallKey)) {
-				//飛行機から飛び降りる
-				FallFromAirplane();
-			}
+        /// <summary>
+        /// ゲーム開始直後に呼び出される
+        /// </summary>
+        private void Start() {              // GameManager からSetUp した方が順番が出来てよいのでは？
+            //Rigidbodyによる重力を無効化
+            playerRb.useGravity = false;
 
-			//接地していなかったら
-			if (!CheckGrounded()) {
-				//以降の処理を行わない
-				return;
-			}
+            //コライダーのセンターの初期値を取得
+            firstColliderCenter = boxCollider.center;
 
-			//アニメーションの再生と、Playerの動きの制御を行う
-			PlayAnimation(MovePlayer());
+            //コライダーの大きさの初期値を取得
+            firstColliderSize = boxCollider.size;
 
-			//アイテムを制御
-			ControlItem();
-		}
+            //物理演算を無効化
+            playerRb.isKinematic = true;
+        }
 
-		/// <summary>
-		/// 飛行機から飛び降りる
-		/// </summary>
-		/// <returns>待ち時間</returns>
-		private IEnumerator FallFromAirplane() {
-			//接地していない間、繰り返される
-			while (!CheckGrounded()) {
-				//落下する
-				transform.Translate(0, -fallSpeed, 0);
+        /// <summary>
+        /// 毎フレーム呼び出される
+        /// </summary>
+        void Update() {
+            //Playerが裏世界に行ってしまったら
+            if (transform.position.y <= -1f) {
+                //自身の座標を(0,0,0)に設定
+                transform.position = Vector3.zero;
 
-				//待ち時間を返す（実質、FixedUpdateと同じ）
-				yield return new WaitForSeconds(Time.fixedDeltaTime);
-			}
-		}
+                //以降の処理を行わない
+                return;
+            }
+
+            //Playerが転倒していたら
+            if (CheckToppled()) {
+                //メッセージを表示
+                uiManager.SetMessageText("I'm\nTrying To\nRecover", Color.red);
+
+                //態勢を立て直す
+                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            }
+
+            //接地していなかったら
+            if (!CheckGrounded()) {
+                //以降の処理を行わない
+                return;
+            }
+
+            //アニメーションの再生と、Playerの動きの制御を行う
+            PlayAnimation(MovePlayer());
+
+            //アイテムを制御
+            ControlItem();
+        }
+
+        /// <summary>
+        /// 一定時間ごとに呼び出される
+        /// </summary>
+        private void FixedUpdate() {
+            //移動する
+            playerRb.MovePosition(transform.position + (desiredMove * Time.fixedDeltaTime));
+
+            //飛行機から飛び降りて、既に着地したのなら
+            if (landed) {
+                //以降の処理を行わない
+                return;
+            }
+
+            //Playerが接地していなかったら
+            if (!CheckGrounded()) {
+                //落下する
+                transform.Translate(0, -GameData.instance.FallSpeed, 0);
+            }
+            //Playerが接地したら
+            else {
+                //効果音を再生
+                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.LandingSE));
+
+                //着地が完了した状態に切り替える
+                landed = true;
+
+                //物理演算を有効化
+                playerRb.isKinematic = false;
+
+                //Rigidbodyによる重力を有効化
+                playerRb.useGravity = true;
+            }
+        }
+
+        /// <summary>
+        /// Playerが転倒しているかどうか調べる
+        /// </summary>
+        /// <returns>Playerが転倒していたらtrue</returns>
+        private bool CheckToppled() {
+            //角度が正常ならfalseを返す
+            if (transform.eulerAngles.x < 40f && transform.eulerAngles.x >= 0f) {
+                return false;
+            } else if (transform.eulerAngles.x <= 360 && transform.eulerAngles.x > 320f) {
+                return false;
+            }
+
+            if (transform.eulerAngles.z < 40f && transform.eulerAngles.z >= 0f) {
+                return false;
+            } else if (transform.eulerAngles.z <= 360 && transform.eulerAngles.z > 320f) {
+                return false;
+            }
+
+            //trueを返す
+            return true;
+        }
 
 		/// <summary>
 		/// 受け取ったPlayerの状態を元に、アニメーションの再生を行う
 		/// </summary>
 		/// <param name="playerCondition"></param>
 		private void PlayAnimation(PlayerCondition playerCondition) {
-			//アニメーション名
-			//string animationName = null;
 
-			string animationName = playerCondition.ToString();
+			// enum は構造体であるため、null の状態を強制的に設定しない限り、null にはなりません
+			// よって null チェックは不要です。null チェックは、クラスに対して行うようにするといいです
 
-   //         //Playerの状態に応じてアニメーション名を設定
-   //         switch (playerCondition) {
-			//	case PlayerCondition.Idle:
-			//		animationName =   //"Idle";
-			//		break;
-
-			//	case PlayerCondition.MoveBack:
-			//		animationName = "MoveBack";
-			//		break;
-
-			//	case PlayerCondition.MovePrevious:
-			//		animationName = "MovePrevious";
-			//		break;
-
-			//	case PlayerCondition.MoveRight:
-			//		animationName = "MoveRight";
-			//		break;
-
-			//	case PlayerCondition.MoveLeft:
-			//		animationName = "MoveLeft";
-			//		break;
-
-			//	case PlayerCondition.Stooping:
-			//		animationName = "Stooping";
-			//		break;
-			//}
-
-			//nullエラー回避
-			if (animationName != null) {
-				//指定したアニメーション名のアニメーションを再生
-				anim.Play(animationName);
-			}
+			//指定したアニメーション名のアニメーションを再生
+			anim.Play(playerCondition.ToString());
 		}
 
 		/// <summary>
 		/// Playerの移動を制御
 		/// </summary>
 		private PlayerCondition MovePlayer() {
-			//Playerの向きをカメラの向きに合わせる
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, mainCamera.eulerAngles.y, transform.eulerAngles.z);
+            //Playerのキャラクターの向きをカメラの向きに合わせる
+            playerCharacterTran.eulerAngles = new Vector3(0f, mainCameraTran.eulerAngles.y, 0f);
 
-			//重力を生成
-			moveDirection.y -= gravity * Time.deltaTime;
+            //移動方向をPlayerの向きに合わせる
+            desiredMove = (mainCameraTran.forward * moveDirection.z) + (mainCameraTran.right * moveDirection.x);
 
-			//ローカル空間からワールド空間へdirectionを変換し、その向きと大きさに移動
-			controller.Move(transform.TransformDirection(moveDirection) * Time.deltaTime);
+            //移動ベクトルの大きさが1.0より小さいなら
+            if (desiredMove.magnitude < 1f) {
+                //移動ベクトルに0を代入
+                desiredMove = Vector3.zero;//バグ防止
+            }
 
-			//Wを押されている間
-			if (Input.GetAxis("Vertical") > 0.0f) {
-				//進行方向ベクトルを設定
-				moveDirection.z = Input.GetAxis("Vertical") * previousSpeed;
+            //Wを押されている間
+            if (Input.GetAxis("Vertical") > 0.0f) {
+                //進行方向ベクトルを設定
+                moveDirection.z = Input.GetAxis("Vertical") * previousSpeed;
 
-				//Playerの状態を返す
-				return PlayerCondition.MovePrevious;
-			}
-			//Sを押されている間
-			else if (Input.GetAxis("Vertical") < 0.0f) {
-				//進行方向ベクトルを設定
-				moveDirection.z = Input.GetAxis("Vertical") * backSpeed;
+                //Playerの状態を返す
+                return PlayerCondition.MovePrevious;
+            }
+            //Sを押されている間
+            else if (Input.GetAxis("Vertical") < 0.0f) {
+                //進行方向ベクトルを設定
+                moveDirection.z = Input.GetAxis("Vertical") * backSpeed;
 
-				//Playerの状態を返す
-				return PlayerCondition.MoveBack;
-			}
+                //Playerの状態を返す
+                return PlayerCondition.MoveBack;
+            }
 
-			//Dを押されている間
-			if (Input.GetAxis("Horizontal") > 0.0f) {
-				//進行方向ベクトルを設定
-				moveDirection.x = Input.GetAxis("Horizontal") * speedX;
+            //Dを押されている間
+            if (Input.GetAxis("Horizontal") > 0.0f) {
+                //進行方向ベクトルを設定
+                moveDirection.x = Input.GetAxis("Horizontal") * speedX;
 
-				//Playerの状態を返す
-				return PlayerCondition.MoveRight;
-			}
-			//Aを押されている間
-			else if (Input.GetAxis("Horizontal") < 0.0f) {
-				//進行方向ベクトルを設定
-				moveDirection.x = Input.GetAxis("Horizontal") * speedX;
+                //Playerの状態を返す
+                return PlayerCondition.MoveRight;
+            }
+            //Aを押されている間
+            else if (Input.GetAxis("Horizontal") < 0.0f) {
+                //進行方向ベクトルを設定
+                moveDirection.x = Input.GetAxis("Horizontal") * speedX;
 
-				//Playerの状態を返す
-				return PlayerCondition.MoveLeft;
-			}
+                //Playerの状態を返す
+                return PlayerCondition.MoveLeft;
+            }
 
-			//かがむキーが押されている間
-			if (Input.GetKey(stoopKey)) {
-				//TODO:かがむ処理を追加
+            // この処理の順番だと、移動時にはかがむボタンを押しても動作しません(return があるので)
+            // つまり、停止時のみかがむのですが、それが意図している動作であれば問題ありません
+            // 移動時であっても(停止していなくても)かかむボタンを押したらかがむ方がいいのであれば
+            // このかがむ処理については、移動の処理よりも上に書く必要があります
 
-				//Playerの状態を返す
-				return PlayerCondition.Stooping;
-			}
+            //かがむキーが押されている間
+            if (Input.GetKey(stoopKey)) {
+                //コライダーのセンターを設定
+                boxCollider.center = new Vector3(0f, 0.25f, 0f);
 
-			//Playerの状態を返す
-			return PlayerCondition.Idle;
-		}
+                //コライダーの大きさを設定
+                boxCollider.size = new Vector3(0.5f, 0.5f, 0.5f);
+
+                //Playerの状態を返す
+                return PlayerCondition.Stooping;
+            }
+            //かがむキーが押されていないなら
+            else {
+                //コライダーのセンターを初期値に設定
+                boxCollider.center = firstColliderCenter;
+
+                //コライダーの大きさを初期値に設定
+                boxCollider.size = firstColliderSize;
+            }
+
+            //Playerの状態を返す
+            return PlayerCondition.Idle;
+        }
 
 		/// <summary>
 		/// Playerが接地していたらtrueを返す
@@ -237,77 +314,91 @@ namespace yamap {
 		/// アイテム関連の処理
 		/// </summary>
 		private void ControlItem() {
-			//アイテムの切り替えを行う
-			ChangeItem(CheckKey());
+            //アイテムの切り替えを行う
+            ChangeItem(CheckKey());
 
-			//アイテム破棄キーが押されたら
-			if (Input.GetKeyDown(discardKey)) {
-				//アイテムを破棄する
-				ItemManager.instance.DiscardItem(ItemManager.instance.SelectedItemNo - 1);
-			}
-			//左クリックされている間
-			else if (Input.GetKey(KeyCode.Mouse0)) {
-				//アイテムを使用する
-				UseItem(ItemManager.instance.playerItemList[ItemManager.instance.SelectedItemNo - 1]);
-			}
-			//右クリックされている間
-			else if (Input.GetKey(KeyCode.Mouse1)) {
-				//選択しているアイテムがスナイパーではないなら
-				if (ItemManager.instance.playerItemList[ItemManager.instance.SelectedItemNo - 1].itemName != ItemDataSO.ItemName.Sniper) {
-					//ズームする
-					followZoom.m_MaxFOV = normalZoomFOV;
-					followZoom.m_MinFOV = 1.0f;
-				}
-				//選択しているアイテムがスナイパーなら
-				else {
-					//ズームする
-					followZoom.m_MaxFOV = ScopeZoomFOV;
-					followZoom.m_MinFOV = 1.0f;
+            //アイテム破棄キーが押されたら
+            if (Input.GetKeyDown(discardKey)) {
+                //効果音を再生
+                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.DiscardItemSE));
 
-					//スコープを覗く
-					uiManager.PeekIntoTheScope();
-				}
-			}
-			//右クリックが終ったら
-			else if (Input.GetKeyUp(KeyCode.Mouse1)) {
-				//元のカメラの倍率に戻す
-				followZoom.m_MaxFOV = 30.0f;
-				followZoom.m_MinFOV = 30.0f;
+                //アイテムを破棄する
+                itemManager.DiscardItem(SelectedItemNo - 1);
+            }
+            //左クリックされている間
+            else if (Input.GetKey(KeyCode.Mouse0)) {
+                //アイテムを使用する
+                itemManager.UseItem(itemManager.GetSelectedItemData());
+            }
+            //右クリックされている間
+            else if (Input.GetKey(KeyCode.Mouse1)) {
+                //選択しているアイテムがスナイパーではないなら
+                if (itemManager.GetSelectedItemData().itemName != ItemDataSO.ItemName.Sniper) {
+                    //ズームする
+                    followZoom.m_MaxFOV = normalZoomFOV;
+                    followZoom.m_MinFOV = 1.0f;
+                }
+                //選択しているアイテムがスナイパーなら
+                else {
+                    //ズームする
+                    followZoom.m_MaxFOV = ScopeZoomFOV;
+                    followZoom.m_MinFOV = 1.0f;
 
-				//スコープを覗くのをやめる
-				uiManager.NotPeekIntoTheScope();
-			}
+                    //スコープを覗く
+                    uiManager.PeekIntoTheScope();
+                }
+            }
+            //右クリックが終ったら
+            else if (Input.GetKeyUp(KeyCode.Mouse1)) {
+                //元のカメラの倍率に戻す
+                followZoom.m_MaxFOV = 30.0f;
+                followZoom.m_MinFOV = 30.0f;
 
-			//Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
-			if (ItemManager.instance.LengthToNearItem > getItemLength || ItemManager.instance.generatedItemDataList.Count == 0) {
-				//メッセージを空にする
-				uiManager.SetMessageText("", Color.black);
+                //スコープを覗くのをやめる
+                uiManager.NotPeekIntoTheScope();
+            }
 
-				//以下の処理を行わない
-				return;
-			}
+            //右クリックされたら
+            if (Input.GetKeyDown(KeyCode.Mouse1)) {
+                //Enemyが使えない武器なら
+                if (!itemManager.GetSelectedItemData().enemyCanUse) {
+                    //以降の処理を行わない
+                    return;
+                }
 
-			//許容オーバーかどうか調べる
-			//GameData.instance.CheckIsFull();
+                //効果音を再生
+                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.BePreparedSE));
+            }
 
-			//許容オーバーかつ、取得しようとしているアイテムが弾ではなかったら  !yamap.GameData.instance.CheckIsFull() &&GameData.instance.generatedItemDataList[GameData.instance.NearItemNo].itemType != ItemDataSO.ItemType.Bullet
-			if (ItemManager.instance.IsFull && ItemManager.instance.generatedItemDataList[ItemManager.instance.NearItemNo].isNotBullet) //
-			{
-				//メッセージを表示
-				uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item", Color.red);
-			}
-			//許容オーバーではないなら
-			else {
-				//メッセージを表示
-				uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem", Color.green);
-			}
+            //Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
+            if (itemManager.LengthToNearItem > getItemLength || itemManager.generatedItemDataList.Count == 0) {
+                //メッセージを空にする
+                uiManager.SetMessageText("", Color.black);
 
-			//アイテム取得キーが押されたら
-			if (Input.GetKeyDown(getItemKey)) {
+                //以下の処理を行わない
+                return;
+            }
+
+            //許容オーバーかどうか調べる
+            itemManager.CheckIsFull();
+
+            //許容オーバーかつ、取得しようとしているアイテムが弾ではなかったら
+            if (ItemManager.instance.IsFull && itemManager.generatedItemDataList[itemManager.NearItemNo].itemType != ItemDataSO.ItemType.Bullet) {
+                //メッセージを表示
+                uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item", Color.red);
+            }
+            //許容オーバーではないなら
+            else {
+                //メッセージを表示
+                uiManager.SetMessageText("Tap 'Q' To\nGet The\nItem", Color.green);
+            }
+
+            //アイテム取得キーが押されたら
+            if (Input.GetKeyDown(getItemKey)) {
                 //アイテムを取得する
-                ItemManager.instance.GetItem(ItemManager.instance.NearItemNo, true);
-			}
-		}
+                itemManager.GetItem(itemManager.NearItemNo, true);
+            }
+        }
 
 		/// <summary>
 		/// 押されたキーの情報を返す
@@ -338,85 +429,39 @@ namespace yamap {
 		/// </summary>
 		private void ChangeItem(KeyCode code) {
 			//押されたキーに応じて使用しているアイテムの番号を設定
-			//switch (code) {
-			//	case KeyCode.Alpha1:
-   //                 GameData.instance.SelectedItemNo = 1;  // 何故 0 スタートではない？ 配列やList との相性が悪くなる
-			//		uiManager.SetItemSlotBackgroundColor(1, Color.red);
-			//		break;
-
-			//	case KeyCode.Alpha2:
-   //                 GameData.instance.SelectedItemNo = 2;
-			//		uiManager.SetItemSlotBackgroundColor(2, Color.red);
-			//		break;
-
-			//	case KeyCode.Alpha3:
-   //                 GameData.instance.SelectedItemNo = 3;
-			//		uiManager.SetItemSlotBackgroundColor(3, Color.red);
-			//		break;
-
-			//	case KeyCode.Alpha4:
-   //                 GameData.instance.SelectedItemNo = 4;
-			//		uiManager.SetItemSlotBackgroundColor(4, Color.red);
-			//		break;
-
-			//	case KeyCode.Alpha5:
-   //                 GameData.instance.SelectedItemNo = 5;
-			//		uiManager.SetItemSlotBackgroundColor(5, Color.red);
-			//		break;
-			//}
-		}
-
-
-
-
-		/// <summary>
-		/// アイテムを使用する
-		/// </summary>
-		/// <param name="itemData">使用するアイテムのデータ</param>
-		public void UseItem(yamap.ItemDataSO.ItemData itemData) {
-
-			switch (itemData.itemType) {
-				case ItemDataSO.ItemType.FireArms:
-                    // 弾を発射
-                    bulletManager.ShotBullet(itemData);
+			switch (code) {
+				case KeyCode.Alpha1:
+					ItemManager.instance.SelectedItemNo = 1;  // 何故 0 スタートではない？ 配列やList との相性が悪くなる
 					break;
 
-				case ItemDataSO.ItemType.HandWeapon:
-				    // 近接武器を使用する 別クラスにする
-				    bulletManager.PrepareUseHandWeapon(itemData);
+				case KeyCode.Alpha2:
+                    ItemManager.instance.SelectedItemNo = 2;
 					break;
 
+				case KeyCode.Alpha3:
+                    ItemManager.instance.SelectedItemNo = 3;
+					break;
+
+				case KeyCode.Alpha4:
+                    ItemManager.instance.SelectedItemNo = 4;
+					break;
+
+				case KeyCode.Alpha5:
+                    ItemManager.instance.SelectedItemNo = 5;
+					break;
+			}
+            uiManager.SetItemSlotBackgroundColor(ItemManager.instance.SelectedItemNo, Color.red);
+
+            //選択したアイテムがNoneなら
+            if (ItemManager.instance.GetSelectedItemData().itemName == ItemDataSO.ItemName.None) {
+                //効果音を再生
+                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.NoneItemSE));
             }
-
-
-			//使用するアイテムが飛び道具なら
-			if (itemData.isMissile) {
-				//弾を発射
-				bulletManager.ShotBullet(itemData);
-			}
-			//使用するアイテムに回復効果があり、左クリックされたら
-			else if (itemData.restorativeValue > 0 && Input.GetKeyDown(KeyCode.Mouse0)) {
-
-
-				////PlayerのHpを更新
-				//playerHealth.UpdatePlayerHp(itemData.restorativeValue);
-
-				////その回復アイテムの所持数を1減らす
-				//playerHealth.UpdateRecoveryItemCount(itemData.itemName, -1);
-
-
-
-				//選択している回復アイテムの所持数が0になったら
-				//if (playerHealth.GetRecoveryItemCount(GameData.instance.playerItemList[GameData.instance.SelectedItemNo - 1].itemName) == 0) {
-				//	//選択しているアイテムの要素を消す
-				//	itemManager.DiscardItem(GameData.instance.SelectedItemNo - 1);
-				//}
-			}
-			//使用するアイテムが近接武器かつ、左クリックされたら
-			else if (itemData.isHandWeapon && Input.GetKeyDown(KeyCode.Mouse0)) {
-				//近接武器を使用する
-				StartCoroutine(bulletManager.UseHandWeapon(itemData));
-			}
-		}
+            //選択したアイテムがNoneではなかったら
+            else {
+                //効果音を再生
+                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.SelectItemSE));
+            }
+        }
 	}
 }
