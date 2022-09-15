@@ -464,7 +464,7 @@ namespace yamap {
                 playerHealth.UpdateRecoveryItemCount(itemData.itemName, -1);
 
                 //選択している回復アイテムの所持数が0になったら
-                if (playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName) == 0) {
+                if (playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName).current == 0) {
                     //選択しているアイテムの要素を消す
                     DiscardItem(SelectedItemNo - 1);
                 }

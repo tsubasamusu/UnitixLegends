@@ -267,7 +267,7 @@ namespace yamap {
             //選択しているアイテムに回復効果があるなら
             else if (ItemManager.instance.GetSelectedItemData().restorativeValue > 0) {
                 //選択されている回復アイテムの所持数をテキストに設定
-                txtItemCount.text = playerHealth.GetRecoveryItemCount(ItemManager.instance.GetSelectedItemData().itemName).ToString();
+                txtItemCount.text = playerHealth.GetRecoveryItemCount(ItemManager.instance.GetSelectedItemData().itemName).current.ToString();
             }
             //選択しているアイテムが、飛び道具でも回復アイテムでもないなら
             else {

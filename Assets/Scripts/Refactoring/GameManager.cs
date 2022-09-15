@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;//LoadSceneを使用
 using System.Linq;//Whereメソッドを使用
+using DG.Tweening.Core.Easing;
 
 namespace yamap {
 
@@ -19,6 +20,9 @@ namespace yamap {
 
         [SerializeField]
         private UIManager uiManager;//UIManager
+
+        [SerializeField]
+        private StormController stormController;//StormController
 
         //[SerializeField]
         //private SoundManager soundManager;//SoundManager
@@ -71,6 +75,55 @@ namespace yamap {
             playerController.SetUpPlayer(uiManager);
 
             ItemManager.instance.SetUpItemManager(uiManager);
+
+            // HP 監視
+            CheckStormDamageAsync();
+        }
+
+        /// <summary>
+        /// ストームによるダメージを受けるかどうか調べる
+        /// </summary>
+        /// <returns>待ち時間</returns>
+        private IEnumerator CheckStormDamageAsync() {
+            //空の判定
+            bool skyFlag = false;
+
+            //ゲーム終了状態ではないなら、繰り返される
+            while (playerController.PlayerHealth.PlayerHp > 0) {
+                //Playerが安置内におらず
+                while (!stormController.CheckEnshrine(transform.position)) {
+                    //空の判定がtrueなら
+                    if (skyFlag) {
+
+                        //悪天候に変更
+                        stormController.ChangeSkyBox(PlayerStormState.InStorm);
+
+                        //空の判定にfalseを入れる
+                        skyFlag = false;
+                    }
+
+                    //PlayerのHpを減少させる
+                    playerController.PlayerHealth.UpdatePlayerHp(-stormController.StormDamage);
+
+                    //1秒待つ
+                    yield return new WaitForSeconds(1f);
+                }
+
+                //空の判定がfalseなら
+                if (!skyFlag) {
+                    //快晴に変更
+                    stormController.ChangeSkyBox(PlayerStormState.OutStorm);
+
+                    //空の判定にtrueを入れる
+                    skyFlag = true;
+                }
+
+                //次のフレームへ飛ばす（実質、Updateメソッド）
+                yield return null;
+            }
+
+            //Playerの体力が0になったらゲームオーバー演出を行う
+            MakeGameOverAsync();
         }
 
         /// <summary>
@@ -95,7 +148,7 @@ namespace yamap {
         /// ゲームオーバー演出を行う
         /// </summary>
         /// <returns>待ち時間</returns>
-        public IEnumerator MakeGameOver() {
+        public IEnumerator MakeGameOverAsync() {
             //ゲームオーバー音を再生
             SoundManager.instance.PlaySE(SeName.GameOverSE);
 

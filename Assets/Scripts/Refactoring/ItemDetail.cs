@@ -10,9 +10,18 @@ namespace yamap {
         ItemDataSO.ItemData itemData;
 
 
+        public void SetUpItemDetail(ItemDataSO.ItemData itemData) {
+            this.itemData = itemData;
+        }
 
-        public void SetUpItemDetail() {
 
+        public ItemDataSO.ItemName GetItemName() {
+            return itemData.itemName;
+        }
+
+
+        public float GetAttackPower() {
+            return itemData.attackPower;
         }
     }
 }

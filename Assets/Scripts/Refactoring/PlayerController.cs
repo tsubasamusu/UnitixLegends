@@ -9,40 +9,43 @@ namespace yamap {
 	public class PlayerController : MonoBehaviour {
 
         [SerializeField]
-        private float previousSpeed;//前進速度
+        private float previousSpeed = 10;//前進速度
 
         [SerializeField]
-        private float backSpeed;//後進速度
+        private float backSpeed = 2;//後進速度
 
         [SerializeField]
-        private float speedX;//左右移動速度
+        private float speedX = 2;//左右移動速度
 
         [SerializeField, Range(1.0f, 30.0f)]
-        private float normalZoomFOV;//通常のズーム時の視野角
+        private float normalZoomFOV = 20;//通常のズーム時の視野角
 
         [SerializeField, Range(1.0f, 30.0f)]
-        private float ScopeZoomFOV;//スコープによるズームの視野角
+        private float ScopeZoomFOV = 5;//スコープによるズームの視野角
 
         [SerializeField]
-        private float getItemLength;//アイテムを取得できる距離
+        private float getItemLength = 1;//アイテムを取得できる距離
 
         [SerializeField]
-        private KeyCode stoopKey;//かがむキー
+        private KeyCode stoopKey = KeyCode.E;//かがむキー
 
         [SerializeField]
-        private KeyCode getItemKey;//アイテム取得キー
+        private KeyCode getItemKey = KeyCode.Q;//アイテム取得キー
 
         [SerializeField]
-        private KeyCode discardKey;//アイテム破棄キー
+        private KeyCode discardKey = KeyCode.X;//アイテム破棄キー
 
-        [SerializeField]
+        //[SerializeField]
         private Rigidbody playerRb;//Rigidbody
 
-        [SerializeField]
+        //[SerializeField]
         private BoxCollider boxCollider;//BoxCollider
 
-        [SerializeField]
+        //[SerializeField]
         private Animator anim;//Animator
+
+        private PlayerHealth playerHealth;
+        public PlayerHealth PlayerHealth { get => playerHealth; }
 
         //[SerializeField]
         //private BulletManager bulletManager;//BulletManager
@@ -59,7 +62,7 @@ namespace yamap {
         [SerializeField]
         private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
 
-        [SerializeField]
+        //[SerializeField]
         private Transform mainCameraTran;//メインカメラの位置
 
         [SerializeField]
@@ -82,7 +85,6 @@ namespace yamap {
             get { return selectedItemNo; }//外部からは取得処理のみ可能に
         }
 
-
         /// <summary>
         /// Playerの状態
         /// </summary>
@@ -95,30 +97,59 @@ namespace yamap {
 			Stooping//かがんでいる
 		}
 
-        private PlayerHealth playerHealth;
 
+        void Reset() {
+            if (!TryGetComponent(out playerHealth)) {
+                Debug.Log("PlayerHealth 取得出来ません");
+            }
+
+            if (!TryGetComponent(out playerRb)) {
+                Debug.Log("Rigidbody 取得出来ません");
+            } else {
+                //Rigidbodyによる重力を無効化
+                playerRb.useGravity = false;
+
+                //物理演算を無効化
+                playerRb.isKinematic = true;
+            }
+
+            if (!TryGetComponent(out boxCollider)) {
+                Debug.Log("boxCollider 取得出来ません");
+            } else {
+                //コライダーのセンターの初期値を取得
+                firstColliderCenter = boxCollider.center;
+
+                //コライダーの大きさの初期値を取得
+                firstColliderSize = boxCollider.size;
+            }
+
+            if (!TryGetComponent(out anim)) {
+                Debug.Log("Animator 取得出来ません");
+            }
+
+            mainCameraTran = Camera.main.transform;
+
+            previousSpeed = 10;
+            backSpeed = 2;
+            speedX = 2;
+            normalZoomFOV = 20;
+            ScopeZoomFOV = 5;
+
+            stoopKey = KeyCode.E;
+            getItemKey = KeyCode.Q;
+            discardKey = KeyCode.X;
+        }
 
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
         public void SetUpPlayer(UIManager uiManager) {   // GameManager からSetUp した方が順番が出来てよいのでは？
-            //Rigidbodyによる重力を無効化
-            playerRb.useGravity = false;
+            Reset();
 
-            //コライダーのセンターの初期値を取得
-            firstColliderCenter = boxCollider.center;
-
-            //コライダーの大きさの初期値を取得
-            firstColliderSize = boxCollider.size;
-
-            //物理演算を無効化
-            playerRb.isKinematic = true;
-
-
-            if (!TryGetComponent(out playerHealth)) {
-                Debug.Log("PlayerHealth 取得出来ません");
-            }
             this.uiManager = uiManager;
+
+            // PlayerHealth の設定
+            playerHealth?.SetUpHealth(uiManager);
         }
 
         /// <summary>
