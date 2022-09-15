@@ -44,17 +44,17 @@ namespace yamap {
         [SerializeField]
         private Animator anim;//Animator
 
-        [SerializeField]
-        private BulletManager bulletManager;//BulletManager
+        //[SerializeField]
+        //private BulletManager bulletManager;//BulletManager
 
-        [SerializeField]
+        //[SerializeField]
         private UIManager uiManager;//UIManager
 
-        [SerializeField]
-        private ItemManager itemManager;//ItemManager
+        //[SerializeField]
+        //private ItemManager itemManager;//ItemManager
 
-        [SerializeField]
-        private SoundManager soundManager;//SoundManager
+        //[SerializeField]
+        //private SoundManager soundManager;//SoundManager
 
         [SerializeField]
         private CinemachineFollowZoom followZoom;//CinemachineFollowZoom
@@ -95,10 +95,13 @@ namespace yamap {
 			Stooping//かがんでいる
 		}
 
+        private PlayerHealth playerHealth;
+
+
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
-        private void Start() {              // GameManager からSetUp した方が順番が出来てよいのでは？
+        public void SetUpPlayer(UIManager uiManager) {   // GameManager からSetUp した方が順番が出来てよいのでは？
             //Rigidbodyによる重力を無効化
             playerRb.useGravity = false;
 
@@ -110,6 +113,12 @@ namespace yamap {
 
             //物理演算を無効化
             playerRb.isKinematic = true;
+
+
+            if (!TryGetComponent(out playerHealth)) {
+                Debug.Log("PlayerHealth 取得出来ません");
+            }
+            this.uiManager = uiManager;
         }
 
         /// <summary>
@@ -168,7 +177,7 @@ namespace yamap {
             //Playerが接地したら
             else {
                 //効果音を再生
-                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.LandingSE));
+                SoundManager.instance.PlaySE(SeName.LandingSE);
 
                 //着地が完了した状態に切り替える
                 landed = true;
@@ -320,20 +329,20 @@ namespace yamap {
             //アイテム破棄キーが押されたら
             if (Input.GetKeyDown(discardKey)) {
                 //効果音を再生
-                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.DiscardItemSE));
+                SoundManager.instance.PlaySE(SeName.DiscardItemSE);
 
                 //アイテムを破棄する
-                itemManager.DiscardItem(SelectedItemNo - 1);
+                ItemManager.instance.DiscardItem(SelectedItemNo - 1);
             }
             //左クリックされている間
             else if (Input.GetKey(KeyCode.Mouse0)) {
                 //アイテムを使用する
-                itemManager.UseItem(itemManager.GetSelectedItemData());
+                ItemManager.instance.UseItem(ItemManager.instance.GetSelectedItemData(), playerHealth);
             }
             //右クリックされている間
             else if (Input.GetKey(KeyCode.Mouse1)) {
                 //選択しているアイテムがスナイパーではないなら
-                if (itemManager.GetSelectedItemData().itemName != ItemDataSO.ItemName.Sniper) {
+                if (ItemManager.instance.GetSelectedItemData().itemName != ItemDataSO.ItemName.Sniper) {
                     //ズームする
                     followZoom.m_MaxFOV = normalZoomFOV;
                     followZoom.m_MinFOV = 1.0f;
@@ -361,17 +370,17 @@ namespace yamap {
             //右クリックされたら
             if (Input.GetKeyDown(KeyCode.Mouse1)) {
                 //Enemyが使えない武器なら
-                if (!itemManager.GetSelectedItemData().enemyCanUse) {
+                if (!ItemManager.instance.GetSelectedItemData().enemyCanUse) {
                     //以降の処理を行わない
                     return;
                 }
 
                 //効果音を再生
-                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.BePreparedSE));
+                SoundManager.instance.PlaySE(SeName.BePreparedSE);
             }
 
             //Playerの最も近くにあるアイテムとの距離が、アイテムを取得できないほど離れているか、アイテムが存在しなかったら
-            if (itemManager.LengthToNearItem > getItemLength || itemManager.generatedItemDataList.Count == 0) {
+            if (ItemManager.instance.LengthToNearItem > getItemLength || ItemManager.instance.generatedItemDataList.Count == 0) {
                 //メッセージを空にする
                 uiManager.SetMessageText("", Color.black);
 
@@ -380,10 +389,10 @@ namespace yamap {
             }
 
             //許容オーバーかどうか調べる
-            itemManager.CheckIsFull();
+            ItemManager.instance.CheckIsFull();
 
             //許容オーバーかつ、取得しようとしているアイテムが弾ではなかったら
-            if (ItemManager.instance.IsFull && itemManager.generatedItemDataList[itemManager.NearItemNo].itemType != ItemDataSO.ItemType.Bullet) {
+            if (ItemManager.instance.IsFull && ItemManager.instance.generatedItemDataList[ItemManager.instance.NearItemNo].itemType != ItemDataSO.ItemType.Bullet) {
                 //メッセージを表示
                 uiManager.SetMessageText("Tap 'X' To\nDiscard\nThe Item", Color.red);
             }
@@ -396,7 +405,7 @@ namespace yamap {
             //アイテム取得キーが押されたら
             if (Input.GetKeyDown(getItemKey)) {
                 //アイテムを取得する
-                itemManager.GetItem(itemManager.NearItemNo, true);
+                ItemManager.instance.GetItem(ItemManager.instance.NearItemNo, true, playerHealth);
             }
         }
 
@@ -455,12 +464,12 @@ namespace yamap {
             //選択したアイテムがNoneなら
             if (ItemManager.instance.GetSelectedItemData().itemName == ItemDataSO.ItemName.None) {
                 //効果音を再生
-                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.NoneItemSE));
+                SoundManager.instance.PlaySE(SeName.NoneItemSE);
             }
             //選択したアイテムがNoneではなかったら
             else {
                 //効果音を再生
-                soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.SelectItemSE));
+                SoundManager.instance.PlaySE(SeName.SelectItemSE);
             }
         }
 	}

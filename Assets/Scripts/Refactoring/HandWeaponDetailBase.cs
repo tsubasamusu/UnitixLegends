@@ -5,7 +5,7 @@ namespace yamap {
     /// </summary>
     public class HandWeaponDetailBase : WeaponBase {
         
-        public virtual void SetUpWeaponDetail(float attackPower, BulletOwnerType bulletOwnerType, SoundDataSO.SoundEffectName soundType, float duration) {
+        public virtual void SetUpWeaponDetail(float attackPower, BulletOwnerType bulletOwnerType, SeName soundType, float duration) {
             this.attackPower = attackPower;
             BulletOwnerType = bulletOwnerType;
 
@@ -13,9 +13,9 @@ namespace yamap {
             TriggerWeapon();
 
             // SE Ç™Ç†ÇÈÇ»ÇÁ
-            if (soundType != SoundDataSO.SoundEffectName.None) {
+            if (soundType != SeName.None) {
                 // SE çƒê∂
-                PlaySE(soundType);
+                SoundManager.instance.PlaySE(soundType);
             }
 
             Destroy(gameObject, duration);

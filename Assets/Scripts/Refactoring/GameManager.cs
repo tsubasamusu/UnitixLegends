@@ -20,8 +20,8 @@ namespace yamap {
         [SerializeField]
         private UIManager uiManager;//UIManager
 
-        [SerializeField]
-        private SoundManager soundManager;//SoundManager
+        //[SerializeField]
+        //private SoundManager soundManager;//SoundManager
 
         private bool isGameOver;//ゲーム完了状態かどうか
 
@@ -36,7 +36,7 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         private IEnumerator Start() {
             //ゲーム開始音を再生
-            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GameStartSE));
+            SoundManager.instance.PlaySE(SeName.GameStartSE);
 
             //PlayerControolerを無効化
             playerController.enabled = false;
@@ -67,6 +67,10 @@ namespace yamap {
 
             //アイテムスロットの設定等を行う
             uiManager.SetUpItemSlots();
+
+            playerController.SetUpPlayer(uiManager);
+
+            ItemManager.instance.SetUpItemManager(uiManager);
         }
 
         /// <summary>
@@ -75,7 +79,7 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         public IEnumerator MakeGameClear() {
             //ゲームクリア音を再生
-            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GameClearSE));
+            SoundManager.instance.PlaySE(SeName.GameClearSE);
 
             //ゲームを終了するための準備を行う
             SetUpGameOver();
@@ -93,7 +97,7 @@ namespace yamap {
         /// <returns>待ち時間</returns>
         public IEnumerator MakeGameOver() {
             //ゲームオーバー音を再生
-            soundManager.PlaySoundEffectByAudioSource(soundManager.GetSoundEffectData(SoundDataSO.SoundEffectName.GameOverSE));
+            SoundManager.instance.PlaySE(SeName.GameOverSE);
 
             //ゲームを終了するための準備を行う
             SetUpGameOver();

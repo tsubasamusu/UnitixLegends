@@ -30,15 +30,5 @@ namespace yamap {
         /// 弾の所有者のプロパティ
         /// </summary>
         public BulletOwnerType BulletOwnerType { get => bulletOwnerType; set => bulletOwnerType = value; }
-
-
-        /// <summary>
-        /// SE 再生
-        /// </summary>
-        /// <param name="seName"></param>
-        /// <param name=""></param>
-        protected virtual void PlaySE(SoundDataSO.SoundEffectName seName) {
-            AudioSource.PlayClipAtPoint(SoundManager.instance.GetSoundEffectData(seName).audioClip, transform.position);
-        }
     }
 }

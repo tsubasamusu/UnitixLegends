@@ -15,17 +15,17 @@ namespace yamap {
         public ItemDataSO ItemDataSO { get => itemDataSO; }
 
 
-        [SerializeField]
+        //[SerializeField]
         private UIManager uIManager;//UIManager
 
-        [SerializeField]
+        //[SerializeField]
         private BulletManager bulletManager;//BulletManager
 
-        [SerializeField]
-        private PlayerController playerController;//PlayerController
+        //[SerializeField]
+        //private PlayerController playerController;//PlayerController
 
-        [SerializeField]
-        private PlayerHealth playerHealth;//PlayerHealth
+        //[SerializeField]
+        //private PlayerHealth playerHealth;//PlayerHealth
 
         [SerializeField]
         private Transform itemTrans;//アイテムの位置情報をまとめたフォルダー
@@ -96,7 +96,13 @@ namespace yamap {
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
-        private void Start() {      // Setup にして GameManager から実行した方がタイミングがつくれます
+        public void SetUpItemManager(UIManager uiManager) {      // Setup にして GameManager から実行した方がタイミングがつくれます
+            this.uIManager = uiManager;
+
+            if (!TryGetComponent(out bulletManager)) {
+                Debug.Log("BulletManager 取得出来ません。");
+            }
+
             //アイテムを生成
             GenerateItem();
         }
@@ -276,7 +282,7 @@ namespace yamap {
         /// </summary>
         /// <param name="nearItemNo">最も近くにあるアイテムの番号</param>
         /// <param name="isPlayer">アイテムの取得者がPlayerかどうか</param>
-        public void GetItem(int nearItemNo, bool isPlayer) {
+        public void GetItem(int nearItemNo, bool isPlayer, PlayerHealth playerHealth = null) {
             //アイテムの取得者がPlayerではないなら
             if (!isPlayer) {
                 //近くのアイテムをリストから削除する
@@ -377,7 +383,7 @@ namespace yamap {
         /// <returns>選択されているアイテムのデータ</returns>
         public ItemDataSO.ItemData GetSelectedItemData() {
             //選択されているアイテムのデータをリストから取得して返す
-            return playerItemList[playerController.SelectedItemNo - 1];
+            return playerItemList[SelectedItemNo - 1];
         }
 
         /// <summary>
@@ -439,7 +445,7 @@ namespace yamap {
         /// アイテムを使用する
         /// </summary>
         /// <param name="itemData">使用するアイテムのデータ</param>
-        public void UseItem(ItemDataSO.ItemData itemData) {
+        public void UseItem(ItemDataSO.ItemData itemData, PlayerHealth playerHealth) {
 
             //使用するアイテムが銃火器なら
             if (itemData.itemType == ItemDataSO.ItemType.Missile) {
@@ -449,7 +455,7 @@ namespace yamap {
             //使用するアイテムに回復効果があり、左クリックされたら
             else if (itemData.restorativeValue > 0 && Input.GetKeyDown(KeyCode.Mouse0)) {
                 //効果音を再生
-                SoundManager.instance.PlaySoundEffectByAudioSource(SoundManager.instance.GetSoundEffectData(SoundDataSO.SoundEffectName.RecoverySE));
+                SoundManager.instance.PlaySE(SeName.RecoverySE);
 
                 //PlayerのHpを更新
                 playerHealth.UpdatePlayerHp(itemData.restorativeValue);
@@ -460,7 +466,7 @@ namespace yamap {
                 //選択している回復アイテムの所持数が0になったら
                 if (playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName) == 0) {
                     //選択しているアイテムの要素を消す
-                    DiscardItem(playerController.SelectedItemNo - 1);
+                    DiscardItem(SelectedItemNo - 1);
                 }
             }
             //使用するアイテムが近接武器かつ、左クリックされたら

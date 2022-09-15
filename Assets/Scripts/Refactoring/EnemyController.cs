@@ -60,29 +60,34 @@ namespace yamap {
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
-        private void Start() {
+        public void SetUpEnemy(UIManager uiManager, EnemyGenerator enemyGenerator, PlayerController player, int no) {           // SetUp で EnemyGenerator から UIManager などをもらうようにする
             //NavMeshAgentを無効化
             agent.enabled = false;
+
+            this.uiManager = uiManager;
+            this.enemyGenerator = enemyGenerator;
+            playerTran = player.transform;
+            myNo = no;
 
             //経過時間を計測
             StartCoroutine(MeasureTime());
 
-            //UIManagerを取得
-            if (!GameObject.Find("UIManager").TryGetComponent(out uiManager)) {
-                //問題を報告
-                Debug.Log("UIManagerの取得に失敗");
-            }
+            ////UIManagerを取得
+            //if (!GameObject.Find("UIManager").TryGetComponent(out uiManager)) {
+            //    //問題を報告
+            //    Debug.Log("UIManagerの取得に失敗");
+            //}
 
-            //EnemyGeneratorを取得
-            if (!GameObject.Find("EnemyGenerator").TryGetComponent(out enemyGenerator)) {
-                //問題を報告
-                Debug.Log("EnemyGeneratorの取得に失敗");
-            }
+            ////EnemyGeneratorを取得
+            //if (!GameObject.Find("EnemyGenerator").TryGetComponent(out enemyGenerator)) {
+            //    //問題を報告
+            //    Debug.Log("EnemyGeneratorの取得に失敗");
+            //}
 
-            //Playerの位置情報を取得
-            if (!GameObject.Find("Player").TryGetComponent(out playerTran)) {
-                Debug.Log("Playerの位置情報の取得に失敗");
-            }
+            ////Playerの位置情報を取得
+            //if (!GameObject.Find("Player").TryGetComponent(out playerTran)) {
+            //    Debug.Log("Playerの位置情報の取得に失敗");
+            //}
 
             //発射位置を取得
             shotBulletTran = transform.GetChild(3).transform;

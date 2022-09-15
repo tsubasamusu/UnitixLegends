@@ -18,17 +18,18 @@ namespace yamap {
         /// <param name="seName">SE の種類</param>
         /// <param name="duration">弾の持続時間</param>
         /// <param name="effectPrefab">エフェクトのプレファブ</param>
-        public virtual void SetUpBulletDetail(float attackPower, BulletOwnerType bulletOwnerType, Vector3 direction, SoundDataSO.SoundEffectName seName, float duration = 3.0f, GameObject effectPrefab = null) {
+        public virtual void SetUpBulletDetail(float attackPower, BulletOwnerType bulletOwnerType, Vector3 direction, SeName seName, float duration = 3.0f, GameObject effectPrefab = null) {
             this.attackPower = attackPower;
             BulletOwnerType = bulletOwnerType;
 
             // 弾の発射
             TriggerBullet(direction, duration);
 
+
             // SE があるなら
-            if (seName != SoundDataSO.SoundEffectName.None) {
+            if (seName != SeName.None) {
                 // SE 再生
-                PlaySE(seName);
+                SoundManager.instance.PlaySE(seName);
             }
 
             // エフェクトがあるなら

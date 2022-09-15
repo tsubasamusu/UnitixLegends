@@ -61,7 +61,7 @@ namespace yamap {
 
             public ItemType itemType;       　　　　　  // アイテムの種類
             public WeaponBase weaponPrefab; 　　　　　  // 弾と近接武器のプレファブ
-            public SoundDataSO.SoundEffectName seName;  // SE の種類
+            public SeName seName;                       // SE の種類
             public GameObject effectPrefab;
         }
 
