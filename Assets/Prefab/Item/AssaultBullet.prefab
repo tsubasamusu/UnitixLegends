@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5376189111143179390}
   - component: {fileID: 4561301363498736101}
+  - component: {fileID: -3094547431735071116}
   m_Layer: 0
   m_Name: AssaultBullet
   m_TagString: Untagged
@@ -132,6 +133,18 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &-3094547431735071116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8991250133275760237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4864e6e5c8659440b4165c052bf9ca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9134921448843247740
 GameObject:
   m_ObjectHideFlags: 0

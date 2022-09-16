@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5219256273950929810}
   - component: {fileID: 5219256273950929811}
   - component: {fileID: -2395311647132578789}
+  - component: {fileID: 8623520441831986297}
   m_Layer: 0
   m_Name: ShotgunBullet
   m_TagString: Shotgun
@@ -114,3 +115,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8623520441831986297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219256273950929836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd72dab32209734f8c481fff6016942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
