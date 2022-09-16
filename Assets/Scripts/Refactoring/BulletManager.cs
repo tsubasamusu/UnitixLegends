@@ -5,13 +5,13 @@ namespace yamap {
 
     public class BulletManager : MonoBehaviour {
 
-        [SerializeField]
+        //[SerializeField]
         private Transform mainCamera;//メインカメラ
 
-        [SerializeField]
+        //[SerializeField]
         private Transform temporaryObjectContainerTran;//一時的にゲームオブジェクトを収容するTransform
 
-        [SerializeField]
+        //[SerializeField]
         private PlayerController playerController;//PlayerController
 
         private float timer;//経過時間
@@ -56,7 +56,12 @@ namespace yamap {
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
-        private void Start() {　　// GameManager からSetUp した方が順番が出来てよいのでは？
+        public void SetUpBulletManager(PlayerController playerController, Transform temporaryObjectContainerTran) {　　// GameManager からSetUp した方が順番が出来てよいのでは？
+
+            mainCamera = Camera.main.transform;
+            this.playerController = playerController;
+            this.temporaryObjectContainerTran = temporaryObjectContainerTran;
+
             //経過時間の計測を開始
             StartCoroutine(MeasureTime());
         }
@@ -90,33 +95,72 @@ namespace yamap {
         /// <param name="itemName">アイテムの名前</param>
         /// <param name="updateValue">残弾数の変更量</param>
         public void UpdateBulletCount(ItemDataSO.ItemName itemName, int updateValue) {
+            Debug.Log($" {itemName} : {updateValue} ");
+
+            // ItemName から更新するバレットの個数と最大値を取得
+            ref int useBulletCount = ref GetUseBulletCount(itemName);
+            int maxBulletCount = GetUseMaxBulletCount(itemName);
+
+            // 更新
+            useBulletCount = Mathf.Clamp(useBulletCount + updateValue, 0, maxBulletCount);
+
+            ////受け取ったアイテムの名前に応じて処理を変更
+            //switch (itemName) {
+            //    //手榴弾なら
+            //    case ItemDataSO.ItemName.Grenade:
+            //        grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Grenade).maxBulletCount);
+            //        break;
+
+            //    //催涙弾なら
+            //    case ItemDataSO.ItemName.TearGasGrenade:
+            //        tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.TearGasGrenade).maxBulletCount);
+            //        break;
+
+            //    //アサルトなら
+            //    case ItemDataSO.ItemName.Assault:
+            //        assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Assault).maxBulletCount);
+            //        break;
+
+            //    //ショットガンなら
+            //    case ItemDataSO.ItemName.Shotgun:
+            //        shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Shotgun).maxBulletCount);
+            //        break;
+
+            //    //スナイパーなら
+            //    case ItemDataSO.ItemName.Sniper:
+            //        sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Sniper).maxBulletCount);
+            //        break;
+            //}
+        }
+
+        int x = 0;
+
+        /// <summary>
+        /// 使用しているバレットの数を取得して参照戻しする
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <returns></returns>
+        private ref int GetUseBulletCount(ItemDataSO.ItemName itemName) {
+            Debug.Log(itemName);
+
             //受け取ったアイテムの名前に応じて処理を変更
             switch (itemName) {
-                //手榴弾なら
-                case ItemDataSO.ItemName.Grenade:
-                    grenadeBulletCount = Mathf.Clamp(grenadeBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Grenade).maxBulletCount);
-                    break;
-
-                //催涙弾なら
-                case ItemDataSO.ItemName.TearGasGrenade:
-                    tearGasGrenadeBulletCount = Mathf.Clamp(tearGasGrenadeBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.TearGasGrenade).maxBulletCount);
-                    break;
-
-                //アサルトなら
-                case ItemDataSO.ItemName.Assault:
-                    assaultBulletCount = Mathf.Clamp(assaultBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Assault).maxBulletCount);
-                    break;
-
-                //ショットガンなら
-                case ItemDataSO.ItemName.Shotgun:
-                    shotgunBulletCount = Mathf.Clamp(shotgunBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Shotgun).maxBulletCount);
-                    break;
-
-                //スナイパーなら
-                case ItemDataSO.ItemName.Sniper:
-                    sniperBulletCount = Mathf.Clamp(sniperBulletCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Sniper).maxBulletCount);
-                    break;
+                case ItemDataSO.ItemName.Grenade: return ref grenadeBulletCount;
+                case ItemDataSO.ItemName.TearGasGrenade: return ref tearGasGrenadeBulletCount;
+                case ItemDataSO.ItemName.Assault: return ref assaultBulletCount;
+                case ItemDataSO.ItemName.Shotgun: return ref shotgunBulletCount;
+                case ItemDataSO.ItemName.Sniper: return ref sniperBulletCount;
+                default: return ref x;
             }
+        }
+
+        /// <summary>
+        /// 使用しているバレットの最大数を取得
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <returns></returns>
+        private int GetUseMaxBulletCount(ItemDataSO.ItemName itemName) {
+            return ItemManager.instance.GetItemData(itemName).maxBulletCount;
         }
 
         /// <summary>
@@ -152,7 +196,7 @@ namespace yamap {
                 // 弾数が 0 になったら
                 if (GetBulletCount(itemData.itemName) <= 0) {
                     // アイテムを破棄
-                    ItemManager.instance.DiscardItem(ItemManager.instance.SelectedItemNo - 1);
+                    ItemManager.instance.DiscardItem(ItemManager.instance.SelectedItemNo);
                 }
             }
         }

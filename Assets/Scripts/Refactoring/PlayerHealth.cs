@@ -116,6 +116,8 @@ namespace yamap {
         /// <param name="updateValue">Hpの更新量</param>
         /// <param name="gameObject">触れた相手</param>
         public void UpdatePlayerHp(float updateValue, GameObject gameObject = null) {
+            //Debug.Log(updateValue);
+
             //攻撃を受けた際の処理なら
             if (updateValue < 0.0f) {
                 //被弾した際の視界の処理を行う
@@ -156,11 +158,12 @@ namespace yamap {
         /// <param name="updateValue">所持数の更新量</param>
         public void UpdateRecoveryItemCount(ItemDataSO.ItemName itemName, int updateValue) {
 
-            // ItemName から更新する回復アイテムの個数を取得
-            (int currentCount, int maxCount) recoveryItemCount = GetRecoveryItemCount(itemName);
+            // ItemName から更新する回復アイテムの個数と最大値を取得
+            ref int recoveryItemCount = ref GetRecoveryItemCountRef(itemName);
+            int maxCount = GetRecoveryItemMaxCount(itemName); 
 
             // 更新
-            recoveryItemCount.currentCount = Mathf.Clamp(recoveryItemCount.currentCount + updateValue, 0, recoveryItemCount.maxCount);
+            recoveryItemCount = Mathf.Clamp(recoveryItemCount + updateValue, 0, maxCount);
 
             ////アイテムの名前に応じて処理を変更
             //switch (itemName) {
@@ -181,22 +184,44 @@ namespace yamap {
             //}
         }
 
+        int x = 0;
+
         /// <summary>
-        /// 指定した回復アイテムの所持数を取得する
+        /// 指定した回復アイテムの所持数を参照戻しで取得する
         /// </summary>
         /// <param name="itemName">回復アイテムの名前</param>
         /// <returns>その回復アイテムの所持数</returns>
-        public (int current, int max) GetRecoveryItemCount(ItemDataSO.ItemName itemName) {
+        private ref int GetRecoveryItemCountRef(ItemDataSO.ItemName itemName) {
+            Debug.Log(itemName);
             //アイテムの名前に応じて処理を変更
+            switch(itemName) {
+                case ItemDataSO.ItemName.Bandage: return ref bandageCount;
+                case ItemDataSO.ItemName.MedicinalPlants: return ref medicinalPlantscount;
+                case ItemDataSO.ItemName.Syringe: return ref syringeCount;
+                default: return ref x;
+            }
+        }
+
+        /// <summary>
+        /// 指定したアイテムの最大数の取得
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <returns></returns>
+        private int GetRecoveryItemMaxCount(ItemDataSO.ItemName itemName) {
+            return ItemManager.instance.GetItemData(itemName).maxBulletCount;
+        }
+
+        /// <summary>
+        /// 指定したアイテムの最大数の取得
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <returns></returns>
+        public int GetRecoveryItemCount(ItemDataSO.ItemName itemName) {
             return itemName switch {
-                //包帯なら
-                ItemDataSO.ItemName.Bandage => (bandageCount, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Bandage).maxBulletCount),
-                //薬草なら
-                ItemDataSO.ItemName.MedicinalPlants => (medicinalPlantscount, ItemManager.instance.GetItemData(ItemDataSO.ItemName.MedicinalPlants).maxBulletCount),
-                //注射器なら
-                ItemDataSO.ItemName.Syringe => (syringeCount, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Syringe).maxBulletCount),
-                // 見つからないなら
-                _ => (0, 0),
+                ItemDataSO.ItemName.Bandage => BandageCount,
+                ItemDataSO.ItemName.MedicinalPlants => MedicinalPlantsCount,
+                ItemDataSO.ItemName.Syringe => SyringeCount,
+                _ => 0,
             };
         }
     }

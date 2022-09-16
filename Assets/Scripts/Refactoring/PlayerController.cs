@@ -354,8 +354,14 @@ namespace yamap {
 		/// アイテム関連の処理
 		/// </summary>
 		private void ControlItem() {
-            //アイテムの切り替えを行う
-            ChangeItem(CheckKey());
+            Debug.Log("押していない : " + CheckKey().ToString());
+
+            if (Input.anyKeyDown)//無駄な処理を回避
+            {
+                //アイテムの切り替えを行う
+                ChangeItem(CheckKey());
+                Debug.Log(CheckKey().ToString());
+            }
 
             //アイテム破棄キーが押されたら
             if (Input.GetKeyDown(discardKey)) {
@@ -444,12 +450,12 @@ namespace yamap {
 		/// 押されたキーの情報を返す
 		/// </summary>
 		private KeyCode CheckKey() {
-			//何もキーを押されていないなら
-			if (!Input.anyKeyDown)//無駄な処理を回避
-			{
-				//キーの情報を返す
-				return KeyCode.None;
-			}
+			////何もキーを押されていないなら
+			//if (!Input.anyKeyDown)//無駄な処理を回避
+			//{
+			//	//キーの情報を返す
+			//	return KeyCode.None;
+			//}
 
 			//1つずつキーの情報を取り出す
 			foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
@@ -471,24 +477,26 @@ namespace yamap {
 			//押されたキーに応じて使用しているアイテムの番号を設定
 			switch (code) {
 				case KeyCode.Alpha1:
-					ItemManager.instance.SelectedItemNo = 1;  // 何故 0 スタートではない？ 配列やList との相性が悪くなる
+					ItemManager.instance.SelectedItemNo = 0;  // 何故 0 スタートではない？ 配列やList との相性が悪くなるので、基本的には 0 スタート
 					break;
 
 				case KeyCode.Alpha2:
-                    ItemManager.instance.SelectedItemNo = 2;
+                    ItemManager.instance.SelectedItemNo = 1;
 					break;
 
 				case KeyCode.Alpha3:
-                    ItemManager.instance.SelectedItemNo = 3;
+                    ItemManager.instance.SelectedItemNo = 2;
 					break;
 
 				case KeyCode.Alpha4:
-                    ItemManager.instance.SelectedItemNo = 4;
+                    ItemManager.instance.SelectedItemNo = 3;
 					break;
 
 				case KeyCode.Alpha5:
-                    ItemManager.instance.SelectedItemNo = 5;
+                    ItemManager.instance.SelectedItemNo = 4;
 					break;
+                default:
+                    return;
 			}
             uiManager.SetItemSlotBackgroundColor(ItemManager.instance.SelectedItemNo, Color.red);
 

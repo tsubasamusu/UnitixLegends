@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace yamap {
@@ -12,15 +10,12 @@ namespace yamap {
         Enemy
     }
 
-
     /// <summary>
     /// 弾と近接武器の両方で共通する処理を記載している、武器全体の親クラス
     /// </summary>
     public class WeaponBase : MonoBehaviour {
 
         protected float attackPower;
-
-        [SerializeField]
         protected Rigidbody rb;
 
         // 弾の所有者
@@ -30,5 +25,11 @@ namespace yamap {
         /// 弾の所有者のプロパティ
         /// </summary>
         public BulletOwnerType BulletOwnerType { get => bulletOwnerType; set => bulletOwnerType = value; }
+
+        protected void Reset() {
+            if (!TryGetComponent(out rb)) {
+                Debug.Log("Rigidbody が取得出来ません。");
+            }    
+        }
     }
 }

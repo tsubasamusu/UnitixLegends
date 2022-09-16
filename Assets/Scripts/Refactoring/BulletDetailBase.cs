@@ -19,6 +19,8 @@ namespace yamap {
         /// <param name="duration">弾の持続時間</param>
         /// <param name="effectPrefab">エフェクトのプレファブ</param>
         public virtual void SetUpBulletDetail(float attackPower, BulletOwnerType bulletOwnerType, Vector3 direction, SeName seName, float duration = 3.0f, GameObject effectPrefab = null) {
+            Reset();
+
             this.attackPower = attackPower;
             BulletOwnerType = bulletOwnerType;
 
@@ -65,6 +67,13 @@ namespace yamap {
 
         public float GetAttackPower() {
             return attackPower;
+        }
+
+        /// <summary>
+        /// 追加効果
+        /// </summary>
+        public virtual void AddTriggerBullet(EnemyController enemyController) {
+            Debug.Log("追加効果を子クラスで記述する");
         }
     }
 }

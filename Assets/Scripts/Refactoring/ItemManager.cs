@@ -33,7 +33,7 @@ namespace yamap {
         [SerializeField]
         private Transform generateItemPosPrefab;//アイテムの生成位置のプレファブ
 
-        [SerializeField]
+        //[SerializeField]
         private Transform playerTran;//Playerの位置情報
 
         [SerializeField]
@@ -42,14 +42,11 @@ namespace yamap {
         [SerializeField]
         private int maxItemTranCount;//生成するアイテムの生成位置の最大数
 
-        [HideInInspector]
         public List<ItemDataSO.ItemData> generatedItemDataList = new List<ItemDataSO.ItemData>();//生成したアイテムのデータのリスト
 
-        [HideInInspector]
         public List<Transform> generatedItemTranList = new List<Transform>();//アイテムの生成位置のリスト
 
-        [HideInInspector]
-        public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>();//Playerが所持しているアイテムのリスト
+        public List<ItemDataSO.ItemData> playerItemList = new List<ItemDataSO.ItemData>(5);//Playerが所持しているアイテムのリスト
 
         private bool isFull;//Playerの所有物が許容オーバーかどうか
 
@@ -74,7 +71,7 @@ namespace yamap {
 
 
         // PlayerController から移管
-        private int selectedItemNo = 1;//使用しているアイテムの番号
+        private int selectedItemNo = 0;//使用しているアイテムの番号
 
         public int SelectedItemNo//useItemNo変数用のプロパティ
         {
@@ -96,21 +93,51 @@ namespace yamap {
         /// <summary>
         /// ゲーム開始直後に呼び出される
         /// </summary>
-        public void SetUpItemManager(UIManager uiManager) {      // Setup にして GameManager から実行した方がタイミングがつくれます
+        public void SetUpItemManager(UIManager uiManager, PlayerController playerController, BulletManager bulletManager) {      // Setup にして GameManager から実行した方がタイミングがつくれます
             this.uIManager = uiManager;
+            playerTran = playerController.transform;
+            this.bulletManager = bulletManager;
 
-            if (!TryGetComponent(out bulletManager)) {
-                Debug.Log("BulletManager 取得出来ません。");
+            // プレイヤーとエネミーのアイテムの種類を仕分け
+            (List<int> playerItemNums, List<int> enemyItemNums) sortingItemNums = GetSotringItemNums();
+
+            /// <summary>
+            /// プレイヤーとエネミーのアイテムとで仕分けした List を作成
+            /// </summary>
+            /// <returns></returns>
+            (List<int> playerNums, List<int> enemyNums) GetSotringItemNums() {
+                List<int> playerList = new();
+                List<int> enemyList = new();
+
+                for (int i = 0; i < itemDataSO.itemDataList.Count; i++) {
+                    // 最初のアイテムは None なので飛ばす
+                    if (i == 0) {
+                        continue;
+                    }
+                    // エネミーの使用できるアイテムなら
+                    if (itemDataSO.itemDataList[i].enemyCanUse) {
+                        enemyList.Add(itemDataSO.itemDataList[i].itemNo);
+                    } else {
+                        // プレイヤー
+                        playerList.Add(itemDataSO.itemDataList[i].itemNo);
+                    }
+                }
+                return (playerList, enemyList);
             }
 
             //アイテムを生成
-            GenerateItem();
+            GenerateItem(sortingItemNums.playerItemNums, sortingItemNums.enemyItemNums);
+            Debug.Log($"プレイヤーのアイテム数 : { sortingItemNums.playerItemNums.Count } / エネミーのアイテム数 : { sortingItemNums.enemyItemNums.Count }");
         }
 
         /// <summary>
         /// 毎フレーム呼び出される
         /// </summary>
         private void Update() {
+            if (!playerTran) {
+                return;
+            }
+
             //Playerの最も近くにあるアイテムの情報を取得
             GetInformationOfNearItem(playerTran.position);
         }
@@ -128,7 +155,9 @@ namespace yamap {
         /// <summary>
         /// アイテムを生成する
         /// </summary>
-        public void GenerateItem() {
+        public void GenerateItem(List<int> playerItemNums, List<int> enemyItemNums) {
+            Debug.Log("アイテムを生成");
+
             //アイテムの生成位置を生成する
             GenerateItemTran();
 
@@ -143,10 +172,12 @@ namespace yamap {
                 //取得した整数が0ではないなら（2/3の確率でEnemyが使える武器を出現させる）
                 if (px != 0) {
                     //5から7までのランダムな整数を取得
-                    int py = Random.Range(5, 8);
+                    //int py = Random.Range(5, 8);
+                    int py = enemyItemNums[Random.Range(0, enemyItemNums.Count)];
+                    Debug.Log(py);
 
                     //指定した位置にランダムなアイテムを生成し、アニメーションを開始
-                    StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[py].prefab, generatedItemTranList[i])));
+                    StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[py].itemPrefab, generatedItemTranList[i])));
 
                     //生成したアイテムのデータをリストに追加
                     generatedItemDataList.Add(itemDataSO.itemDataList[py]);
@@ -156,13 +187,16 @@ namespace yamap {
                 }
 
                 //Enemyが使用できないアイテムの番号
-                int[] randomNumbers = { 1, 2, 3, 4, 8, 9, 10, 11, 12, 13 }; // 途中で変更や追加もあるので、直接番号は書かない方がいいです
+                //int[] randomNumbers = { 1, 2, 3, 4, 8, 9, 10, 11, 12, 13 }; // <= 途中で変更や追加もあるので、直接番号は書かない方がいいです
 
                 //上記の配列からランダムな要素を取得
-                int pz = randomNumbers[Random.Range(0, 10)];
+                //int pz = randomNumbers[Random.Range(0, 10)];
+
+                int pz = playerItemNums[Random.Range(0, playerItemNums.Count)];
+                Debug.Log(px);
 
                 //指定した位置にランダムなアイテムを生成し、アニメーションを開始
-                StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[pz].prefab, generatedItemTranList[i])));
+                StartCoroutine(PlayItemAnimation(Instantiate(itemDataSO.itemDataList[pz].itemPrefab, generatedItemTranList[i])));
 
                 //生成したアイテムのデータをリストに追加
                 generatedItemDataList.Add(itemDataSO.itemDataList[pz]);
@@ -258,19 +292,19 @@ namespace yamap {
         /// <summary>
         /// アイテムのアニメーションを行う
         /// </summary>
-        /// <param name="itemPrefab">アイテムのプレファブ</param>
+        /// <param name="item">アイテムのプレファブ</param>
         /// <returns>待ち時間</returns>
-        private IEnumerator PlayItemAnimation(GameObject itemPrefab) {
+        private IEnumerator PlayItemAnimation(ItemDetail item) {
             //nullエラー回避
-            if (itemPrefab != null) {
+            if (item != null) {
                 //アイテムを上下に無限に運動させる
-                itemPrefab.transform.DOLocalMoveY(0.5f, 2.0f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+                item.transform.DOLocalMoveY(0.5f, 2.0f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo).SetLink(item.gameObject);
             }
 
             //nullエラー回避
-            while (itemPrefab != null) {
+            while (item != null) {
                 //アイテムを回転させる
-                itemPrefab.transform.Rotate(0, itemRotSpeed, 0);
+                item.transform.Rotate(0, itemRotSpeed, 0);
 
                 //次のフレームに飛ぶ（実質Updateメソッド）
                 yield return null;
@@ -327,7 +361,7 @@ namespace yamap {
             }
 
             //取得するアイテムが飛び道具なら
-            if (generatedItemDataList[nearItemNo].itemType == ItemDataSO.ItemType.Missile) {
+            if (generatedItemDataList[nearItemNo].itemType == ItemDataSO.ItemType.Missile || generatedItemDataList[nearItemNo].itemType == ItemDataSO.ItemType.Bullet) {
                 //残弾数を更新
                 bulletManager.UpdateBulletCount(generatedItemDataList[nearItemNo].itemName, generatedItemDataList[nearItemNo].bulletCount);
             }
@@ -383,7 +417,7 @@ namespace yamap {
         /// <returns>選択されているアイテムのデータ</returns>
         public ItemDataSO.ItemData GetSelectedItemData() {
             //選択されているアイテムのデータをリストから取得して返す
-            return playerItemList[SelectedItemNo - 1];
+            return playerItemList[SelectedItemNo];
         }
 
         /// <summary>
@@ -464,9 +498,9 @@ namespace yamap {
                 playerHealth.UpdateRecoveryItemCount(itemData.itemName, -1);
 
                 //選択している回復アイテムの所持数が0になったら
-                if (playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName).current == 0) {
+                if (playerHealth.GetRecoveryItemCount(GetSelectedItemData().itemName) == 0) {
                     //選択しているアイテムの要素を消す
-                    DiscardItem(SelectedItemNo - 1);
+                    DiscardItem(SelectedItemNo);
                 }
             }
             //使用するアイテムが近接武器かつ、左クリックされたら

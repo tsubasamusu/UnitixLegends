@@ -24,6 +24,12 @@ namespace yamap {
         [SerializeField]
         private StormController stormController;//StormController
 
+        [SerializeField]
+        private BulletManager bulletManager;
+
+        [SerializeField]
+        private Transform temporaryObjectContainerTran;
+
         //[SerializeField]
         //private SoundManager soundManager;//SoundManager
 
@@ -44,6 +50,9 @@ namespace yamap {
 
             //PlayerControolerを無効化
             playerController.enabled = false;
+            playerController.SetUpPlayer(uiManager);
+
+            uiManager.SetUpUIManager(bulletManager, playerController.PlayerHealth);
 
             //CanvasGroupを非表示にする
             uiManager.SetCanvasGroup(false);
@@ -51,11 +60,17 @@ namespace yamap {
             //メッセージを無効化
             uiManager.SetMessageActive(false);
 
+            bulletManager.SetUpBulletManager(playerController, temporaryObjectContainerTran);       
+
+            ItemManager.instance.SetUpItemManager(uiManager, playerController, bulletManager);
+
             //キル数を初期化
             GameData.instance.KillCount = 0;
 
             //ゲームスタート演出を行う
             yield return StartCoroutine(uiManager.PlayGameStart());
+
+            Debug.Log("スタート演出終了");
 
             //メッセージを有効化
             uiManager.SetMessageActive(true);
@@ -63,21 +78,38 @@ namespace yamap {
             //飛行機に関する設定を行う
             airplaneController.SetUpAirplane();
 
+            //メッセージを表示
+            uiManager.SetMessageText("Tap\n'Space'\nTo Fall", Color.blue);
+
             //Playerの行動の制御を開始
-            StartCoroutine(airplaneController.ControlPlayerMovement());
+            StartCoroutine(airplaneController.ControlPlayerMovement(this, playerController));
 
             //Enemyの生成を開始
-            StartCoroutine(enemyGenerator.GenerateEnemy());
+            StartCoroutine(enemyGenerator.GenerateEnemy(uiManager, playerController));
 
             //アイテムスロットの設定等を行う
             uiManager.SetUpItemSlots();
 
-            playerController.SetUpPlayer(uiManager);
-
-            ItemManager.instance.SetUpItemManager(uiManager);
-
             // HP 監視
-            CheckStormDamageAsync();
+            StartCoroutine(CheckStormDamageAsync());
+        }
+
+        /// <summary>
+        /// 飛行機から飛び降りる
+        /// </summary>
+        /// <returns>待ち時間</returns>
+        public void FallAirPlane() {     
+            //メッセージのテキストを空にする
+            uiManager.SetMessageText("", Color.black);
+
+            //PlayerControllerを有効化
+            playerController.enabled = true;
+
+            //CanvasGroupを表示
+            uiManager.SetCanvasGroup(true);
+
+            //テキストの表示の更新を開始
+            StartCoroutine(uiManager.UpdateText());
         }
 
         /// <summary>
@@ -85,13 +117,15 @@ namespace yamap {
         /// </summary>
         /// <returns>待ち時間</returns>
         private IEnumerator CheckStormDamageAsync() {
+            Debug.Log("Hp の監視スタート");
+
             //空の判定
             bool skyFlag = false;
 
             //ゲーム終了状態ではないなら、繰り返される
             while (playerController.PlayerHealth.PlayerHp > 0) {
                 //Playerが安置内におらず
-                while (!stormController.CheckEnshrine(transform.position)) {
+                while (!stormController.CheckEnshrine(playerController.transform.position)) {
                     //空の判定がtrueなら
                     if (skyFlag) {
 
@@ -107,6 +141,11 @@ namespace yamap {
 
                     //1秒待つ
                     yield return new WaitForSeconds(1f);
+
+                    // 残り HP 確認
+                    if (playerController.PlayerHealth.PlayerHp <= 0) {
+                        break;
+                    }
                 }
 
                 //空の判定がfalseなら
@@ -122,8 +161,10 @@ namespace yamap {
                 yield return null;
             }
 
+            Debug.Log("Hp の監視終了");
+
             //Playerの体力が0になったらゲームオーバー演出を行う
-            MakeGameOverAsync();
+            StartCoroutine(MakeGameOverAsync());
         }
 
         /// <summary>

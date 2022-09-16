@@ -48,10 +48,10 @@ namespace yamap {
         [SerializeField]
         private Transform itemSlot;//アイテムスロットの親
 
-        [SerializeField]
+        //[SerializeField]
         private BulletManager bulletManager;//BulletManager
 
-        [SerializeField]
+        //[SerializeField]
         private PlayerHealth playerHealth;//PlayerHealth
 
         [SerializeField]
@@ -71,6 +71,12 @@ namespace yamap {
 
         [HideInInspector]
         public List<Image> imgItemSlotBackgroundList = new List<Image>();//アイテムスロットの背景のイメージのリスト
+
+
+        public void SetUpUIManager(BulletManager bulletManager, PlayerHealth playerHealth) {
+            this.bulletManager = bulletManager;
+            this.playerHealth = playerHealth;
+        }
 
         /// <summary>
         /// テキストの表示の更新を常に行う
@@ -175,16 +181,16 @@ namespace yamap {
             SetEventHorizonColor(Color.black);
 
             //視界を透明にする
-            eventHorizon.DOFade(0f, 0f);
+            eventHorizon.DOFade(0f, 0f).SetLink(gameObject);
 
             //1.0秒かけて視界を完全に暗くする
-            eventHorizon.DOFade(1.0f, 1.0f);
+            eventHorizon.DOFade(1.0f, 1.0f).SetLink(gameObject);
 
             //視界が完全に暗転するまで待つ
             yield return new WaitForSeconds(1.0f);
 
             //3.0秒かけて等速で「GameOver」を表示
-            txtGameOver.DOText("GameOver", 3.0f).SetEase(Ease.Linear);
+            txtGameOver.DOText("GameOver", 3.0f).SetEase(Ease.Linear).SetLink(gameObject);
 
             //「GameOverの表示が終ったあと、さらに1.0秒間待つ
             yield return new WaitForSeconds(4.0f);
@@ -259,6 +265,10 @@ namespace yamap {
         /// アイテムの数の表示の更新を行う
         /// </summary>
         private void UpdateTxtBulletCount() {
+            if (ItemManager.instance.playerItemList.Count == 0) {
+                return;
+            }
+
             //選択しているアイテムが飛び道具なら
             if (ItemManager.instance.GetSelectedItemData().itemType == ItemDataSO.ItemType.Missile) {
                 //選択されている飛び道具の残弾数をテキストに設定
@@ -267,7 +277,7 @@ namespace yamap {
             //選択しているアイテムに回復効果があるなら
             else if (ItemManager.instance.GetSelectedItemData().restorativeValue > 0) {
                 //選択されている回復アイテムの所持数をテキストに設定
-                txtItemCount.text = playerHealth.GetRecoveryItemCount(ItemManager.instance.GetSelectedItemData().itemName).current.ToString();
+                txtItemCount.text = playerHealth.GetRecoveryItemCount(ItemManager.instance.GetSelectedItemData().itemName).ToString();
             }
             //選択しているアイテムが、飛び道具でも回復アイテムでもないなら
             else {
@@ -423,7 +433,7 @@ namespace yamap {
             float value = isSetting ? 1f : 0f;
 
             //取得した透明度をメッセージに反映する
-            txtMessage.DOFade(value, 0f);
+            txtMessage.DOFade(value, 0f).SetLink(gameObject);
         }
 
         /// <summary>

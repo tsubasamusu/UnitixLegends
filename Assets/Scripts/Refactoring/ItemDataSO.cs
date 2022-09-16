@@ -6,7 +6,7 @@ using System;//Serializable属性を使用
 namespace yamap {
 
     //アセットメニューで「Create ItemDataSO」を選択すると、「ItemDataSO」を作成できる
-    [CreateAssetMenu(fileName = "ItemDataSO", menuName = "Create ItemDataSO")]
+    [CreateAssetMenu(fileName = "ItemDataSO", menuName = "Create ItemDataSO_yamap")]
     public class ItemDataSO : ScriptableObject {
         /// <summary>
         /// アイテムの名前
@@ -34,14 +34,15 @@ namespace yamap {
         public enum ItemType {
             Missile,
             HandWeapon,
-            Bullet
+            Bullet,
+            Recovery
         }
 
         /// <summary>
         /// アイテムのデータを管理するクラス
         /// </summary>
         [Serializable]
-        public class ItemData {
+        public class ItemData {           
             public ItemName itemName;//アイテムの名前
             [Range(0.0f, 100.0f)]
             public float restorativeValue;//回復量
@@ -57,9 +58,14 @@ namespace yamap {
             //public bool isMissile;//飛び道具かどうか
             //public bool isHandWeapon;//近接武器かどうか
             public Sprite sprite;//Sprite
-            public GameObject prefab;//落ちている方のプレファブ
 
+            [Header("落ちている方のプレファブ")]
+            public ItemDetail itemPrefab;//落ちている方のプレファブ
+
+            public int itemNo;
             public ItemType itemType;       　　　　　  // アイテムの種類
+
+            [Header("攻撃時に生成するプレファブ")]
             public WeaponBase weaponPrefab; 　　　　　  // 弾と近接武器のプレファブ
             public SeName seName;                       // SE の種類
             public GameObject effectPrefab;

@@ -7,17 +7,17 @@ namespace yamap {
 
     public class EnemyController : MonoBehaviour {
 
-        [SerializeField]
+        //[SerializeField]
         private NavMeshAgent agent;//NavMeshAgent
 
-        [SerializeField]
+        //[SerializeField]
         private Animator animator;//Animator
 
-        [SerializeField]
-        private ItemDataSO itemDataSO;//ItemDataSO
+        //[SerializeField]
+        //private ItemDataSO itemDataSO;//ItemDataSO
 
-        [SerializeField]
-        private float fallSpeed;//落下速度
+        //[SerializeField]
+        //private float fallSpeed;//落下速度
 
         [SerializeField, Header("射程距離")]
         private float range;//射程距離
@@ -50,7 +50,7 @@ namespace yamap {
 
         private Transform playerTran;//Playerの位置
 
-        private GameObject usedItemObj;//使用しているアイテムのオブジェクト
+        private ItemDetail usedItemObj;//使用しているアイテムのオブジェクト
 
         private int nearItemNo;//最も近くにある使用可能アイテムの番号
 
@@ -61,9 +61,18 @@ namespace yamap {
         /// ゲーム開始直後に呼び出される
         /// </summary>
         public void SetUpEnemy(UIManager uiManager, EnemyGenerator enemyGenerator, PlayerController player, int no) {           // SetUp で EnemyGenerator から UIManager などをもらうようにする
-            //NavMeshAgentを無効化
-            agent.enabled = false;
 
+            if (!TryGetComponent(out agent)) {
+                Debug.Log("NavMeshAgent 取得出来ません。");
+            } else {
+                //NavMeshAgentを無効化
+                agent.enabled = false;
+            }
+
+            if (!TryGetComponent(out animator)) {
+                Debug.Log("Animator 取得出来ません。");
+            }
+            
             this.uiManager = uiManager;
             this.enemyGenerator = enemyGenerator;
             playerTran = player.transform;
@@ -101,7 +110,7 @@ namespace yamap {
             //接地していなかったら
             if (!CheckGrounded()) {
                 //落下する
-                transform.Translate(0, -fallSpeed, 0);
+                transform.Translate(0, -GameData.instance.FallSpeed, 0);
 
                 // Rigidbody を利用した方が、Mass の値と空気抵抗値によって落下速度に差が出る
 
@@ -334,7 +343,7 @@ namespace yamap {
             usedItemData = ItemManager.instance.generatedItemDataList[nearItemNo];
 
             //取得したアイテムを配置
-            usedItemObj = Instantiate(ItemManager.instance.generatedItemDataList[nearItemNo].prefab, enemyWeaponTran);
+            usedItemObj = Instantiate(ItemManager.instance.generatedItemDataList[nearItemNo].itemPrefab, enemyWeaponTran);
 
             //アイテムを拾う
             ItemManager.instance.GetItem(nearItemNo, false);
@@ -369,6 +378,7 @@ namespace yamap {
                 //以降の処理を行わない
                 return;
             }
+            Debug.Log(itemData.itemName);
 
             //弾を生成
             BulletDetailBase bullet = Instantiate(itemData.weaponPrefab, shotBulletTran.position, Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0)).GetComponent<BulletDetailBase>();
@@ -408,6 +418,8 @@ namespace yamap {
                 }
 
                 UpdateEnemyHp(attackPower, bulletDetail.BulletOwnerType);
+
+                bulletDetail.AddTriggerBullet(this);
             }
         }
 
@@ -432,6 +444,10 @@ namespace yamap {
             }
         }
 
+        /// <summary>
+        /// 催涙弾効果の準備
+        /// 外部からの呼び出し用
+        /// </summary>
         public void PrepareTearGasGrenade() {
             StartCoroutine(AttackedByTearGasGrenade());
         }

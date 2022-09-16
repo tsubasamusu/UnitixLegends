@@ -6,11 +6,11 @@ namespace yamap {
 
     public class EnemyGenerator : MonoBehaviour {
 
-        [SerializeField]
-        private PlayerController player;
+        //[SerializeField]
+        //private PlayerController player;
 
-        [SerializeField]
-        private UIManager uIManager;//UIManager
+        //[SerializeField]
+        //private UIManager uIManager;//UIManager
 
         //[SerializeField]
         //private Transform enemyPrefab;//Enemyのプレファブ
@@ -40,7 +40,8 @@ namespace yamap {
         /// Enemyを生成する
         /// </summary>
         /// <returns>待ち時間</returns>
-        public IEnumerator GenerateEnemy() {
+        public IEnumerator GenerateEnemy(UIManager uIManager, PlayerController player) {
+            Debug.Log("エネミー生成開始");
             //Enemyの最大生成数だけ繰り返す
             for (int i = 0; i < maxGenerateCount; i++) {
                 //Enemyを生成する時間のリストを完成させる
