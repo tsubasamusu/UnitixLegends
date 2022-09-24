@@ -2,21 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace yamap {
-
-    public class PlayerHealth : MonoBehaviour {
-
-        //[SerializeField]
+namespace yamap 
+{
+    public class PlayerHealth : MonoBehaviour 
+    {
         private UIManager uiManager;//UIManager
-
-        //[SerializeField]
-        //private StormController stormController;//StormController
-
-        //[SerializeField]
-        //private GameManager gameManager;//GameManager
-
-        //[SerializeField]
-        //private ItemManager itemManager;//ItemManager
 
         private float playerHp = 100.0f;//Playerの体力
 
@@ -46,80 +36,40 @@ namespace yamap {
             get { return syringeCount; }//外部からは取得処理のみ可能に
         }
 
-
         /// <summary>
-        /// ゲーム開始直後に呼び出される
+        /// PlayerHealthの初期設定を行う
         /// </summary>
-        public void SetUpHealth(UIManager uiManager) {
+        /// <param name="uiManager">UIManager</param>
+        public void SetUpHealth(UIManager uiManager) 
+        {
+            //UIManagerを取得
             this.uiManager = uiManager;
-
-            //ストームによるダメージを受けるかどうかの調査を開始
-            //StartCoroutine(CheckStormDamage());
         }
 
         /// <summary>
         /// 他のコライダーに触れた際に呼び出される
         /// </summary>
-        /// <param name="hit">触れた相手</param>
-        private void OnCollisionEnter(Collision hit) {
-            if (hit.gameObject.TryGetComponent(out ItemDetail itemDetail)) {
+        /// <param name="hit">接触相手</param>
+        private void OnCollisionEnter(Collision hit) 
+        {
+            //接触相手がアイテムなら
+            if (hit.gameObject.TryGetComponent(out ItemDetail itemDetail)) 
+            {
+                //PlayerのHpを更新する
                 UpdatePlayerHp(itemDetail.GetAttackPower(), hit.gameObject);
             }
         }
 
-        ///// <summary>
-        ///// ストームによるダメージを受けるかどうか調べる  =>  GameManager で監視
-        ///// </summary>
-        ///// <returns>待ち時間</returns>
-        //private IEnumerator CheckStormDamage() {
-        //    //空の判定
-        //    bool skyFlag = false;
-
-        //    //ゲーム終了状態ではないなら、繰り返される
-        //    while (PlayerHp > 0) {
-        //        //Playerが安置内におらず
-        //        while (!stormController.CheckEnshrine(transform.position)) {
-        //            //空の判定がtrueなら
-        //            if (skyFlag) {
-
-        //                //悪天候に変更
-        //                stormController.ChangeSkyBox(PlayerStormState.InStorm);
-
-        //                //空の判定にfalseを入れる
-        //                skyFlag = false;
-        //            }
-
-        //            //PlayerのHpを減少させる
-        //            UpdatePlayerHp(-stormController.StormDamage);
-
-        //            //1秒待つ
-        //            yield return new WaitForSeconds(1f);
-        //        }
-
-        //        //空の判定がfalseなら
-        //        if (!skyFlag) {
-        //            //快晴に変更
-        //            stormController.ChangeSkyBox(PlayerStormState.OutStorm);
-
-        //            //空の判定にtrueを入れる
-        //            skyFlag = true;
-        //        }
-
-        //        //次のフレームへ飛ばす（実質、Updateメソッド）
-        //        yield return null;
-        //    }
-        //}
-
         /// <summary>
-        /// PlayerのHpを更新
+        /// PlayerのHpを更新する
         /// </summary>
         /// <param name="updateValue">Hpの更新量</param>
         /// <param name="gameObject">触れた相手</param>
-        public void UpdatePlayerHp(float updateValue, GameObject gameObject = null) {
-            //Debug.Log(updateValue);
-
+        public void UpdatePlayerHp(float updateValue, GameObject gameObject = null) 
+        {
             //攻撃を受けた際の処理なら
-            if (updateValue < 0.0f) {
+            if (updateValue < 0.0f) 
+            {
                 //被弾した際の視界の処理を行う
                 StartCoroutine(uiManager.AttackEventHorizon());
             }
@@ -131,22 +81,18 @@ namespace yamap {
             playerHp = Mathf.Clamp(playerHp + updateValue, 0, 100);
 
             //nullエラー回避
-            if (gameObject != null) {
+            if (gameObject != null) 
+            {
                 //引数で受け取ったゲームオブジェクトを消す
                 Destroy(gameObject);
             }
-
-            ////Playerの体力が0になったら
-            //if (playerHp == 0.0f) {
-            //    //ゲームオーバー演出を行う
-            //    StartCoroutine(gameManager.MakeGameOver());
-            //}
         }
 
         /// <summary>
         /// 催涙弾による攻撃を受けた場合の処理
         /// </summary>
-        private void AttackedByTearGasGrenade() {
+        private void AttackedByTearGasGrenade() 
+        {
             //視界を5.0秒間暗くする
             StartCoroutine(uiManager.SetEventHorizonBlack(5.0f));
         }
@@ -156,34 +102,20 @@ namespace yamap {
         /// </summary>
         /// <param name="itemName">アイテムの名前</param>
         /// <param name="updateValue">所持数の更新量</param>
-        public void UpdateRecoveryItemCount(ItemDataSO.ItemName itemName, int updateValue) {
-
-            // ItemName から更新する回復アイテムの個数と最大値を取得
+        public void UpdateRecoveryItemCount(ItemDataSO.ItemName itemName, int updateValue) 
+        {
+            //ItemNameから更新する回復アイテムの個数と最大値を取得
+            //TODO:なんでrefを付ける？
             ref int recoveryItemCount = ref GetRecoveryItemCountRef(itemName);
+
+            //回復アイテムの最大所持数を取得
             int maxCount = GetRecoveryItemMaxCount(itemName); 
 
-            // 更新
+            //回復アイテムの所持数を更新
             recoveryItemCount = Mathf.Clamp(recoveryItemCount + updateValue, 0, maxCount);
-
-            ////アイテムの名前に応じて処理を変更
-            //switch (itemName) {
-            //    //包帯なら
-            //    case ItemDataSO.ItemName.Bandage:
-            //        bandageCount = Mathf.Clamp(bandageCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Bandage).maxBulletCount);
-            //        break;
-
-            //    //薬草なら
-            //    case ItemDataSO.ItemName.MedicinalPlants:
-            //        medicinalPlantscount = Mathf.Clamp(medicinalPlantscount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.MedicinalPlants).maxBulletCount);
-            //        break;
-
-            //    //注射器なら
-            //    case ItemDataSO.ItemName.Syringe:
-            //        syringeCount = Mathf.Clamp(syringeCount + updateValue, 0, ItemManager.instance.GetItemData(ItemDataSO.ItemName.Syringe).maxBulletCount);
-            //        break;
-            //}
         }
 
+        //TODO:なんのための変数？なぜ外？
         int x = 0;
 
         /// <summary>
@@ -191,10 +123,11 @@ namespace yamap {
         /// </summary>
         /// <param name="itemName">回復アイテムの名前</param>
         /// <returns>その回復アイテムの所持数</returns>
-        private ref int GetRecoveryItemCountRef(ItemDataSO.ItemName itemName) {
-            Debug.Log(itemName);
+        private ref int GetRecoveryItemCountRef(ItemDataSO.ItemName itemName) 
+        {
             //アイテムの名前に応じて処理を変更
-            switch(itemName) {
+            switch(itemName) 
+            {
                 case ItemDataSO.ItemName.Bandage: return ref bandageCount;
                 case ItemDataSO.ItemName.MedicinalPlants: return ref medicinalPlantscount;
                 case ItemDataSO.ItemName.Syringe: return ref syringeCount;
@@ -205,19 +138,24 @@ namespace yamap {
         /// <summary>
         /// 指定したアイテムの最大数の取得
         /// </summary>
-        /// <param name="itemName"></param>
-        /// <returns></returns>
-        private int GetRecoveryItemMaxCount(ItemDataSO.ItemName itemName) {
+        /// <param name="itemName">アイテムの名前</param>
+        /// <returns>指定したアイテムの最大数</returns>
+        private int GetRecoveryItemMaxCount(ItemDataSO.ItemName itemName) 
+        {
+            //指定されたアイテムの最大数を返す
             return ItemManager.instance.GetItemData(itemName).maxBulletCount;
         }
 
         /// <summary>
-        /// 指定したアイテムの最大数の取得
+        /// 指定した回復アイテムの最大数の取得
         /// </summary>
-        /// <param name="itemName"></param>
-        /// <returns></returns>
-        public int GetRecoveryItemCount(ItemDataSO.ItemName itemName) {
-            return itemName switch {
+        /// <param name="itemName">回復アイテムの名前</param>
+        /// <returns>指定した回復アイテムの最大数</returns>
+        public int GetRecoveryItemCount(ItemDataSO.ItemName itemName) 
+        {
+            //受け取った回復アイテムの名前に応じて処理を変更
+            return itemName switch 
+            {
                 ItemDataSO.ItemName.Bandage => BandageCount,
                 ItemDataSO.ItemName.MedicinalPlants => MedicinalPlantsCount,
                 ItemDataSO.ItemName.Syringe => SyringeCount,

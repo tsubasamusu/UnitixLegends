@@ -2,19 +2,21 @@ using System.Collections.Generic;//リストを使用
 using UnityEngine;
 using System;//Serializable属性を使用
 
-namespace yamap {
-
+namespace yamap 
+{
     /// <summary>
     /// BGM
     /// </summary>
-    public enum BgmName {
+    public enum BgmName 
+    {
         Main,
     }
 
     /// <summary>
     /// 効果音の名前
     /// </summary>
-    public enum SeName {
+    public enum SeName 
+    {
         None,//選択しない
         KnifeSE,//ナイフで刺す音
         BatSE,//バットで殴る音
@@ -42,28 +44,30 @@ namespace yamap {
     }
 
     /// <summary>
-    /// 音のデータを管理するクラス
+    /// 音のデータを管理する
     /// </summary>
     [Serializable]
-    public class SeData {
+    public class SeData 
+    {
         public SeName seName;//効果音の名前
         public AudioClip audioClip;//オーディオクリップ
     }
 
     /// <summary>
-    /// BGM
+    /// BGMのデータを管理する
     /// </summary>
     [Serializable]
-    public class BgmData {
-        public BgmName bgmName;
-        public AudioClip audioClip;
+    public class BgmData 
+    {
+        public BgmName bgmName;//BGMの名前
+        public AudioClip audioClip;//オーディオクリップ
     }
 
-    //アセットメニューで「Create SoundDataSO」を選択すると、「SoundDataSO」を作成できる
+    //アセットメニューで「Create SoundDataSO_yamap」を選択すると、「SoundDataSO」を作成できる
     [CreateAssetMenu(fileName = "SoundDataSO", menuName = "Create SoundDataSO_yamap")]
-    public class SoundDataSO : ScriptableObject {
-
-        public List<SeData> seList = new ();//音のデータのリスト
-        public List<BgmData> bgmList = new();
+    public class SoundDataSO : ScriptableObject 
+    {
+        public List<SeData> seList = new ();//効果音のデータのリスト
+        public List<BgmData> bgmList = new();//BGMのデータのリスト
     }
 }

@@ -105,9 +105,6 @@ namespace yamap
             {
                 //落下する
                 transform.Translate(0, -GameData.instance.FallSpeed, 0);
-
-                //TODO: Rigidbody を利用した方が、Mass の値と空気抵抗値によって落下速度に差が出る
-
             }
         }
 
@@ -507,7 +504,7 @@ namespace yamap
         /// </summary>
         private void WasKilled() 
         {
-            //TODO:死亡処理
+            //死亡処理
         }
 
         /// <summary>
