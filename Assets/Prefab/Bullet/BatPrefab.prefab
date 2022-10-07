@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 3088890808843193075}
   - component: {fileID: 2520694529103862772}
   - component: {fileID: 4446308964368911491}
+  - component: {fileID: 5616877964786048130}
   m_Layer: 0
   m_Name: BatPrefab
   m_TagString: Bat
@@ -96,6 +97,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5616877964786048130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2520694529103862775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de715959e684eaa4c88652a0403861d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3533236352652918235
 GameObject:
   m_ObjectHideFlags: 0

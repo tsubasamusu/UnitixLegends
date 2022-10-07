@@ -1,0 +1,239 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9427d525402ab03439e757431950067d, type: 3}
+  m_Name: ItemDataSO
+  m_EditorClassIdentifier: 
+  itemDataList:
+  - itemName: 0
+    restorativeValue: 0
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 0
+    maxBulletCount: 0
+    enemyCanUse: 0
+    sprite: {fileID: 0}
+    itemPrefab: {fileID: 0}
+    itemNo: 0
+    itemType: 0
+    weaponPrefab: {fileID: 0}
+    seName: 0
+    effectPrefab: {fileID: 0}
+  - itemName: 1
+    restorativeValue: 0
+    attackPower: 30
+    shotSpeed: 100
+    interval: 1
+    timeToExplode: 3
+    bulletCount: 1
+    maxBulletCount: 10
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: 4173be7b6c266fe45b67c4602ee39969, type: 3}
+    itemPrefab: {fileID: -1855135883840908858, guid: 4dd9edeb7b00a2042b91ac986cbbb02a, type: 3}
+    itemNo: 1
+    itemType: 0
+    weaponPrefab: {fileID: 1639192808590740786, guid: 617ea640fab3ab844abfd21999c47a3f, type: 3}
+    seName: 3
+    effectPrefab: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  - itemName: 2
+    restorativeValue: 0
+    attackPower: 0
+    shotSpeed: 100
+    interval: 1
+    timeToExplode: 2
+    bulletCount: 1
+    maxBulletCount: 10
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: 8b6eb3e89926bb94c974e2cc37ac778a, type: 3}
+    itemPrefab: {fileID: -4709523824758677815, guid: 94a3b31779ff25b4fafa989ceb44e81e, type: 3}
+    itemNo: 2
+    itemType: 0
+    weaponPrefab: {fileID: -4979422200916253128, guid: 99cbe6fdb7aa5164197d61c11049e42c, type: 3}
+    seName: 4
+    effectPrefab: {fileID: 1000012560919920, guid: 85a8865d1bf4a63478038fae23776de8, type: 3}
+  - itemName: 3
+    restorativeValue: 0
+    attackPower: 100
+    shotSpeed: 0
+    interval: 1
+    timeToExplode: 0
+    bulletCount: 0
+    maxBulletCount: 0
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: ad553b38856212047ace67743e54d0fa, type: 3}
+    itemPrefab: {fileID: 1924582143197766404, guid: 02a20ca504888954fbc69da33ed2d8d6, type: 3}
+    itemNo: 3
+    itemType: 1
+    weaponPrefab: {fileID: 2411341910753796102, guid: 57364f008a7cdb840b4be21cd0169948, type: 3}
+    seName: 1
+    effectPrefab: {fileID: 0}
+  - itemName: 4
+    restorativeValue: 0
+    attackPower: 50
+    shotSpeed: 0
+    interval: 1
+    timeToExplode: 0
+    bulletCount: 0
+    maxBulletCount: 0
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: ddcf5feb3e17009478c996101331519b, type: 3}
+    itemPrefab: {fileID: 3880994430869402687, guid: bc9b8950c627ece4886fcf9d44f6a535, type: 3}
+    itemNo: 4
+    itemType: 1
+    weaponPrefab: {fileID: 5616877964786048130, guid: 18d5773b3eacd5a4dbf23af442cd1eb4, type: 3}
+    seName: 2
+    effectPrefab: {fileID: 0}
+  - itemName: 5
+    restorativeValue: 0
+    attackPower: 1
+    shotSpeed: 1000
+    interval: 0.1
+    timeToExplode: 0
+    bulletCount: 1000
+    maxBulletCount: 10000
+    enemyCanUse: 1
+    sprite: {fileID: 21300000, guid: 1b07c51ade9d68443b2f66910bda4990, type: 3}
+    itemPrefab: {fileID: 2296479953800237989, guid: 8afcbc212a76e2344a71ee064f9fab6b, type: 3}
+    itemNo: 5
+    itemType: 0
+    weaponPrefab: {fileID: 7057293398090948689, guid: 003737ebc8a18b145868ce1344a9c36b, type: 3}
+    seName: 5
+    effectPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+  - itemName: 6
+    restorativeValue: 0
+    attackPower: 10
+    shotSpeed: 1000
+    interval: 1
+    timeToExplode: 0
+    bulletCount: 100
+    maxBulletCount: 1000
+    enemyCanUse: 1
+    sprite: {fileID: 21300000, guid: bfae38439f14da14db710fbe0aee7d33, type: 3}
+    itemPrefab: {fileID: 8163124467710139778, guid: dc5765defa44e0c4daae785866edc10a, type: 3}
+    itemNo: 6
+    itemType: 0
+    weaponPrefab: {fileID: 8623520441831986297, guid: 8109983f3e058b74a980d419344f1cb1, type: 3}
+    seName: 6
+    effectPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+  - itemName: 7
+    restorativeValue: 0
+    attackPower: 30
+    shotSpeed: 2000
+    interval: 2
+    timeToExplode: 0
+    bulletCount: 10
+    maxBulletCount: 100
+    enemyCanUse: 1
+    sprite: {fileID: 21300000, guid: d5da1e23ae2a5bb41b4fc1008894c983, type: 3}
+    itemPrefab: {fileID: -1935402232784325306, guid: d216797b1b74a484ab27039305e5c1df, type: 3}
+    itemNo: 7
+    itemType: 0
+    weaponPrefab: {fileID: -263902682861909346, guid: 9435d289f090eab4f977f800b02d0862, type: 3}
+    seName: 7
+    effectPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+  - itemName: 8
+    restorativeValue: 10
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 1
+    maxBulletCount: 10
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: cc9d1fb92a80bbc419f6bc1973c6f0a3, type: 3}
+    itemPrefab: {fileID: 4650610535466259675, guid: 1b75fe71a4449b04db308d85a5c29413, type: 3}
+    itemNo: 8
+    itemType: 3
+    weaponPrefab: {fileID: 0}
+    seName: 8
+    effectPrefab: {fileID: 0}
+  - itemName: 9
+    restorativeValue: 50
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 1
+    maxBulletCount: 2
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: 8b51bac5904437d45a3ce760a771605e, type: 3}
+    itemPrefab: {fileID: 1523190139839249389, guid: c4687cf7f0c86604fb76d76d34674edc, type: 3}
+    itemNo: 9
+    itemType: 3
+    weaponPrefab: {fileID: 0}
+    seName: 8
+    effectPrefab: {fileID: 0}
+  - itemName: 10
+    restorativeValue: 100
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 1
+    maxBulletCount: 1
+    enemyCanUse: 0
+    sprite: {fileID: 21300000, guid: eff3f242e9ac79549b13936bdd8de78f, type: 3}
+    itemPrefab: {fileID: 4706131935526686502, guid: b55dbdf566a253940ad3dca1166a9b18, type: 3}
+    itemNo: 10
+    itemType: 3
+    weaponPrefab: {fileID: 0}
+    seName: 8
+    effectPrefab: {fileID: 0}
+  - itemName: 11
+    restorativeValue: 0
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 1000
+    maxBulletCount: 0
+    enemyCanUse: 0
+    sprite: {fileID: 0}
+    itemPrefab: {fileID: -3094547431735071116, guid: cc51377fc5623004988998499244b6f3, type: 3}
+    itemNo: 11
+    itemType: 2
+    weaponPrefab: {fileID: 7057293398090948689, guid: 003737ebc8a18b145868ce1344a9c36b, type: 3}
+    seName: 5
+    effectPrefab: {fileID: 0}
+  - itemName: 12
+    restorativeValue: 0
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 100
+    maxBulletCount: 0
+    enemyCanUse: 0
+    sprite: {fileID: 0}
+    itemPrefab: {fileID: -7272283185166740355, guid: 2ca7ce3be3aa4ef4791b8c66f93c1f9c, type: 3}
+    itemNo: 12
+    itemType: 2
+    weaponPrefab: {fileID: 8623520441831986297, guid: 8109983f3e058b74a980d419344f1cb1, type: 3}
+    seName: 6
+    effectPrefab: {fileID: 0}
+  - itemName: 13
+    restorativeValue: 0
+    attackPower: 0
+    shotSpeed: 0
+    interval: 0
+    timeToExplode: 0
+    bulletCount: 10
+    maxBulletCount: 0
+    enemyCanUse: 0
+    sprite: {fileID: 0}
+    itemPrefab: {fileID: 930683391537414775, guid: 1c560f3d28636e24397cf39dfd818ef5, type: 3}
+    itemNo: 13
+    itemType: 2
+    weaponPrefab: {fileID: -263902682861909346, guid: 9435d289f090eab4f977f800b02d0862, type: 3}
+    seName: 7
+    effectPrefab: {fileID: 0}
